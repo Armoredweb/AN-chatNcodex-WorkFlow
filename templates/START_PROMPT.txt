@@ -3,7 +3,9 @@ Read the instructions configured for this ChatGPT Project first.
 Then read the canonical workflow manual:
 https://github.com/Armoredweb/AN-chatNcodex-WorkFlow.git
 
-Follow that workflow for this project.
+Keep that manual as an active reference throughout the workflow and refresh the relevant sections before major phase transitions or whenever workflow behavior is uncertain.
+
+Follow the manual for this project.
 
 Determine whether this is a new workflow or an existing one with persistent planning state.
 

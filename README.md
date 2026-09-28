@@ -8,14 +8,16 @@ The workflow separates three responsibilities:
 - GitHub: current code source of truth and, optionally, persistent planning storage.
 - Codex agents: autonomous implementation, testing, debugging, and validation from prepared plans.
 
-The central goal is to move difficult reasoning into planning so implementation agents receive small, explicit, evidence-based work without forcing each planning file to become a separate execution.
+The central goal is to move difficult reasoning into planning so implementation agents receive explicit, evidence-based work without forcing each planning file to become a separate execution.
 
 ## Start here
 
 User documentation:
 
 - English: docs/USER_GUIDE.md
-- Portugues (Brasil): docs/USER_GUIDE_PT-BR.md
+- Português (Brasil): docs/USER_GUIDE_PT-BR.md
+
+Both user guides are self-contained. They include copyable Project Instructions and startup/continuation prompts directly in the guide.
 
 Operational documentation:
 
@@ -24,23 +26,36 @@ Operational documentation:
 - docs/LIBRARY_AND_BACKUP.md - storage, persistence, backup, and recovery.
 - docs/AGENT_STRATEGY.md - LUA-high / SOL-high assignment and execution strategy.
 
-Templates:
+Raw text templates:
 
-- templates/PROJECT_INSTRUCTIONS.md - generic instructions to copy into a ChatGPT Project.
-- templates/START_PROMPT.md - prompt for the first chat.
-- templates/CHAT_CONTINUATION_PROMPT.md - prompt for a successor chat.
-- templates/PROJECT.md - durable project entry point.
-- templates/MASTER_PLAN.md - compact project/change backbone.
-- templates/PLAN_INDEX.md - decomposition, dependency, assignment, batch, and GOAL index.
-- templates/PLAN_PART.md - expanded implementation-plan part.
-- templates/CHAT_HANDOFF.md - operational context checkpoint.
-- templates/CODEX_HANDOFF.md - final implementation handoff.
+- templates/PROJECT_INSTRUCTIONS.txt
+- templates/START_PROMPT.txt
+- templates/CHAT_CONTINUATION_PROMPT.txt
+
+Planning templates:
+
+- templates/PROJECT.md
+- templates/MASTER_PLAN.md
+- templates/PLAN_INDEX.md
+- templates/PLAN_PART.md
+- templates/CHAT_HANDOFF.md
+- templates/CODEX_HANDOFF.md
+
+## Manual Context Rule
+
+The canonical workflow manual must remain an active reference during the entire lifecycle.
+
+ChatGPT reads it at every new or continuation chat and refreshes the relevant sections before major phase transitions, after handoffs, and whenever workflow behavior is uncertain.
+
+The workflow must not depend only on remembered process rules.
+
+For current software implementation facts, the working GitHub repository remains the primary source of truth.
 
 ## Core flow
 
     Project instructions
         -> new ChatGPT chat
-        -> read this manual
+        -> read/refresh this manual
         -> identify and verify working GitHub repository
         -> choose planning storage: Library or GitHub
         -> brainstorm / research / inspect code
@@ -75,18 +90,18 @@ Chat safety:
 
 A Plan Part is sized for safe ChatGPT planning. A Micro Step is a logical work unit. An Implementation Batch groups work before broad validation. A GOAL is a continuous autonomous mission assigned to one implementation agent.
 
-Do not infer one Codex run per plan file. Hundreds of plan files may belong to a small number of continuous GOALs.
+Do not infer one Codex run per plan file. Many plan files may belong to a small number of continuous GOALs.
 
 ## Source precedence
 
-When sources conflict:
+For software facts, when sources conflict:
 
 1. current repository code and active architecture;
 2. newest canonical/consolidated plan;
 3. newer implementation plans and macroblocks;
 4. historical plans and notes.
 
-Historical plans are supporting evidence only when still compatible with the current system.
+For workflow procedure, the canonical manual is authoritative and should be re-read instead of reconstructed from memory.
 
 ## Canonical manual
 

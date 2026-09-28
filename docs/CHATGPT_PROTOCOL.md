@@ -2,6 +2,18 @@
 
 Use this protocol together with WORKFLOW.md and the templates.
 
+## Manual Context Rule
+
+Keep the canonical workflow manual as an active reference throughout all phases.
+
+Read it at the beginning of every new or continuation chat.
+
+Refresh the relevant sections before major workflow transitions, after handoffs, before finalizing a phase, and whenever workflow procedure is uncertain.
+
+If remembered workflow behavior conflicts with Project Instructions, CHAT_HANDOFF.md, planning artifacts, or the manual itself, re-read the manual before proceeding.
+
+Do not substitute remembered workflow rules for direct consultation of the canonical manual.
+
 ## Start behavior
 
 1. Read the ChatGPT Project instructions.
@@ -24,7 +36,9 @@ Use web research when current or external information materially affects the pla
 
 Use repository inspection whenever design decisions depend on existing code.
 
-The master plan should be compact enough to remain navigable. Split the backbone if necessary.
+Before consolidating or materially revising MASTER_PLAN.md, refresh the relevant manual sections.
+
+The master plan should remain navigable and compact. Split the backbone if necessary.
 
 ## Implementation-planning gate
 
@@ -32,7 +46,7 @@ Do not cross this gate implicitly.
 
 Wait until the user indicates the master plan is ready for implementation planning.
 
-Then persist the approved plan, preserve the original backup, and decompose.
+Refresh the relevant manual sections, then persist the approved plan, preserve the original backup, and decompose.
 
 ## Decomposition behavior
 
@@ -40,14 +54,7 @@ Read the whole approved master plan and create a dependency-oriented PLAN_INDEX.
 
 Think in microsteps, but do not expand them yet.
 
-For each microstep determine:
-
-- purpose;
-- prerequisites;
-- outputs;
-- affected system;
-- preliminary agent assignment;
-- provisional plan filename.
+For each microstep determine purpose, prerequisites, outputs, affected system, preliminary agent assignment, and provisional plan filename.
 
 Prefer more small planning units over a few unsafe giant units. This does not imply separate implementation runs.
 
@@ -65,6 +72,8 @@ Minimize final agent switching across GOALs.
 
 ## Expansion preflight
 
+Before entering expansion, refresh the relevant manual sections.
+
 Before beginning any substantial expansion:
 
 1. perform a Context Safety Check;
@@ -80,18 +89,7 @@ Expanded plan parts should leave implementation decisions as explicit as practic
 
 Use verified repository paths and symbols when possible.
 
-Resolve:
-
-- ownership;
-- interfaces;
-- state/data flow;
-- algorithms;
-- lifecycle;
-- compatibility;
-- failure behavior;
-- cleanup/migration;
-- tests;
-- definition of done.
+Resolve ownership, interfaces, state/data flow, algorithms, lifecycle, compatibility, failure behavior, cleanup/migration, tests, and definition of done.
 
 Provide useful pseudocode or code where doing so materially reduces implementation-agent thinking, but do not invent production details contradicted by the live repository.
 
@@ -143,17 +141,23 @@ When handoff is appropriate:
 4. give the user CHAT_CONTINUATION_PROMPT;
 5. do not start the next large operation.
 
-A successor chat should recover from persistent documents, not from a long user recap.
+The successor chat must re-read the manual before continuing.
 
 ## Final audit
 
-After expansion, review every plan part again.
+Before final optimization, refresh the relevant manual sections.
 
-Improve implementation readiness, split unsafe files, remove stale assumptions, eliminate UNASSIGNED, and aggressively reconsider SOL-high work for LUA-high.
+Review every plan part again. Improve implementation readiness, split unsafe files, remove stale assumptions, eliminate UNASSIGNED, and aggressively reconsider SOL-high work for LUA-high.
 
 Then form Implementation Batches and continuous GOALs.
 
 Planning-file boundaries are not automatic build/test boundaries.
+
+## Codex handoff
+
+Before producing CODEX_HANDOFF.md, refresh the relevant manual sections.
+
+Do not generate the handoff from remembered workflow behavior alone.
 
 ## GitHub write scope
 

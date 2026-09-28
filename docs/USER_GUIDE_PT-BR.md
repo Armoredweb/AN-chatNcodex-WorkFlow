@@ -1,224 +1,378 @@
 # Como usar o AN-chatNcodex-WorkFlow
 
-Este e o guia para o usuario. Os documentos operacionais, templates e instrucoes para ChatGPT/Codex permanecem em ingles para manter um unico protocolo canonico.
+Este guia é autossuficiente para o uso normal. Você não precisa abrir os arquivos da pasta `templates/` para começar. As instruções e os prompts exatos já estão reproduzidos abaixo em caixas copiáveis.
+
+Os documentos operacionais e as instruções para ChatGPT/Codex permanecem em inglês para existir um único protocolo canônico. Os prompts humanos de brainstorm deste guia estão em português.
 
 ## 1. Crie um Projeto no ChatGPT
 
 Crie um novo Projeto do ChatGPT para o trabalho que deseja planejar.
 
-Copie o conteudo de templates/PROJECT_INSTRUCTIONS.md para a area de instrucoes do Projeto.
+Copie TODO o texto abaixo para o campo de instruções do Projeto:
 
-Essas instrucoes sao genericas. Elas apontam para o manual publico e permitem que um chat novo descubra como trabalhar mesmo quando nao possui o contexto da conversa anterior.
+```text
+AN-chatNcodex WORKFLOW - PROJECT INSTRUCTIONS
+
+Canonical manual:
+https://github.com/Armoredweb/AN-chatNcodex-WorkFlow.git
+
+Keep the canonical workflow manual as an active reference throughout the entire planning lifecycle. Read it at the start of every new or continuation chat. Refresh relevant sections before major phase transitions, after handoffs, and whenever workflow behavior is uncertain. Never rely only on remembered workflow rules.
+
+START OR RESUME
+
+1. Read these Project Instructions and the canonical manual.
+2. Determine whether this is a new workflow or continuation.
+3. If present, read PROJECT.md, then CHAT_HANDOFF.md.
+4. For a continuation, then read MASTER_PLAN.md and PLAN_INDEX.md, inventory remaining plan files, and load only what the next operation needs.
+5. Before substantial work, refresh the manual sections relevant to that phase.
+
+WORKING REPOSITORY GATE
+
+If the working GitHub repository is not recorded in PROJECT.md, ask the user for it. Verify that it exists and is accessible, then inspect its current state before repository-specific planning.
+
+For software facts use this precedence: current repository/active architecture, newest canonical plan, newer implementation plans/macroblocks, historical plans/notes.
+
+For workflow procedure, the canonical manual is authoritative. If memory, local instructions, handoff state, or planning artifacts appear to conflict with it, re-read the manual before continuing.
+
+STORAGE GATE
+
+After confirming the working repository, ask the user to choose LIBRARY or GITHUB. Record mode and planning root in PROJECT.md.
+
+LIBRARY: use a dedicated persistent ChatGPT Library folder after the implementation-planning gate. Before each Library write, warn that a permission request may appear. When approval is required, use a web browser; do not rely on the native mobile app if it cannot present the request.
+
+GITHUB: inspect for an existing plans/planning convention. Always create a new folder for an independent plan; otherwise default to plans/<plan-name>/. Explain that planning writes may create commits and obtain authorization to maintain files inside that folder. After scoped authorization, routine writes there need no repeated confirmation. Writes elsewhere require separate approval.
+
+MASTER PLAN
+
+Work with the user across as many messages as needed. Brainstorm, research, inspect code, and refine decisions.
+
+The first canonical artifact is MASTER_PLAN.md: a compact backbone of requirements, architecture decisions, constraints, dependencies, non-goals, major systems, and expected results. Do not expand it into implementation-level code or large examples. Split the backbone into coherent subfiles if required.
+
+Do not begin microstep decomposition until the user explicitly says the plan is ready for implementation planning. At that gate, persist the project and preserve backup/MASTER_PLAN.original.md as the approved baseline.
+
+FILE SAFETY
+
+Implementation-planning files should target about 1,200-1,600 lines. Consider preventive subdivision around 1,700-1,800 lines. Do not intentionally produce one above about 2,000 lines.
+
+2,000 lines is a safety ceiling, not a target. Split earlier when reasoning, research, repository inspection, tool use, or information density raises timeout risk.
+
+Evaluate expected size and complexity before drafting. Recursive subdivision is encouraged. File size and chat-context pressure are separate constraints.
+
+CONTEXT SAFETY CHECK
+
+Before every substantial operation, assess whether the current chat can safely finish it. Apply this during master-plan consolidation, repository-heavy analysis, decomposition, expansion, audits, research, and Codex handoff preparation.
+
+SAFE: continue.
+CAUTION: finish only the current bounded operation, then reassess.
+HANDOFF: do not start the next substantial operation; persist state and move to a new chat.
+
+There is no reliable exact remaining-context counter. Judge risk from accumulated conversation size, loaded material, required reasoning, expected output, repository inspection, repeated failures, loss of earlier details, abnormal incompleteness, or interface warnings.
+
+If uncertain whether enough context remains for the next substantial operation, prefer a planned handoff. Output below the file-size ceiling does not guarantee chat safety.
+
+CHAT HANDOFF
+
+CHAT_HANDOFF.md is an operational checkpoint, not a transcript. Record current phase, storage mode/root, working repository/base, last completed item, next item, recent non-canonical decisions, blockers, decomposition changes, and safe continuation point.
+
+When handoff is needed, persist or update it and give the user the canonical continuation prompt. A successor chat must reconstruct state from persistent files, re-read the manual, and re-check relevant live code instead of relying on assumed memory.
+
+DECOMPOSITION
+
+After the approved master plan is persisted and backed up, decompose it into ordered microsteps.
+
+Decomposition and expansion are separate. During decomposition create PLAN_INDEX.md; identify macroblocks, dependencies, microsteps, outputs, order, preliminary agent assignment, and small skeleton files where useful. Do not fully expand implementation details.
+
+Classify each microstep as LUA-high, SOL-high, or UNASSIGNED.
+
+LUA-high is the default: lighter, faster, cheaper, less capable.
+SOL-high is for work that remains genuinely complex after planning.
+UNASSIGNED may exist during planning but not in the final handoff.
+
+Do difficult reasoning in planning so as much implementation as practical can move from SOL to LUA.
+
+PLANNING VS EXECUTION
+
+Plan Part: safely sized ChatGPT planning artifact.
+Micro Step: logical implementation unit.
+Implementation Batch: several microsteps before broad validation.
+GOAL: continuous autonomous mission assigned to one implementation agent.
+
+Many plan files may belong to one GOAL. Minimize agent switching and prefer long continuous LUA or SOL GOALs.
+
+Planning granularity must not dictate test granularity. Combine compatible work into broad batches and build or test at meaningful technical boundaries, testing earlier when necessary.
+
+EXPANSION
+
+Before starting the expansion phase, refresh the relevant manual sections.
+
+Expand one substantial plan file at a time unless several are clearly small and safe.
+
+Before each implementation part:
+1. Perform a Context Safety Check.
+2. Re-read relevant current code directly from the working GitHub repository.
+3. Reconcile repository reality with the master plan, index, dependencies, and previous parts.
+4. Resolve implementation questions from evidence.
+5. Add concrete paths, symbols, ownership, data flow, invariants, compatibility behavior, algorithms, useful pseudocode/code where appropriate, tests, and definition of done.
+6. Persist the file and update index/handoff state when needed.
+
+Never rely solely on memory, old repository inspection, handoff text, or planning files for current implementation facts. If expansion becomes unsafe, subdivide before timeout.
+
+During expansion, the persisted plan file is the primary output. Do not duplicate or summarize its implementation content in chat unless the user asks. Keep chat output to completion/subdivision status, required permissions, blockers/user decisions, next action, Context Safety, and handoff information.
+
+FINAL OPTIMIZATION AUDIT
+
+Before the final audit, refresh the relevant manual sections.
+
+Audit every expanded file for missing detail, stale assumptions, useful code/pseudocode/contracts/tests, safe subdivision, overlap, UNASSIGNED work, and SOL-high tasks that can become LUA-high.
+
+Then define final Implementation Batches and GOALs while minimizing agent switches. Only then prepare CODEX_HANDOFF.md. Refresh the manual again before preparing that handoff.
+
+CORE RULE
+
+Move difficult reasoning out of implementation time. Leave agents clear, evidence-based work. Give LUA as much as practical after preparation; use SOL only where capability is genuinely required.
+```
+
+As Project Instructions são texto simples e precisam permanecer dentro do limite de 8.000 caracteres das instruções de Projeto do ChatGPT.
 
 ## 2. Inicie o primeiro chat
 
-Abra um novo chat dentro do Projeto e cole o conteudo de templates/START_PROMPT.md.
+Abra um novo chat dentro desse Projeto e envie:
 
-O ChatGPT devera:
+```text
+Read the instructions configured for this ChatGPT Project first.
 
-1. ler as instrucoes do Projeto;
-2. ler o manual canonico deste repositorio;
-3. descobrir se e um fluxo novo ou continuacao;
-4. perguntar qual e o repositorio GitHub de trabalho caso ainda nao esteja registrado;
-5. verificar a existencia e o estado desse repositorio antes de planejar.
+Then read the canonical workflow manual:
+https://github.com/Armoredweb/AN-chatNcodex-WorkFlow.git
 
-Existem dois repositorios diferentes:
+Keep that manual as an active reference throughout the workflow and refresh the relevant sections before major phase transitions or whenever workflow behavior is uncertain.
 
-- repositorio do workflow: este manual publico e reutilizavel;
-- repositorio de trabalho: o projeto de software que sera planejado e implementado.
+Follow the manual for this project.
 
-## 3. Escolha onde os planos serao armazenados
+Determine whether this is a new workflow or an existing one with persistent planning state.
 
-Depois de confirmar o repositorio de trabalho, o ChatGPT oferecera duas opcoes: Library ou GitHub.
+If the working GitHub repository is not already known from persistent project state, ask me for it. Verify the repository before making repository-specific planning decisions.
+
+Do not assume current code or architecture from conversation memory. Use the working GitHub repository as the source of truth for implementation facts.
+
+If this is a new workflow, run the required Storage Gate after the working repository has been verified.
+```
+
+O ChatGPT deverá ler as instruções do Projeto e este manual, descobrir se o fluxo é novo ou uma continuação e, se necessário, perguntar qual é o repositório GitHub de trabalho.
+
+Depois de receber o repositório, deve verificá-lo antes de tomar decisões dependentes do código.
+
+Existem dois repositórios diferentes:
+
+- repositório do workflow: este manual público e reutilizável;
+- repositório de trabalho: o projeto de software que será planejado e implementado.
+
+## 3. O manual deve continuar ativo durante todo o trabalho
+
+O manual não serve apenas para inicializar o primeiro chat.
+
+O ChatGPT deve relê-lo no início de todo chat novo ou de continuação e atualizar em contexto as seções relevantes antes de mudanças importantes de fase, depois de handoffs e sempre que houver dúvida sobre o procedimento.
+
+Conversas longas não devem depender apenas da memória das regras do workflow.
+
+Para fatos sobre implementação, o código atual do repositório GitHub de trabalho continua sendo a fonte principal.
+
+## 4. Escolha onde o planejamento será salvo
+
+Depois de verificar o repositório de trabalho, o ChatGPT oferece LIBRARY ou GITHUB.
 
 ### Library
 
-Escolha Library quando quiser manter o planejamento separado do repositorio GitHub ate ele estar completamente expandido e auditado.
+Escolha Library quando quiser manter o planejamento incompleto separado do repositório até a publicação final.
 
-Depois que o plano principal for aprovado para planejamento de implementacao, o ChatGPT cria uma pasta persistente dedicada na Library.
+Depois que o plano principal for aprovado para planejamento de implementação, o ChatGPT usa uma pasta persistente dedicada na Library.
 
-Gravacoes na Library podem mostrar pedidos de permissao. Fique disponivel para aprova-los. Caso o app nativo de smartphone nao mostre esses pedidos, use o ChatGPT pelo navegador. Pode ser navegador de desktop ou navegador do smartphone.
+Gravações na Library podem exibir pedidos de permissão. Fique disponível para aprovar. Se o app nativo de smartphone não conseguir mostrar essa autorização, use o ChatGPT no navegador do computador ou do smartphone.
 
 ### GitHub
 
-Escolha GitHub quando aceitar commits incrementais de planejamento e quiser evitar os pedidos frequentes de permissao da Library.
+Escolha GitHub quando aceitar commits incrementais dos planos e quiser evitar os pedidos frequentes de autorização da Library.
 
-O ChatGPT verifica se o projeto ja possui uma pasta ou convencao para planos. Sempre cria uma nova subpasta para o novo plano. Quando nao existir uma convencao melhor, o padrao sera:
+O ChatGPT procura uma convenção existente para planos e sempre cria uma nova pasta para o novo plano. Se não houver uma convenção melhor:
 
-    plans/<nome-do-plano>/
+```text
+plans/<nome-do-plano>/
+```
 
-Antes de comecar, o ChatGPT avisara que as gravacoes podem gerar commits e pedira autorizacao para manter os arquivos dentro dessa pasta.
+Antes de começar, ele explica que as gravações podem gerar commits e pede autorização para manter os arquivos dentro dessa pasta.
 
-Depois dessa autorizacao, nao e necessario pedir confirmacao para cada arquivo criado ou atualizado dentro da pasta autorizada. Alteracoes fora dela continuam exigindo autorizacao separada.
+Depois dessa autorização, não precisa perguntar novamente para cada gravação normal dentro da pasta aprovada. Alterações fora dela exigem autorização separada.
 
-## 4. Construa o plano principal
+## 5. Faça o brainstorm e construa o plano principal
 
-Explique ao ChatGPT o projeto ou mudanca completa.
+Você pode enviar requisitos durante várias mensagens, pesquisar, refletir, revisar escolhas e confrontar ideias com o código existente.
 
-Isso pode acontecer durante muitas mensagens. Faca brainstorm, reflexao, pesquisas, comparacoes e perguntas. O ChatGPT tambem deve consultar o codigo atual sempre que isso ajudar nas decisoes.
+Um bom prompt para iniciar o brainstorm:
 
-O primeiro artefato canonico e MASTER_PLAN.md.
+```text
+Quero começar a construir o plano deste projeto.
 
-Ele e a espinha dorsal compacta do projeto e deve registrar:
+Antes de criar o MASTER_PLAN, quero fazer brainstorm comigo. Analise o estado atual do repositório, faça perguntas quando necessário, identifique decisões ainda abertas e me ajude a consolidar requisitos, arquitetura, restrições e não-objetivos.
 
-- requisitos;
-- decisoes arquiteturais;
-- restricoes;
-- dependencias;
-- nao-objetivos;
-- principais sistemas envolvidos;
-- resultado esperado.
+Consulte o manual canônico do workflow sempre que necessário e não comece a decomposição para implementação até eu dizer explicitamente que o plano está pronto.
+```
 
-O plano principal nao deve ser uma expansao detalhada da implementacao e nao deve ficar cheio de grandes exemplos ou blocos de codigo.
+Para continuar sem consolidar ainda:
 
-Se ate a espinha dorsal ficar grande demais, o ChatGPT pode dividi-la em subarquivos mantendo um MASTER_PLAN.md principal compacto.
+```text
+Continue o brainstorm. Ainda não quero consolidar o MASTER_PLAN. Continue verificando o repositório quando as decisões dependerem do estado atual do código.
+```
 
-## 5. Libere o planejamento para implementacao
+Para fazer uma revisão antes da consolidação:
 
-Continue discutindo e corrigindo o plano ate acreditar que ele esta pronto.
+```text
+Agora revise tudo o que decidimos e verifique novamente o repositório. Se houver contradições, decisões faltando ou premissas que não combinam com o código atual, aponte antes de consolidar o MASTER_PLAN.
+```
 
-Quando voce disser explicitamente que o plano esta pronto para planejamento de implementacao, o ChatGPT atravessa esse gate.
+O primeiro artefato canônico é `MASTER_PLAN.md`: uma espinha dorsal compacta com requisitos, decisões arquiteturais, restrições, dependências, não-objetivos, principais sistemas e resultado esperado.
 
-Nesse momento ele:
+Ele não deve virar um documento gigante de implementação ou ficar cheio de grandes blocos de código.
 
-1. persiste o projeto no armazenamento escolhido;
-2. cria/atualiza PROJECT.md;
-3. guarda backup/MASTER_PLAN.original.md;
-4. inicia a decomposicao.
+Se necessário, a espinha dorsal pode ser dividida em subarquivos mantendo um `MASTER_PLAN.md` principal compacto.
 
-Esse backup representa a versao aprovada do plano antes da expansao.
+## 6. Revise e aprove o gate para planejamento de implementação
 
-## 6. Primeiro decompor, depois expandir
+Quando acreditar que o plano principal está quase pronto, você pode usar:
 
-O ChatGPT pega o plano completo e identifica macroblocos e micro passos.
+```text
+Acredito que o plano principal está pronto. Faça uma revisão final do MASTER_PLAN, releia as seções relevantes do manual e verifique novamente o repositório. Se encontrar algo que precise ser resolvido, aponte antes de iniciar a decomposição. Ainda não comece a decomposição até eu aprovar esta versão.
+```
 
-Nesta etapa ele cria PLAN_INDEX.md e, quando util, pequenos arquivos-esqueleto para cada passo.
+Depois de revisar e aceitar:
 
-Ainda nao e hora de expandir a implementacao.
+```text
+MASTER_PLAN aprovado. Pode iniciar o planejamento para implementação seguindo o workflow canônico.
+```
 
-Cada micro passo recebe uma classificacao inicial:
+Nesse gate, o ChatGPT persiste o projeto, cria ou atualiza `PROJECT.md`, guarda `backup/MASTER_PLAN.original.md` e inicia a decomposição.
 
-- LUA-high: agente preferencial, leve, rapido e mais barato;
-- SOL-high: agente mais capaz e caro, reservado para trabalho realmente complexo;
-- UNASSIGNED: classificacao temporaria enquanto faltam informacoes.
+O backup representa a versão aprovada antes da expansão.
+
+## 7. Primeiro decompor, depois expandir
+
+O ChatGPT identifica macroblocos, dependências e micro passos e cria `PLAN_INDEX.md`.
+
+Nesta etapa os arquivos podem ser apenas esqueletos. A expansão detalhada vem depois.
+
+Cada micro passo recebe:
+
+- LUA-high: preferencial/padrão;
+- SOL-high: para trabalho que continua realmente complexo depois da preparação;
+- UNASSIGNED: temporário enquanto faltam evidências.
 
 Nenhum UNASSIGNED pode permanecer no handoff final.
 
-## 7. Expansao dos arquivos
+## 8. Expansão
 
-So depois de todos os micro passos estarem identificados comeca a expansao.
+Depois que todos os micro passos estiverem definidos, começa a expansão.
 
-Normalmente o ChatGPT expande um arquivo substancial por invocacao. Arquivos claramente pequenos podem ser tratados juntos quando for seguro.
+Normalmente um arquivo substancial é expandido por invocação. Arquivos claramente pequenos podem ser agrupados quando for seguro.
 
-Antes de expandir cada parte, o ChatGPT deve ler novamente o codigo atual relevante diretamente no repositorio GitHub de trabalho.
+Antes de cada expansão, o ChatGPT faz um Context Safety Check e lê novamente o código atual relevante diretamente no repositório GitHub de trabalho.
 
-Ele nao deve depender apenas de memoria, de uma leitura antiga do repositorio ou dos proprios planos.
+Arquivos expandidos devem mirar aproximadamente 1.200-1.600 linhas. Por volta de 1.700-1.800 deve considerar divisão preventiva e não deve tentar produzir intencionalmente um arquivo acima de aproximadamente 2.000 linhas.
 
-Arquivos expandidos devem mirar aproximadamente 1.200-1.600 linhas. Por volta de 1.700-1.800 linhas o ChatGPT deve considerar divisao preventiva e nao deve tentar produzir intencionalmente um arquivo acima de aproximadamente 2.000 linhas.
+Trabalho complexo pode exigir divisão muito antes disso.
 
-Complexidade de raciocinio, pesquisa e leitura de codigo pode exigir divisao muito antes disso.
+### Resposta no chat durante a expansão
 
-Se necessario, um arquivo pode ser subdividido sucessivamente em A/B/C e depois novamente.
+O arquivo persistido é o resultado principal.
 
-### O que o ChatGPT deve responder no chat
+O ChatGPT não deve copiar, explicar ou resumir no chat o conteúdo detalhado que acabou de gravar, a menos que você solicite.
 
-Durante a expansao, o arquivo persistido e o resultado principal.
+A resposta deve ficar limitada ao necessário para continuar:
 
-O ChatGPT nao precisa copiar, explicar ou resumir no chat todo o conteudo que acabou de gravar, a menos que voce solicite.
+- arquivo concluído, atualizado ou subdividido;
+- permissão que precisa ser aprovada;
+- bloqueio ou decisão que depende de você;
+- próximo arquivo/ação;
+- aviso de Context Safety;
+- necessidade de handoff.
 
-A resposta deve ficar concentrada em informacoes necessarias para continuar:
+## 9. Context Safety e troca de chat
 
-- arquivo concluido, atualizado ou subdividido;
-- permissao de armazenamento que precisa ser aprovada;
-- bloqueio ou decisao que depende de voce;
-- proximo arquivo ou acao;
-- aviso de seguranca de contexto;
-- necessidade de trocar de chat.
+O ChatGPT não possui um contador exato e confiável do contexto restante.
 
-Isso economiza contexto para o trabalho de planejamento.
+Antes de tarefas substanciais usa:
 
-## 8. Seguranca de contexto e troca de chat
+- SAFE: continua;
+- CAUTION: termina somente a operação limitada atual e reavalia;
+- HANDOFF: não inicia a próxima operação substancial neste chat.
 
-Chats muito longos podem comecar a perder confiabilidade. O ChatGPT nao possui um contador exato e confiavel dizendo quanto contexto ainda resta.
+Se houver dúvida sobre conseguir terminar a próxima tarefa grande com segurança, deve preferir um handoff planejado.
 
-Antes de uma operacao grande ele deve fazer uma avaliacao preventiva:
+Isso vale na criação do MASTER_PLAN, decomposição, expansão, pesquisa, auditoria final e preparação do handoff para Codex.
 
-- SAFE: pode continuar;
-- CAUTION: termina somente a operacao pequena atual e reavalia;
-- HANDOFF: nao inicia a proxima operacao substancial nesse chat.
+## 10. Continue em um chat novo
 
-Se houver duvida se a proxima tarefa grande cabe com seguranca, deve preferir uma troca planejada de chat.
+Quando o ChatGPT recomendar a troca, ele deve primeiro atualizar `CHAT_HANDOFF.md`.
 
-Essa regra vale desde a criacao do MASTER_PLAN ate decomposicao, expansao, pesquisas, auditoria final e preparacao do handoff para o Codex.
+Abra outro chat no mesmo Projeto e envie:
 
-Quando for necessario trocar, o ChatGPT atualiza CHAT_HANDOFF.md e entrega o prompt para o novo chat.
+```text
+Read the instructions configured for this ChatGPT Project first.
 
-## 9. Continue em um chat novo
+Then read the canonical workflow manual:
+https://github.com/Armoredweb/AN-chatNcodex-WorkFlow.git
 
-Abra outro chat dentro do mesmo Projeto e cole templates/CHAT_CONTINUATION_PROMPT.md.
+Keep that manual as an active reference and refresh the relevant sections before continuing the current phase or crossing any major phase boundary.
 
-O novo chat deve reconstruir o contexto usando os arquivos persistentes, nao tentando adivinhar o que aconteceu na conversa anterior.
+This chat continues an existing planning workflow.
 
-A ordem inicial e:
+Recover the project from its persistent planning storage. Start with PROJECT.md and CHAT_HANDOFF.md, then read MASTER_PLAN.md and PLAN_INDEX.md. Inventory the remaining planning files and load only those required for the next operation.
 
-1. instrucoes do Projeto;
-2. manual do workflow;
-3. PROJECT.md;
-4. CHAT_HANDOFF.md;
-5. MASTER_PLAN.md;
-6. PLAN_INDEX.md.
+Do not rely on assumed context from the previous conversation. Reconstruct project state from persistent artifacts.
 
-Depois ele inventaria os outros arquivos e carrega integralmente apenas aqueles necessarios para a proxima operacao.
+Before making implementation-level decisions or expanding another plan part, verify the relevant current code directly in the working GitHub repository.
 
-Sempre que precisar de fatos sobre a implementacao, volta ao codigo atual do GitHub.
+Continue from the next safe action recorded in CHAT_HANDOFF.md and follow the workflow's File Safety and Context Safety rules.
+```
 
-## 10. Auditoria final de otimizacao
+O novo chat reconstrói o projeto pelos arquivos persistentes, relê o manual e não pede que você reconte toda a conversa anterior.
 
-Depois que todos os arquivos estiverem expandidos, o ChatGPT percorre o plano arquivo por arquivo.
+Ele começa por `PROJECT.md`, `CHAT_HANDOFF.md`, `MASTER_PLAN.md` e `PLAN_INDEX.md`, inventaria os outros arquivos e carrega apenas os necessários para a próxima operação.
 
-Ele procura:
+Fatos de implementação relevantes são verificados novamente no repositório atual.
 
-- detalhes ainda faltando;
-- premissas antigas sobre o codigo;
-- contratos, pseudocodigo, codigo, algoritmos e testes que possam ser preparados;
-- arquivos que ainda devam ser subdivididos;
-- sobreposicoes e lacunas;
-- tarefas ainda UNASSIGNED;
-- tarefas SOL-high que, depois de bem preparadas, possam ser executadas pelo LUA-high.
+## 11. Auditoria final de otimização
 
-A intencao e deixar o trabalho pesado de raciocinio pronto antes da implementacao.
+Depois de expandir tudo, o ChatGPT percorre os arquivos procurando detalhes faltando, premissas antigas, oportunidades de adicionar contratos/código/pseudocódigo/testes, divisão adicional, sobreposições ou lacunas, UNASSIGNED e tarefas SOL-high que agora possam virar LUA-high.
 
-## 11. Batches e GOALs
+## 12. Batches e GOALs
 
-Quantidade de arquivos de plano nao e quantidade de execucoes do Codex.
+Quantidade de arquivos de plano não é quantidade de execuções do Codex.
 
-O ChatGPT agrupa micro passos compativeis em Implementation Batches e GOALs maiores.
+Plan Part é uma unidade segura de planejamento. Micro Step é uma unidade lógica. Implementation Batch agrupa trabalho antes de validação ampla. GOAL é uma missão autônoma contínua para um agente.
 
-Um GOAL e uma missao autonoma continua para um agente. Ele pode ler dezenas ou centenas de arquivos de plano durante a mesma execucao.
+Um GOAL pode usar dezenas ou centenas de arquivos.
 
-A troca manual entre agentes deve ser minimizada.
+O ChatGPT deve minimizar trocas manuais de agente e preparar o máximo possível para LUA-high.
 
-A preferencia e entregar o maximo possivel ao LUA-high. O SOL-high entra quando a tarefa ainda exigir maior capacidade mesmo depois da preparacao.
+Build/test completo deve acontecer em limites técnicos relevantes, não obrigatoriamente depois de cada pequeno arquivo.
 
-Tambem nao e necessario fazer um build/test completo depois de cada pequeno arquivo. Os testes devem ocorrer em limites tecnicos relevantes, ou antes quando forem necessarios para continuar com seguranca.
+## 13. Handoff para Codex
 
-## 12. Handoff para implementacao
+Depois da auditoria final, o ChatGPT prepara `CODEX_HANDOFF.md`.
 
-No final da auditoria o ChatGPT prepara CODEX_HANDOFF.md com a ordem dos GOALs, arquivos, dependencias e validacoes.
+No modo GitHub, o planejamento já está no repositório.
 
-Se o armazenamento escolhido foi GitHub, todo o planejamento ja esta no repositorio.
+No modo Library, o ChatGPT pede autorização antes de publicar o pacote completo em uma pasta dedicada de planos no repositório de trabalho.
 
-Se foi Library, o ChatGPT pede autorizacao antes de publicar o pacote final de planejamento no local correto do repositorio de trabalho.
+Os agentes então executam os GOALs na ordem planejada.
 
-Depois disso os agentes de implementacao podem executar os GOALs.
+## Templates canônicos
 
-## Prompts para copiar
+As caixas acima são o caminho normal para o usuário. Também existem cópias raw canônicas:
 
-Primeiro chat:
-templates/START_PROMPT.md
+- `templates/PROJECT_INSTRUCTIONS.txt`
+- `templates/START_PROMPT.txt`
+- `templates/CHAT_CONTINUATION_PROMPT.txt`
 
-Troca/continuacao de chat:
-templates/CHAT_CONTINUATION_PROMPT.md
+Quando um desses templates mudar, as cópias incorporadas nos dois guias devem permanecer idênticas.
 
-Manual canonico:
+Manual canônico:
 https://github.com/Armoredweb/AN-chatNcodex-WorkFlow.git
