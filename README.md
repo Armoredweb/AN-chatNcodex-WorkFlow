@@ -109,3 +109,13 @@ For workflow procedure, the canonical manual is authoritative and should be re-r
 
 Repository:
 https://github.com/Armoredweb/AN-chatNcodex-WorkFlow.git
+
+## License
+
+This project is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0).
+
+You may share and adapt the material for any purpose, including commercially, provided appropriate attribution is given.
+
+Suggested attribution: **AN-chatNcodex-WorkFlow by Armoredweb** — https://github.com/Armoredweb/AN-chatNcodex-WorkFlow
+
+See `LICENSE` for the full legal terms.
