@@ -1,142 +1,102 @@
-# <PLAN-ID> — <Title>
+# <Plan ID> - <Title>
 
-Status: draft  
-Macroblock: <macroblock ID/name>  
-Sequence: <position in implementation order>  
-Target repository: <owner/repository>  
-Target branch/base: <branch or ref>
+Status: <skeleton | expanding | complete | superseded>
+Macroblock: <id/name>
+Sequence: <order>
+Working repository: <owner/repository>
+Repository base inspected: <branch/ref/commit>
+Agent: <LUA-high | SOL-high | UNASSIGNED>
+Implementation Batch: <id/TBD>
+GOAL: <id/TBD>
 
 ## Objective
 
-Describe the exact repository state or behavior that must exist when this part is complete.
+Describe the exact implementation state this part must produce.
 
 ## Why this part exists
 
-Explain the architectural purpose of this part and why it is a useful planning boundary.
+Explain the architectural purpose and why this is a useful planning boundary.
 
 ## Current repository evidence
 
-Verified relevant code at planning time:
+Verified immediately before expansion:
 
-- `path/to/file` — <relevant type/function/system and current behavior>
-- `path/to/other` — <relevant evidence>
+- <path / symbol / observed behavior>
 
-Repository observations:
-
-- <observation>
-- <observation>
-
-Do not list guessed paths as verified evidence.
+Do not present guessed paths or old planning assumptions as current evidence.
 
 ## Decisions already made
 
-Codex should treat these as fixed planning decisions unless current implementation evidence makes one impossible:
-
-- <decision>
-- <decision>
+- <fixed decision>
 
 ## Scope
 
-This part includes:
-
-- <work item>
-- <work item>
+- <included work>
 
 ## Non-scope
 
-This part must not:
-
-- <unrelated redesign>
-- <future macroblock work>
+- <excluded work>
 
 ## Dependencies
 
-Required before implementation:
+Requires:
 
-- <previous plan part or repository state>
+- <prior state / plan part>
 
-Produces prerequisites for:
+Produces:
 
-- <later plan part>
+- <state used later>
 
 ## Implementation instructions
 
-### 1. <Implementation area>
+Describe concrete work using verified paths/symbols when available.
 
-Relevant current files:
+Resolve as applicable:
 
-- `path/to/file`
+- ownership;
+- interfaces and contracts;
+- state/data flow;
+- lifecycle;
+- algorithms;
+- compatibility behavior;
+- failure/error behavior;
+- migration;
+- cleanup/removal;
+- concurrency/performance constraints.
 
-Required changes:
-
-- <specific change>
-- <state ownership / API / data flow / invariant>
-- <compatibility behavior>
-- <error handling>
-
-Expected result:
-
-- <observable technical result>
-
-### 2. <Implementation area>
-
-Relevant current files:
-
-- `path/to/file`
-
-Required changes:
-
-- <specific change>
-
-Expected result:
-
-- <observable technical result>
+Include useful pseudocode or implementation code when it materially reduces implementation-agent reasoning.
 
 ## Invariants
 
-The implementation must preserve:
-
-- <invariant>
 - <invariant>
 
-## Tests and validation
+## Validation
 
-Run or add the relevant checks:
+Plan validation at technically meaningful boundaries. This Plan Part does not automatically require its own full build/test cycle.
 
-- <unit test>
-- <integration test>
-- <build command>
-- <runtime validation>
-- <regression case>
-- <failure case>
+Relevant checks:
 
-Expected validation result:
+- <check>
+
+Expected result:
 
 - <result>
 
 ## Definition of done
 
-This part is complete only when:
-
 - [ ] <observable criterion>
-- [ ] <observable criterion>
-- [ ] relevant tests pass;
-- [ ] the repository remains buildable;
-- [ ] no unrelated subsystem was redesigned;
-- [ ] material deviations from this plan are documented.
+- [ ] no unrelated redesign;
+- [ ] material deviations are documented;
+- [ ] downstream prerequisites produced by this part are available.
 
-## Handoff to the next part
+## Handoff to dependent work
 
-After this part, the repository should provide:
+After implementation, later work may assume:
 
-- <new interface/state/behavior>
+- <guarantee>
 
-The next part may assume:
+## Planning notes
 
-- <assumption guaranteed by this part>
-
-## Implementation notes
-
-Use this section only for discoveries made during implementation that materially change the handoff.
+Keep only information useful to implementation or later plan maintenance.
 
 - <note>

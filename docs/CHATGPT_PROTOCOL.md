@@ -1,241 +1,166 @@
 # ChatGPT Planning Protocol
 
-This document is the operational entry point for using a normal ChatGPT conversation as the planning layer before Codex implementation.
+Use this protocol together with WORKFLOW.md and the templates.
 
-## What to give ChatGPT
+## Start behavior
 
-A planning session should identify:
+1. Read the ChatGPT Project instructions.
+2. Read the canonical workflow repository.
+3. Determine whether this is a new workflow or continuation.
+4. If continuation artifacts exist, recover from persistent files before asking the user to repeat information.
+5. If the working GitHub repository is unknown, ask for it.
+6. Verify the repository and inspect its relevant current state.
+7. If planning storage is unknown, run the Storage Gate.
 
-1. this workflow repository;
-2. the target source repository;
-3. the plan, requirement, issue, or existing planning document to refine;
-4. any known canonical documents;
-5. whether ChatGPT may write the resulting plan files directly to GitHub.
+Do not assume repository state from conversation memory.
 
-A minimal instruction can be:
+## New project behavior
 
-```text
-Read the AN-chatNcodex-WorkFlow manual.
-Use it to prepare implementation planning for <target repository>.
-The source plan is <plan/file/issue>.
-Inspect the current repository before finalizing details.
-Create the plan files one at a time and stop after each complete file if the next one may be large.
-These planning subdivisions do not represent separate Codex agents.
-```
+Before the implementation-planning gate, help the user develop the complete MASTER_PLAN.
 
-## ChatGPT operating sequence
+The user may send requirements in several invocations. Preserve decisions without prematurely turning every idea into an implementation part.
 
-### Step 1 — Load the workflow manual
+Use web research when current or external information materially affects the plan.
 
-Read:
+Use repository inspection whenever design decisions depend on existing code.
 
-- `README.md`
-- `docs/WORKFLOW.md`
-- this file
-- the relevant templates
+The master plan should be compact enough to remain navigable. Split the backbone if necessary.
 
-Do not assume the workflow from memory when the repository can be read directly.
+## Implementation-planning gate
 
-### Step 2 — Locate the source plan
+Do not cross this gate implicitly.
 
-The source may be:
+Wait until the user indicates the master plan is ready for implementation planning.
 
-- one existing plan file;
-- several historical plan files;
-- a GitHub issue;
-- a user request;
-- a previous implementation audit;
-- a mixture of these.
+Then persist the approved plan, preserve the original backup, and decompose.
 
-Identify which source is newest and canonical.
+## Decomposition behavior
 
-Do not treat every historical document as equally authoritative.
+Read the whole approved master plan and create a dependency-oriented PLAN_INDEX.
 
-### Step 3 — Inspect current code before optimizing the plan
+Think in microsteps, but do not expand them yet.
 
-Before converting a plan into implementation instructions:
+For each microstep determine:
 
-- find the affected systems;
-- inspect current interfaces and ownership;
-- identify existing replacements for legacy code;
-- inspect tests/build files when relevant;
-- verify exact paths and symbols used in the plan.
+- purpose;
+- prerequisites;
+- outputs;
+- affected system;
+- preliminary agent assignment;
+- provisional plan filename.
 
-If current code contradicts an old plan, adapt the plan.
+Prefer more small planning units over a few unsafe giant units. This does not imply separate implementation runs.
 
-Do not force the repository back to an obsolete design merely to match historical documentation.
+## Agent assignment
 
-### Step 4 — Create the plan index
+Use LUA-high as the default implementation candidate.
 
-Before writing detailed implementation parts, define the intended decomposition in a plan index.
+Use SOL-high when the work remains complex after strong preparation.
 
-The index should contain:
+Use UNASSIGNED only while information is insufficient.
 
-- objective;
-- authoritative inputs;
-- precedence notes;
-- macroblocks;
-- ordered plan files;
-- dependencies;
-- implementation mode;
-- validation strategy.
+Do not assign SOL merely because a task is broad. First ask whether better planning, contracts, algorithms, code sketches, repository evidence, or subdivision can make it straightforward enough for LUA.
 
-At this point, file boundaries are provisional and may be split further during detailed planning.
+Minimize final agent switching across GOALs.
 
-### Step 5 — Optimize one plan file at a time
+## Expansion preflight
 
-For each planned file:
+Before beginning any substantial expansion:
 
-1. inspect all relevant code needed for that file;
-2. resolve architectural questions that can be resolved from evidence;
-3. write implementation-level instructions;
-4. define tests and completion criteria;
-5. save the complete file;
-6. update the index if the decomposition changed.
+1. perform a Context Safety Check;
+2. estimate expected output size/complexity;
+3. subdivide before drafting if needed;
+4. re-read the relevant current GitHub source.
 
-The planning file should leave little design work for Codex.
+Do not begin an unsafe operation and hope it fits.
 
-### Step 6 — Split again when necessary
+## Expansion requirements
 
-If a planned file becomes too large, split it into sequential subparts.
+Expanded plan parts should leave implementation decisions as explicit as practical.
 
-Example:
+Use verified repository paths and symbols when possible.
 
-```text
-04-renderer.md
-```
-
-may become:
-
-```text
-04A-renderer-contracts.md
-04B-renderer-resource-lifetime.md
-04C-renderer-frame-path.md
-04D-renderer-validation.md
-```
-
-Splitting is valid even after the original index was created.
-
-Update the index to reflect the new structure.
-
-### Step 7 — Respect the response boundary
-
-When working interactively, prefer this behavior:
-
-- finish exactly one substantial plan file;
-- write it to GitHub;
-- report completion;
-- identify the next file;
-- stop.
-
-The user can then ask ChatGPT to continue.
-
-This prevents a long planning run from timing out while preserving a clean persisted result.
-
-Small files may be completed together when doing so does not reduce reasoning quality.
-
-### Step 8 — Final planning audit
-
-Before handing work to Codex, verify:
-
-- every part has a clear objective;
-- dependencies are correct;
-- no part relies on an obsolete plan;
-- verified paths and symbols still exist;
-- overlapping work is intentional;
-- tests cover integration boundaries;
-- the final repository state is described;
-- unresolved questions are explicitly marked.
-
-If an unresolved question can be answered by inspecting the repository, inspect it instead of passing the question to Codex.
-
-### Step 9 — Prepare the Codex handoff
-
-The Codex handoff should specify:
-
-- target repository;
-- base branch or commit;
-- plan index;
-- ordered files to read;
-- whether implementation should be one continuous run;
-- required validation;
-- how to report deviations.
-
-Codex should not need to reconstruct the high-level design from scattered conversation history.
-
-## Planning quality rules
-
-### Use evidence
-
-Prefer:
-
-```text
-src/world/state.rs currently owns WorldState and exposes apply_delta().
-Extend this existing ownership path...
-```
-
-over:
-
-```text
-Create a world-state manager somewhere appropriate.
-```
-
-### Separate facts from intended changes
-
-Use explicit language:
-
-- "Current repository:" for observed facts.
-- "Required implementation:" for intended changes.
-- "Historical plan:" when citing old design information.
-
-### Avoid premature code generation
-
-Planning may include:
-
-- signatures;
-- schemas;
-- pseudocode;
-- state machines;
-- data contracts;
-- algorithms.
-
-Do not fill the plan with large speculative production-code dumps when the implementation agent can write the code more reliably against the live repository.
-
-### Do the hard reasoning during planning
-
-The planning stage should decide:
+Resolve:
 
 - ownership;
-- boundaries;
-- sequence;
+- interfaces;
+- state/data flow;
+- algorithms;
+- lifecycle;
 - compatibility;
-- invariants;
-- validation.
+- failure behavior;
+- cleanup/migration;
+- tests;
+- definition of done.
 
-Do not intentionally leave difficult architectural decisions to Codex when ChatGPT has enough repository evidence to resolve them first.
+Provide useful pseudocode or code where doing so materially reduces implementation-agent thinking, but do not invent production details contradicted by the live repository.
 
-## Interactive continuation protocol
+Re-check source before every part, even if a nearby part was expanded recently.
 
-At the end of a planning turn, use a compact status such as:
+## Expansion response behavior
 
-```text
-Completed: 03B-world-storage.md
-Index updated: yes
-Next: 03C-world-delta-application.md
-```
+The persisted file is the primary output.
 
-Do not start the next large file in the same response merely to show progress.
+Do not echo or summarize the expansion into the chat unless asked.
 
-## When the source plan is already detailed
+Return only continuity information needed by the user: completed/subdivided files, permissions, blockers, next action, Context Safety, or handoff.
 
-A detailed plan still requires repository verification.
+This is a context-preservation rule.
 
-The optimization task is then to:
+## File-size rule
 
-1. validate each assumption against current code;
-2. remove stale design;
-3. make paths/symbols concrete;
-4. split overly large implementation units;
-5. add missing validation and handoff details.
+Target approximately 1,200-1,600 lines for implementation-planning files.
 
-The result should be more executable than the source plan, not merely reformatted.
+Around 1,700-1,800 lines, strongly consider preventive subdivision.
+
+Do not intentionally exceed about 2,000 lines.
+
+Complex work may need to be split well below these numbers.
+
+Size is checked prospectively during reasoning, not only after writing.
+
+## Context Safety
+
+Use SAFE / CAUTION / HANDOFF before substantial operations.
+
+SAFE: proceed.
+
+CAUTION: finish the current bounded action; do not automatically begin another large one.
+
+HANDOFF: persist operational state and move to a successor chat before more substantial work.
+
+If unsure, hand off.
+
+Do not claim an exact percentage of context remaining.
+
+## Handoff behavior
+
+When handoff is appropriate:
+
+1. finish or stop at a safe artifact boundary;
+2. persist/update CHAT_HANDOFF.md;
+3. make sure PROJECT.md and PLAN_INDEX.md point to the correct state;
+4. give the user CHAT_CONTINUATION_PROMPT;
+5. do not start the next large operation.
+
+A successor chat should recover from persistent documents, not from a long user recap.
+
+## Final audit
+
+After expansion, review every plan part again.
+
+Improve implementation readiness, split unsafe files, remove stale assumptions, eliminate UNASSIGNED, and aggressively reconsider SOL-high work for LUA-high.
+
+Then form Implementation Batches and continuous GOALs.
+
+Planning-file boundaries are not automatic build/test boundaries.
+
+## GitHub write scope
+
+When GITHUB storage was explicitly selected and the user authorized the dedicated planning folder, maintain planning artifacts inside that folder without repeatedly requesting permission.
+
+Do not extend that authorization to unrelated repository files.
+
+When LIBRARY storage was selected, warn before Library writes because the UI may require explicit approval.
+
+Final publication from Library to GitHub requires user authorization.

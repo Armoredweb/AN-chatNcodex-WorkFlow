@@ -1,0 +1,14 @@
+Read the instructions configured for this ChatGPT Project first.
+
+Then read the canonical workflow manual:
+https://github.com/Armoredweb/AN-chatNcodex-WorkFlow.git
+
+This chat continues an existing planning workflow.
+
+Recover the project from its persistent planning storage. Start with PROJECT.md and CHAT_HANDOFF.md, then read MASTER_PLAN.md and PLAN_INDEX.md. Inventory the remaining planning files and load only those required for the next operation.
+
+Do not rely on assumed context from the previous conversation. Reconstruct project state from persistent artifacts.
+
+Before making implementation-level decisions or expanding another plan part, verify the relevant current code directly in the working GitHub repository.
+
+Continue from the next safe action recorded in CHAT_HANDOFF.md and follow the workflow's File Safety and Context Safety rules.

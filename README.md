@@ -1,150 +1,94 @@
 # AN-chatNcodex-WorkFlow
 
-A practical workflow for turning a high-level development plan into implementation-ready work for Codex using:
+A practical planning workflow for using normal ChatGPT + GitHub + Codex on large software projects.
 
-- ChatGPT (normal chat) for analysis, planning, decomposition, and review
-- GitHub as the persistent source of truth and handoff layer
-- Codex for repository implementation, testing, and validation
+The workflow separates three responsibilities:
 
-## Goal
+- ChatGPT: architecture, research, decomposition, implementation planning, context recovery, and review.
+- GitHub: current code source of truth and, optionally, persistent planning storage.
+- Codex agents: autonomous implementation, testing, debugging, and validation from prepared plans.
 
-The purpose of this repository is to make a normal ChatGPT conversation capable of taking a large plan, checking it against the current repository, and converting it into a sequence of small, implementation-ready plan files that Codex can execute with minimal additional design work.
-
-The workflow is designed for projects where:
-
-- the original plan may be too large for a single ChatGPT response;
-- implementation should remain in one continuous Codex execution even when planning is split into several files;
-- current source code has precedence over stale assumptions;
-- old plans may contain useful details but may also contain superseded decisions;
-- planning should do as much of the reasoning as possible before implementation begins.
-
-## Core flow
-
-```text
-Idea / requirement
-      |
-      v
-ChatGPT planning
-      |
-      +--> inspect current GitHub repository
-      +--> reconcile current architecture and plans
-      +--> decompose work
-      |
-      v
-Ordered implementation plan files
-      |
-      v
-Codex implementation
-      |
-      +--> edit code
-      +--> build
-      +--> test
-      +--> validate
-      |
-      v
-GitHub result / PR / commit
-      |
-      v
-ChatGPT review and next plan
-```
-
-## Roles
-
-### ChatGPT
-
-ChatGPT is the planner and orchestrator.
-
-Its job is to:
-
-1. understand the requested change;
-2. inspect the current repository before finalizing implementation details;
-3. identify the authoritative architecture and constraints;
-4. split large work into ordered plan files;
-5. make each file concrete enough that Codex mainly needs to implement, test, and validate;
-6. stop at safe boundaries when a planning file becomes too large for one response;
-7. review implementation results and prepare follow-up work when needed.
-
-### GitHub
-
-GitHub is the persistent coordination layer.
-
-It stores:
-
-- current source code;
-- canonical workflow documentation;
-- implementation plans;
-- historical plans when useful;
-- implementation results;
-- commits and pull requests.
-
-### Codex
-
-Codex is the implementation agent.
-
-It should receive implementation-ready instructions rather than broad design questions.
-
-Codex is expected to:
-
-- inspect the referenced code;
-- implement the plan;
-- keep the repository buildable;
-- run relevant tests and validation;
-- report deviations, blockers, and discoveries;
-- avoid silently redesigning architecture that was already decided during planning.
-
-## Planning rule
-
-A planning file is not a separate implementation session.
-
-Large work may be split into many planning files only to keep ChatGPT planning reliable and within response limits. Those files may later be implemented by the same Codex agent in one continuous implementation run.
-
-## Source-of-truth precedence
-
-When information conflicts, use this order:
-
-1. current repository code and current architecture;
-2. the newest consolidated/canonical plan;
-3. newer implementation-plan files and macroblocks;
-4. older plans and historical notes.
-
-Historical plans are references, not automatic requirements. Reuse an old decision only when it is still compatible with the current architecture.
-
-## Repository structure
-
-```text
-.
-├── README.md
-├── docs/
-│   ├── CHATGPT_PROTOCOL.md
-│   └── WORKFLOW.md
-└── templates/
-    ├── CODEX_HANDOFF.md
-    ├── PLAN_INDEX.md
-    └── PLAN_PART.md
-```
-
-More templates and examples can be added as the workflow is tested on real projects.
+The central goal is to move difficult reasoning into planning so implementation agents receive small, explicit, evidence-based work without forcing each planning file to become a separate execution.
 
 ## Start here
 
-For a new planning session:
+User documentation:
 
-1. give ChatGPT this repository and the target repository;
-2. ask it to read [ChatGPT Planning Protocol](docs/CHATGPT_PROTOCOL.md);
-3. provide the source plan, issue, or requirement;
-4. let ChatGPT inspect the current target code before finalizing the decomposition;
-5. create the master plan index using [PLAN_INDEX](templates/PLAN_INDEX.md);
-6. optimize implementation files one at a time using [PLAN_PART](templates/PLAN_PART.md);
-7. when planning is complete, prepare the Codex instruction using [CODEX_HANDOFF](templates/CODEX_HANDOFF.md).
+- English: docs/USER_GUIDE.md
+- Portugues (Brasil): docs/USER_GUIDE_PT-BR.md
 
-## Canonical documents
+Operational documentation:
 
-- [Workflow rules](docs/WORKFLOW.md)
-- [ChatGPT planning protocol](docs/CHATGPT_PROTOCOL.md)
-- [Master plan index template](templates/PLAN_INDEX.md)
-- [Implementation plan-part template](templates/PLAN_PART.md)
-- [Codex handoff template](templates/CODEX_HANDOFF.md)
+- docs/WORKFLOW.md - canonical end-to-end workflow.
+- docs/CHATGPT_PROTOCOL.md - rules for ChatGPT while planning.
+- docs/LIBRARY_AND_BACKUP.md - storage, persistence, backup, and recovery.
+- docs/AGENT_STRATEGY.md - LUA-high / SOL-high assignment and execution strategy.
 
-## Status
+Templates:
 
-Initial workflow definition. The format is expected to evolve based on real ChatGPT + GitHub + Codex usage.
+- templates/PROJECT_INSTRUCTIONS.md - generic instructions to copy into a ChatGPT Project.
+- templates/START_PROMPT.md - prompt for the first chat.
+- templates/CHAT_CONTINUATION_PROMPT.md - prompt for a successor chat.
+- templates/PROJECT.md - durable project entry point.
+- templates/MASTER_PLAN.md - compact project/change backbone.
+- templates/PLAN_INDEX.md - decomposition, dependency, assignment, batch, and GOAL index.
+- templates/PLAN_PART.md - expanded implementation-plan part.
+- templates/CHAT_HANDOFF.md - operational context checkpoint.
+- templates/CODEX_HANDOFF.md - final implementation handoff.
+
+## Core flow
+
+    Project instructions
+        -> new ChatGPT chat
+        -> read this manual
+        -> identify and verify working GitHub repository
+        -> choose planning storage: Library or GitHub
+        -> brainstorm / research / inspect code
+        -> compact MASTER_PLAN
+        -> user implementation-planning gate
+        -> persist + backup approved master plan
+        -> decompose into microsteps without expansion
+        -> assign LUA-high / SOL-high / UNASSIGNED
+        -> expand one safe plan part at a time
+        -> final optimization audit
+        -> define Implementation Batches and GOALs
+        -> Codex handoff
+        -> implementation / validation
+
+## Two independent safety controls
+
+File safety:
+
+- normal target: about 1,200-1,600 lines;
+- preventive subdivision: around 1,700-1,800 lines;
+- do not intentionally exceed about 2,000 lines;
+- split earlier when reasoning, research, repository inspection, or information density makes the operation risky.
+
+Chat safety:
+
+- there is no exact reliable remaining-context counter;
+- ChatGPT performs a Context Safety Check before substantial operations;
+- states are SAFE, CAUTION, and HANDOFF;
+- when uncertain whether the next substantial operation can finish cleanly, prefer a planned handoff.
+
+## Planning is not execution
+
+A Plan Part is sized for safe ChatGPT planning. A Micro Step is a logical work unit. An Implementation Batch groups work before broad validation. A GOAL is a continuous autonomous mission assigned to one implementation agent.
+
+Do not infer one Codex run per plan file. Hundreds of plan files may belong to a small number of continuous GOALs.
+
+## Source precedence
+
+When sources conflict:
+
+1. current repository code and active architecture;
+2. newest canonical/consolidated plan;
+3. newer implementation plans and macroblocks;
+4. historical plans and notes.
+
+Historical plans are supporting evidence only when still compatible with the current system.
+
+## Canonical manual
+
+Repository:
+https://github.com/Armoredweb/AN-chatNcodex-WorkFlow.git

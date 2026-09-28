@@ -1,329 +1,255 @@
-# Workflow
+# Canonical Workflow
 
-This document defines the canonical workflow for converting a development request or large plan into implementation-ready files for Codex.
+This document defines the canonical lifecycle for converting a large project/change into implementation-ready work for Codex.
 
-## 1. Principles
+## 1. Roles
 
-### 1.1 Inspect before planning
+ChatGPT is the planning and orchestration layer. It performs architecture reasoning, research, repository inspection, decomposition, expansion, optimization, context recovery, and implementation review.
 
-Do not finalize implementation details from the plan alone.
+The working GitHub repository is the source of truth for current code and active architecture.
 
-Before producing implementation-ready instructions, ChatGPT should inspect the current target repository and verify:
+Persistent planning storage may be either ChatGPT Library or a dedicated plan folder in the working GitHub repository.
 
-- current architecture;
-- relevant source files;
-- existing abstractions and naming;
-- tests and build system;
-- recently introduced replacements for older systems;
-- whether the plan contains assumptions that are no longer true.
-
-A plan describes intent. The repository describes the current implementation reality.
-
-### 1.2 Planning should remove implementation ambiguity
-
-The purpose of the planning stage is not merely to summarize work.
-
-The planning stage should resolve as much as possible before Codex starts:
-
-- what must change;
-- where it must change;
-- what must remain unchanged;
-- dependencies between changes;
-- interfaces and data flow;
-- edge cases;
-- tests;
-- validation criteria;
-- migration or compatibility requirements.
-
-Codex should primarily implement, test, and validate.
-
-### 1.3 Split planning for reliability, not because implementation is separate
-
-A large plan may be divided into multiple files because a single ChatGPT response would become too large, slow, or unreliable.
-
-This does not imply separate Codex agents or separate implementation sessions.
-
-Several planning files may describe one continuous implementation pass.
-
-### 1.4 Preserve ordering and dependencies
-
-Every plan part must make its place in the sequence explicit.
-
-A part should declare:
-
-- prerequisites;
-- what it produces;
-- which later parts depend on it;
-- whether it may be implemented independently.
+Codex agents implement prepared GOALs, test, debug, validate, and report material deviations.
 
 ## 2. Source precedence
 
-When sources disagree, apply this precedence:
+When information conflicts:
 
-1. current repository code and active architecture;
-2. newest canonical or consolidated plan;
-3. newer implementation plans and macroblocks;
+1. current working repository code and active architecture;
+2. newest canonical/consolidated plan;
+3. newer implementation plan parts and macroblocks;
 4. historical plans and notes.
 
-Older plans may be used to recover details only when those details are still compatible with the current system.
+Do not revive superseded architecture merely because an older document contains more detail.
 
-Never resurrect a superseded architecture merely because it is documented more thoroughly in an older file.
+## 3. Initialization
 
-## 3. Planning phases
+A ChatGPT Project should contain the generic PROJECT_INSTRUCTIONS template.
 
-### Phase A — Understand the requested outcome
+The first chat uses START_PROMPT.
 
-Extract:
+ChatGPT reads the local instructions and this canonical manual.
 
-- desired behavior;
-- explicit constraints;
+If the working repository is unknown, ask for it. Verify access and inspect its current state before project planning becomes repository-specific.
+
+## 4. Storage Gate
+
+After the working repository is known, ask the user to choose LIBRARY or GITHUB.
+
+Record the choice and planning root in PROJECT.md.
+
+### LIBRARY
+
+Use a dedicated persistent Library project folder after the implementation-planning gate.
+
+Before a Library write, warn the user that a permission request may appear. If native mobile UI cannot present the request, use a web browser.
+
+Library mode keeps unfinished planning separate from the working repository.
+
+### GITHUB
+
+Inspect the working repository for an existing planning convention.
+
+Always create a new folder for each independent plan. Reuse an existing plans/planning parent directory when appropriate. Otherwise default to plans/<plan-name>/.
+
+Explain that planning writes may create incremental commits and obtain authorization to maintain planning files inside that folder.
+
+After scoped authorization, routine writes inside that folder do not need a new confirmation. Writes outside it do.
+
+GitHub mode requires no final publication step because the plan is already persistent in the repository.
+
+## 5. Master-plan phase
+
+The user may provide requirements over many invocations. Brainstorm, research, inspect code, compare alternatives, and refine decisions.
+
+MASTER_PLAN.md is the first canonical planning artifact. It is a compact backbone, not an implementation expansion.
+
+Capture:
+
+- requirements and outcomes;
+- architecture decisions;
+- constraints and invariants;
 - non-goals;
-- compatibility requirements;
-- expected user-visible result;
-- expected internal architecture result.
+- major systems;
+- high-level dependencies;
+- compatibility expectations;
+- unresolved decisions that truly require user input.
 
-Do not decompose immediately if the scope is still semantically unclear.
+Avoid large production-code examples and file-by-file implementation detail.
 
-### Phase B — Inspect the target repository
+Split the master plan into coherent subfiles if necessary, but preserve a compact top-level MASTER_PLAN.md.
 
-Inspect the code that actually participates in the requested change.
+Do not begin implementation decomposition until the user explicitly approves the master plan for implementation planning.
 
-Prefer targeted inspection over reading the entire repository.
+## 6. Implementation-planning gate
+
+At user approval:
+
+1. establish persistent project storage if not already established;
+2. create/update PROJECT.md;
+3. preserve backup/MASTER_PLAN.original.md;
+4. start decomposition.
+
+The original backup is an immutable semantic baseline. Git history does not replace its purpose.
+
+## 7. Decomposition phase
+
+Decomposition and expansion are separate.
+
+First define:
+
+- macroblocks;
+- ordered microsteps;
+- dependencies;
+- outputs;
+- preliminary agent assignment;
+- provisional plan files.
+
+Create PLAN_INDEX.md and small skeleton files where useful.
+
+Do not fully expand implementation details during decomposition.
+
+Each microstep is LUA-high, SOL-high, or UNASSIGNED. UNASSIGNED is temporary and forbidden in the final handoff.
+
+## 8. File Safety
+
+Implementation-planning files should normally target about 1,200-1,600 lines.
+
+Consider preventive subdivision around 1,700-1,800 lines.
+
+Do not intentionally produce a plan file above approximately 2,000 lines.
+
+The ceiling is not a target. High reasoning complexity, research, tool usage, repository inspection, or dense implementation detail may require splitting much earlier.
+
+Estimate size and complexity before drafting. Recursively subdivide when needed.
+
+## 9. Context Safety Check
+
+File size and conversation-context pressure are independent constraints.
+
+Before every substantial planning operation assess whether the current chat can finish it cleanly.
+
+Use three operational states:
+
+SAFE - continue normally.
+
+CAUTION - complete only the current bounded operation; reassess before starting another large operation.
+
+HANDOFF - do not start the next substantial operation; persist state and move to a successor chat.
+
+There is no reliable exact remaining-context counter. Use observable risk factors: accumulated conversation size, recently loaded material, required repository inspection, expected reasoning, expected output, repeated tool/response failures, loss of earlier details, abnormal incompleteness, or interface warnings.
+
+When uncertain, prefer a planned handoff.
+
+This check applies during master-plan consolidation, decomposition, expansion, research, audits, and final Codex handoff preparation.
+
+## 10. Expansion phase
+
+Expand one substantial plan part at a time unless several parts are clearly small and safe.
+
+Before every expansion:
+
+1. inspect the relevant current source code directly in the working GitHub repository;
+2. reconcile it with the master plan, index, dependencies, and previously expanded interfaces;
+3. resolve architectural questions that repository evidence can answer;
+4. expand the part into concrete implementation instructions;
+5. persist the result;
+6. update PLAN_INDEX.md and CHAT_HANDOFF.md when state changes require it.
+
+Planning files are not evidence of current code state. Conversation memory and old repository inspections are not substitutes for current source.
+
+An expanded plan should provide verified paths/symbols when available, state ownership, interfaces/contracts, data flow, algorithms, invariants, compatibility rules, error behavior, migration/cleanup requirements, validation, and definition of done.
+
+Useful pseudocode or implementation code may be included when it materially reduces implementation-agent reasoning.
+
+## 11. Minimal chat output during expansion
+
+The persisted plan file is the primary output.
+
+Do not reproduce or summarize the expanded content in chat unless the user asks.
+
+Chat output should normally contain only continuity information:
+
+- completed/updated/subdivided file;
+- storage permission needed;
+- blocker or user decision;
+- next file/action;
+- Context Safety warning;
+- handoff status.
+
+Avoid spending context twice on the same implementation content.
+
+## 12. Chat Handoff
+
+CHAT_HANDOFF.md is an operational checkpoint, not a conversation transcript.
+
+Maintain enough information to resume from a new chat: phase, storage mode/root, working repository/base, last completed item, next item, recent non-canonical decisions, blockers, decomposition changes, and safe continuation point.
+
+When a planned or emergency handoff is needed, persist/update it and provide CHAT_CONTINUATION_PROMPT.
+
+The successor chat reads PROJECT.md, CHAT_HANDOFF.md, MASTER_PLAN.md, and PLAN_INDEX.md, inventories the plan directory, loads only the files required for the next operation, and re-verifies relevant code against the current repository.
+
+## 13. Final optimization audit
+
+After every plan part is expanded, inspect the complete plan file by file.
 
 Look for:
 
-- entry points;
-- public interfaces;
-- state ownership;
-- data flow;
-- persistence;
-- rendering or UI paths;
-- network boundaries;
-- tests;
-- configuration;
-- build scripts;
-- nearby TODOs or partially completed replacements.
+- unresolved ambiguity;
+- stale repository assumptions;
+- missing interfaces/contracts/algorithms/tests;
+- opportunities to provide more implementation-ready code/pseudocode;
+- unsafe file sizes;
+- overlaps and gaps;
+- incorrect dependencies;
+- UNASSIGNED work;
+- SOL-high work that can become LUA-high after preparation.
 
-Record discoveries that invalidate or refine the original plan.
+The final audit is allowed to subdivide parts again.
 
-### Phase C — Reconcile plan and repository
+Only after this audit should PLAN_INDEX.md be considered implementation-ready.
 
-Before splitting work, decide:
+## 14. Execution model
 
-- which plan assumptions remain valid;
-- which are obsolete;
-- which details must be adapted to the current code;
-- which architectural decisions are already implemented;
-- whether new prerequisites are required.
+Keep four concepts distinct:
 
-The implementation plan must describe the repository that exists now, not the repository that existed when an old plan was written.
+Plan Part - safely sized ChatGPT planning artifact.
 
-### Phase D — Build macroblocks
+Micro Step - logical unit of work.
 
-Group the implementation into dependency-oriented macroblocks.
+Implementation Batch - compatible microsteps implemented before a broad validation boundary.
 
-A macroblock should represent a meaningful implementation objective such as:
+GOAL - continuous autonomous mission assigned to one implementation agent.
 
-- introduce a core interface;
-- migrate one subsystem;
-- add persistence;
-- add a renderer path;
-- integrate the feature;
-- validate and remove compatibility code.
+Planning granularity must not dictate execution or test granularity.
 
-Do not split merely by file count.
+Many plan files may belong to one GOAL. Minimize agent switches. Prefer broad coherent implementation and validation at meaningful technical boundaries rather than full test cycles after every small part.
 
-### Phase E — Split macroblocks into plan parts
+## 15. Codex handoff
 
-Split a macroblock when one of these becomes true:
+Prepare CODEX_HANDOFF.md only after final optimization.
 
-- it contains multiple independently reasoned implementation objectives;
-- the instructions require too much repository context for one reliable ChatGPT response;
-- the validation matrix becomes too large;
-- the part spans unrelated subsystems;
-- completing the planning response risks truncation or timeout;
-- a clean dependency boundary exists.
+It must identify:
 
-Keep a macroblock together when splitting would force repeated context or produce artificial fragments.
+- working repository/base;
+- plan root;
+- authoritative plan index;
+- GOAL order;
+- assigned agent for each GOAL;
+- plan files/batches included;
+- cross-GOAL dependencies;
+- required validation;
+- deviation-reporting rules.
 
-## 4. Plan-part sizing
+In GITHUB storage mode, the plan is already available to implementation agents.
 
-There is no fixed line-count limit.
+In LIBRARY mode, ask the user for authorization before publishing the completed planning package into a new plan folder in the working repository.
 
-A good plan part should be small enough that ChatGPT can fully reason about it and large enough that Codex receives a coherent implementation unit.
+## 16. Review loop
 
-Prefer one primary objective per plan part.
+After implementation, review the current repository rather than extending old assumptions.
 
-Examples:
+Classify findings as implementation defect, planning defect, newly discovered repository constraint, optional improvement, or follow-up work.
 
-```text
-03A-world-state-contract.md
-03B-world-state-storage.md
-03C-world-state-delta-application.md
-03D-world-state-validation.md
-```
-
-These may all belong to macroblock 03 and still be implemented in a single Codex run.
-
-## 5. Required content of every implementation plan part
-
-Each plan file should contain the following sections when applicable.
-
-### Identity
-
-- plan ID;
-- title;
-- macroblock;
-- sequence position;
-- status.
-
-### Objective
-
-State exactly what must be true when the part is complete.
-
-### Why this part exists
-
-Explain the architectural purpose and why it is separated from adjacent work.
-
-### Current repository evidence
-
-List the relevant current files, types, functions, systems, or behavior observed during planning.
-
-Do not include guessed paths as facts.
-
-### Decisions already made
-
-Record decisions Codex should treat as fixed unless implementation evidence proves they are impossible.
-
-### Scope
-
-Specify what is included.
-
-### Non-scope
-
-Specify what must not be redesigned or implemented in this part.
-
-### Dependencies
-
-List earlier plan parts or repository prerequisites.
-
-### Implementation instructions
-
-Describe concrete implementation work.
-
-Use:
-
-- exact file paths when verified;
-- exact symbols when verified;
-- expected new abstractions;
-- state ownership;
-- call/data flow;
-- invariants;
-- compatibility behavior;
-- error handling;
-- cleanup requirements.
-
-Avoid vague instructions such as "refactor as needed."
-
-### Tests and validation
-
-Define:
-
-- unit tests;
-- integration tests;
-- build commands;
-- runtime checks;
-- regression checks;
-- expected failure cases.
-
-### Definition of done
-
-Use observable completion criteria.
-
-### Handoff to the next part
-
-Explain what state the repository should be in when the next part begins.
-
-## 6. ChatGPT response boundary rule
-
-When planning is being produced interactively and the next part is likely to become too large:
-
-1. finish the current plan file completely;
-2. save it to GitHub;
-3. stop at that clean boundary;
-4. report which file was completed;
-5. report which file should be planned next.
-
-Do not partially draft several files just to cover more scope.
-
-A complete smaller plan is preferable to several incomplete ones.
-
-## 7. Codex handoff
-
-Before Codex implementation begins, ChatGPT should be able to provide:
-
-- the ordered list of plan files;
-- the target repository and branch;
-- the implementation scope;
-- whether all plan files belong to one continuous run;
-- validation expectations;
-- known risks or unresolved questions.
-
-Codex should read all required prerequisite plan parts before implementing dependent work.
-
-## 8. Codex implementation behavior
-
-Codex should:
-
-1. inspect the repository again before editing;
-2. verify that plan assumptions still match HEAD;
-3. implement in dependency order;
-4. keep changes scoped to the plan;
-5. run relevant tests after meaningful milestones;
-6. fix regressions introduced by the implementation;
-7. document material deviations from the plan;
-8. leave the repository in a coherent state.
-
-Codex should not:
-
-- silently revive superseded architecture;
-- rewrite unrelated subsystems;
-- skip validation because the plan was detailed;
-- treat every planning file as a separate agent assignment.
-
-## 9. Review loop
-
-After implementation, ChatGPT may review:
-
-- diff;
-- changed files;
-- tests;
-- logs;
-- unresolved TODOs;
-- deviations from the plan.
-
-The review should classify findings as:
-
-- implementation defect;
-- plan defect;
-- newly discovered repository constraint;
-- optional improvement;
-- follow-up work.
-
-If a follow-up plan is required, it should be created from the updated repository state rather than by blindly extending the old plan.
-
-## 10. Workflow summary
-
-```text
-request
-  -> inspect repository
-  -> reconcile sources
-  -> define macroblocks
-  -> split into reliable plan parts
-  -> finish each plan part completely
-  -> Codex reads ordered parts
-  -> implement in one continuous run when appropriate
-  -> build/test/validate
-  -> ChatGPT reviews current result
-  -> next plan starts from new repository state
-```
+Any follow-up plan begins from the repository state that exists at that time.

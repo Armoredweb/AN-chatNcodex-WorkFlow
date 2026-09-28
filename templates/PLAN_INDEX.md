@@ -1,108 +1,91 @@
-# <PLAN-ID> — Implementation Plan Index
+# <Plan Name> - Implementation Plan Index
 
-Status: planning  
-Target repository: <owner/repository>  
-Target base: <branch / commit>  
-Source plan: <path / issue / request>  
-Implementation mode: <single continuous Codex run / staged runs>
+Status: <decomposing | expanding | final-audit | implementation-ready>
+Working repository: <owner/repository>
+Working base: <branch/ref>
+Storage mode: <LIBRARY | GITHUB>
+Planning root: <location>
+Master plan: <path>
+Approved baseline: <backup/MASTER_PLAN.original.md>
+Workflow manual: https://github.com/Armoredweb/AN-chatNcodex-WorkFlow.git
 
-## Objective
+## Source precedence
 
-Describe the final outcome of the complete implementation.
-
-## Authoritative inputs
-
-Use this precedence for this plan:
-
-1. <current repository / active architecture>
-2. <newest canonical plan>
-3. <newer macroblocks or implementation notes>
-4. <historical references>
+1. current repository code and active architecture;
+2. newest canonical/consolidated plan;
+3. newer implementation parts/macroblocks;
+4. historical plans/notes.
 
 Known superseded material:
 
-- <document/decision that must not be revived>
-
-## Repository baseline
-
-Relevant repository state verified before decomposition:
-
-- <system/path/current behavior>
-- <system/path/current behavior>
-
-Baseline ref:
-
-- branch: <branch>
-- commit: <optional SHA>
+- <item>
 
 ## Macroblocks
 
-### 01 — <Macroblock>
+### <ID> - <name>
 
 Purpose:
-
-- <purpose>
-
-Produces:
-
-- <output relied on later>
-
-### 02 — <Macroblock>
-
-Purpose:
-
 - <purpose>
 
 Depends on:
+- <dependency>
 
-- 01
+Produces:
+- <output>
 
-## Ordered plan files
+## Ordered microsteps
 
-| Order | File | Macroblock | Depends on | Status |
-|---|---|---|---|---|
-| 01 | `01-<name>.md` | 01 | — | draft |
-| 02 | `02A-<name>.md` | 02 | 01 | draft |
-| 03 | `02B-<name>.md` | 02 | 02A | draft |
+| Order | Plan file | Macroblock | Depends on | Agent | Batch | GOAL | Status |
+|---|---|---|---|---|---|---|---|
+| 001 | plan/001-<name>.md | <id> | - | UNASSIGNED | TBD | TBD | skeleton |
 
-The decomposition may be refined during detailed planning. If one file becomes too large, split it and update this table.
+Agent is LUA-high, SOL-high, or UNASSIGNED during planning. No UNASSIGNED may remain when status becomes implementation-ready.
 
 ## Cross-part invariants
 
-All parts must preserve:
-
-- <invariant>
 - <invariant>
 
-## Validation strategy
+## Implementation Batches
 
-The complete implementation must be validated with:
+Define only when enough expansion exists.
 
-- <build>
-- <unit tests>
-- <integration tests>
-- <runtime/manual checks>
-- <regression checks>
+### <Batch ID>
 
-## Known risks
+Plan parts:
+- <paths>
 
-- <risk>
-- <risk>
+Validation boundary:
+- <validation>
 
-## Open questions
+## GOALs
 
-Only questions that cannot currently be resolved from repository evidence should remain here.
+Finalize after the optimization audit.
 
-- <question>
+### <GOAL ID>
 
-## Final Codex handoff requirements
+Agent: <LUA-high | SOL-high>
+Plan parts / batches:
+- <items>
 
-Before implementation begins:
+Depends on:
+- <GOAL>
 
-- [ ] all plan files are complete;
-- [ ] the ordering table is current;
-- [ ] dependencies are internally consistent;
-- [ ] obsolete assumptions have been removed;
-- [ ] verified repository paths still exist;
-- [ ] validation commands are known;
-- [ ] implementation mode is explicit.
+Required final validation:
+- <validation>
+
+## Risks and unresolved planning questions
+
+- <item>
+
+## Final readiness checklist
+
+- [ ] all required microsteps exist;
+- [ ] all expanded parts are within safe planning size or intentionally subdivided;
+- [ ] relevant repository assumptions were re-verified during expansion;
+- [ ] dependencies are consistent;
+- [ ] no UNASSIGNED remains;
+- [ ] every SOL-high assignment survived the LUA-conversion audit;
+- [ ] Implementation Batches are defined;
+- [ ] GOALs minimize unnecessary agent switching;
+- [ ] required validations are explicit;
+- [ ] CODEX_HANDOFF.md can be generated without reconstructing design from chat history.
