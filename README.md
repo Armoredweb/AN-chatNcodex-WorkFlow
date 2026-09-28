@@ -115,17 +115,35 @@ Historical plans are references, not automatic requirements. Reuse an old decisi
 .
 ├── README.md
 ├── docs/
+│   ├── CHATGPT_PROTOCOL.md
 │   └── WORKFLOW.md
 └── templates/
+    ├── CODEX_HANDOFF.md
+    ├── PLAN_INDEX.md
     └── PLAN_PART.md
 ```
 
 More templates and examples can be added as the workflow is tested on real projects.
 
+## Start here
+
+For a new planning session:
+
+1. give ChatGPT this repository and the target repository;
+2. ask it to read [ChatGPT Planning Protocol](docs/CHATGPT_PROTOCOL.md);
+3. provide the source plan, issue, or requirement;
+4. let ChatGPT inspect the current target code before finalizing the decomposition;
+5. create the master plan index using [PLAN_INDEX](templates/PLAN_INDEX.md);
+6. optimize implementation files one at a time using [PLAN_PART](templates/PLAN_PART.md);
+7. when planning is complete, prepare the Codex instruction using [CODEX_HANDOFF](templates/CODEX_HANDOFF.md).
+
 ## Canonical documents
 
 - [Workflow rules](docs/WORKFLOW.md)
+- [ChatGPT planning protocol](docs/CHATGPT_PROTOCOL.md)
+- [Master plan index template](templates/PLAN_INDEX.md)
 - [Implementation plan-part template](templates/PLAN_PART.md)
+- [Codex handoff template](templates/CODEX_HANDOFF.md)
 
 ## Status
 
