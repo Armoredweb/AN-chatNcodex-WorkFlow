@@ -161,10 +161,12 @@ Do not generate the handoff from remembered workflow behavior alone.
 
 ## GitHub write scope
 
-When GITHUB storage was explicitly selected and the user authorized the dedicated planning folder, maintain planning artifacts inside that folder without repeatedly requesting permission.
+Prefer GITHUB storage when available. When the user authorizes the dedicated planning folder, maintain planning artifacts there without repeatedly requesting permission.
 
-Do not extend that authorization to unrelated repository files.
+Preserve micro-expansion granularity, but avoid micro-commits. Keep intermediate work in memory when practical and consolidate related writes so one expansion preferably results in one or two commits. Do not create a local file tree or artificial batch workflow solely to reduce commit count.
 
-When LIBRARY storage was selected, warn before Library writes because the UI may require explicit approval.
+Do not extend planning-folder authorization to unrelated repository files.
+
+Treat LIBRARY as a fallback when GitHub storage is unavailable or unsuitable. Warn that repeated permission prompts can make even small expansions tedious and that the UI may request approval multiple times.
 
 Final publication from Library to GitHub requires user authorization.

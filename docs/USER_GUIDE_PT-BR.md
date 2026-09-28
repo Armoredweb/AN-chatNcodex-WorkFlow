@@ -36,11 +36,11 @@ For workflow procedure, the canonical manual is authoritative. If memory, local 
 
 STORAGE GATE
 
-After confirming the working repository, ask the user to choose LIBRARY or GITHUB. Record mode and planning root in PROJECT.md.
+After confirming the repository, offer GITHUB (recommended) or LIBRARY (fallback); record mode/root in PROJECT.md.
 
-LIBRARY: use a dedicated persistent ChatGPT Library folder after the implementation-planning gate. Before each Library write, warn that a permission request may appear. When approval is required, use a web browser; do not rely on the native mobile app if it cannot present the request.
+LIBRARY: use when GitHub storage is unavailable or unsuitable. Repeated permission prompts can make it tedious, even for small expansions. Warn before writes; use a web browser if approvals are needed because the native mobile app may not show them.
 
-GITHUB: inspect for an existing plans/planning convention. Always create a new folder for an independent plan; otherwise default to plans/<plan-name>/. Explain that planning writes may create commits and obtain authorization to maintain files inside that folder. After scoped authorization, routine writes there need no repeated confirmation. Writes elsewhere require separate approval.
+GITHUB: follow an existing plans convention or default to plans/<plan-name>/; create a new folder per plan. Explain that writes create commits and get scoped authorization. Avoid micro-commits: keep micro-expansions one-by-one/in memory, but consolidate related writes so each expansion preferably uses 1-2 commits. Do not create local file trees or batches solely to reduce commits. Writes outside the folder require separate approval.
 
 MASTER PLAN
 
@@ -178,19 +178,21 @@ Para fatos sobre implementação, o código atual do repositório GitHub de trab
 
 ## 4. Escolha onde o planejamento será salvo
 
-Depois de verificar o repositório de trabalho, o ChatGPT oferece LIBRARY ou GITHUB.
+Depois de verificar o repositório de trabalho, o ChatGPT oferece GITHUB ou LIBRARY. GITHUB é o modo recomendado quando estiver disponível; LIBRARY fica como alternativa quando o GitHub não puder ou não deva ser usado para armazenar o planejamento.
 
-### Library
+### GitHub — recomendado
 
-Escolha Library quando quiser manter o planejamento incompleto separado do repositório até a publicação final.
+Para o uso normal, prefira GitHub. Ele mantém o planejamento persistente sem depender dos pedidos repetidos de autorização da Library.
 
-Depois que o plano principal for aprovado para planejamento de implementação, o ChatGPT usa uma pasta persistente dedicada na Library.
+### Library — alternativa
 
-Gravações na Library podem exibir pedidos de permissão. Fique disponível para aprovar. Se o app nativo de smartphone não conseguir mostrar essa autorização, use o ChatGPT no navegador do computador ou do smartphone.
+A Library continua suportada, mas pode ficar bastante cansativa durante expansões longas: gravações persistentes podem pedir autorização repetidamente e, em alguns casos, várias vezes em torno de uma pequena expansão. Use principalmente quando o GitHub não estiver disponível ou quando o planejamento precisar ficar fora do repositório até a publicação final.
 
-### GitHub
+Se escolher Library, fique disponível para aprovar as gravações. Se o app nativo de smartphone não mostrar a autorização, use o ChatGPT pelo navegador do computador ou do smartphone.
 
-Escolha GitHub quando aceitar commits incrementais dos planos e quiser evitar os pedidos frequentes de autorização da Library.
+### Pasta de planos e commits no GitHub
+
+Use a convenção de plans/planning já existente no repositório; se não houver, use uma pasta dedicada `plans/<nome-do-plano>/`.
 
 O ChatGPT procura uma convenção existente para planos e sempre cria uma nova pasta para o novo plano. Se não houver uma convenção melhor:
 
@@ -201,6 +203,8 @@ plans/<nome-do-plano>/
 Antes de começar, ele explica que as gravações podem gerar commits e pede autorização para manter os arquivos dentro dessa pasta.
 
 Depois dessa autorização, não precisa perguntar novamente para cada gravação normal dentro da pasta aprovada. Alterações fora dela exigem autorização separada.
+
+A micro-expansão continua sendo a unidade de planejamento: o ChatGPT pode trabalhar uma por vez em memória e persistir o resultado normalmente. O que deve ser evitado são micro-commits para ajustes mínimos. As gravações relacionadas a uma expansão devem, de preferência, resultar em apenas um ou dois commits. Não crie árvore local de arquivos nem um processo artificial em lote apenas para diminuir commits.
 
 ## 5. Faça o brainstorm e construa o plano principal
 

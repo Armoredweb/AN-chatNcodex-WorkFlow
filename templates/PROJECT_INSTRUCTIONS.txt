@@ -23,11 +23,11 @@ For workflow procedure, the canonical manual is authoritative. If memory, local 
 
 STORAGE GATE
 
-After confirming the working repository, ask the user to choose LIBRARY or GITHUB. Record mode and planning root in PROJECT.md.
+After confirming the repository, offer GITHUB (recommended) or LIBRARY (fallback); record mode/root in PROJECT.md.
 
-LIBRARY: use a dedicated persistent ChatGPT Library folder after the implementation-planning gate. Before each Library write, warn that a permission request may appear. When approval is required, use a web browser; do not rely on the native mobile app if it cannot present the request.
+LIBRARY: use when GitHub storage is unavailable or unsuitable. Repeated permission prompts can make it tedious, even for small expansions. Warn before writes; use a web browser if approvals are needed because the native mobile app may not show them.
 
-GITHUB: inspect for an existing plans/planning convention. Always create a new folder for an independent plan; otherwise default to plans/<plan-name>/. Explain that planning writes may create commits and obtain authorization to maintain files inside that folder. After scoped authorization, routine writes there need no repeated confirmation. Writes elsewhere require separate approval.
+GITHUB: follow an existing plans convention or default to plans/<plan-name>/; create a new folder per plan. Explain that writes create commits and get scoped authorization. Avoid micro-commits: keep micro-expansions one-by-one/in memory, but consolidate related writes so each expansion preferably uses 1-2 commits. Do not create local file trees or batches solely to reduce commits. Writes outside the folder require separate approval.
 
 MASTER PLAN
 

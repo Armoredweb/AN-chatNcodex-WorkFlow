@@ -1,6 +1,8 @@
 # Storage, Backup, and Recovery
 
-The workflow supports two persistent planning backends: LIBRARY and GITHUB.
+The workflow supports two persistent planning backends: GITHUB and LIBRARY.
+
+GITHUB is recommended when available. LIBRARY is a fallback for cases where GitHub storage is unavailable, unsuitable, or unfinished planning must remain outside the repository.
 
 The storage choice changes where planning artifacts live, not where code facts come from. Current implementation facts always come from the working GitHub repository.
 
@@ -45,9 +47,9 @@ Do not turn PROJECT.md into a transcript.
 
 Use a dedicated persistent Library folder after the user approves the master plan for implementation planning.
 
-Before writing to Library, warn the user that a permission request may appear.
+Before writing to Library, warn the user that permission requests may appear repeatedly. In long expansion sessions this can become tedious, and even a small expansion may require several approvals.
 
-If the native mobile app cannot show that request, the workflow should be performed in a web browser.
+If the native mobile app cannot show those requests, the workflow should be performed in a web browser.
 
 Use normal temporary chat workspace before the implementation-planning gate when persistence is not yet needed.
 
@@ -82,7 +84,9 @@ Obtain scoped authorization for ChatGPT to maintain files inside the dedicated p
 
 Once authorized, do not interrupt expansion for permission on every routine write inside that folder.
 
-Do not treat that as authorization to modify application source code or unrelated documentation.
+Avoid micro-commits. Continue one micro-expansion at a time and keep intermediate drafting in memory when practical, but consolidate related writes so an expansion preferably creates one or two commits. Do not build a local file tree or artificial batching process solely for commit reduction.
+
+Do not treat planning-folder authorization as authorization to modify application source code or unrelated documentation.
 
 ## Backup semantics
 

@@ -51,13 +51,15 @@ The workflow must not depend only on remembered process rules.
 
 For current software implementation facts, the working GitHub repository remains the primary source of truth.
 
+For planning persistence, GitHub is recommended when available. Library remains a fallback because repeated write approvals can make long micro-expansion workflows tedious. In GitHub mode, preserve micro-expansion granularity but consolidate related writes to avoid unnecessary micro-commits, preferably one or two commits per expansion.
+
 ## Core flow
 
     Project instructions
         -> new ChatGPT chat
         -> read/refresh this manual
         -> identify and verify working GitHub repository
-        -> choose planning storage: Library or GitHub
+        -> choose planning storage: GitHub recommended / Library fallback
         -> brainstorm / research / inspect code
         -> compact MASTER_PLAN
         -> user implementation-planning gate

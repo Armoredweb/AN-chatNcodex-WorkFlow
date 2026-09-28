@@ -36,11 +36,11 @@ For workflow procedure, the canonical manual is authoritative. If memory, local 
 
 STORAGE GATE
 
-After confirming the working repository, ask the user to choose LIBRARY or GITHUB. Record mode and planning root in PROJECT.md.
+After confirming the repository, offer GITHUB (recommended) or LIBRARY (fallback); record mode/root in PROJECT.md.
 
-LIBRARY: use a dedicated persistent ChatGPT Library folder after the implementation-planning gate. Before each Library write, warn that a permission request may appear. When approval is required, use a web browser; do not rely on the native mobile app if it cannot present the request.
+LIBRARY: use when GitHub storage is unavailable or unsuitable. Repeated permission prompts can make it tedious, even for small expansions. Warn before writes; use a web browser if approvals are needed because the native mobile app may not show them.
 
-GITHUB: inspect for an existing plans/planning convention. Always create a new folder for an independent plan; otherwise default to plans/<plan-name>/. Explain that planning writes may create commits and obtain authorization to maintain files inside that folder. After scoped authorization, routine writes there need no repeated confirmation. Writes elsewhere require separate approval.
+GITHUB: follow an existing plans convention or default to plans/<plan-name>/; create a new folder per plan. Explain that writes create commits and get scoped authorization. Avoid micro-commits: keep micro-expansions one-by-one/in memory, but consolidate related writes so each expansion preferably uses 1-2 commits. Do not create local file trees or batches solely to reduce commits. Writes outside the folder require separate approval.
 
 MASTER PLAN
 
@@ -178,19 +178,21 @@ The current working GitHub repository remains the source of truth for current so
 
 ## 4. Choose planning storage
 
-After the working repository is verified, ChatGPT asks you to choose LIBRARY or GITHUB.
+After the working repository is verified, ChatGPT offers GITHUB or LIBRARY. GITHUB is the recommended planning backend when it is available; LIBRARY is a fallback when GitHub storage is unavailable or unsuitable.
 
-### Library
+### GitHub — recommended
 
-Choose Library when you want unfinished planning isolated from the working repository until final publication.
+Choose GitHub for normal use. It provides durable planning without repeated Library approval dialogs.
 
-After the master plan is approved for implementation planning, ChatGPT uses a dedicated persistent Library folder.
+### Library — fallback
 
-Library writes may require permission. Keep the interface available to approve them. If the native mobile app cannot display the approval request, use ChatGPT in a desktop or mobile web browser.
+Library remains supported, but it can become tiring during long expansion work because persistent writes may trigger permission prompts repeatedly, sometimes several times around a small expansion. Use it mainly when GitHub storage is unavailable or when planning must stay outside the repository until final publication.
 
-### GitHub
+If Library is selected, keep the interface available to approve write requests. If the native mobile app cannot display them, use ChatGPT in a desktop or mobile web browser.
 
-Choose GitHub when incremental planning commits are acceptable and you want to avoid repeated Library approval dialogs.
+### GitHub planning folder and commits
+
+Use the repository's existing plans/planning convention when present; otherwise use a dedicated `plans/<plan-name>/` folder.
 
 ChatGPT inspects the repository for an existing plans/planning convention and always creates a new folder for this independent plan. If there is no better convention, the default is:
 
@@ -201,6 +203,8 @@ plans/<plan-name>/
 ChatGPT explains that planning writes may create commits and asks for authorization to maintain planning files inside that folder.
 
 After that scoped authorization, routine planning writes inside the approved folder do not require a new confirmation every time. Writes outside the approved folder require separate authorization.
+
+Micro-expansion remains the planning unit: ChatGPT may continue preparing each small expansion in memory and persisting it independently. However, it should avoid micro-commits for tiny adjustments. Related writes for one expansion should preferably be consolidated into one or two commits. Do not create a local file tree or artificial batching workflow solely to reduce commit count.
 
 ## 5. Build the master plan
 

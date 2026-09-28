@@ -54,19 +54,15 @@ Before advancing into a major phase, refresh the relevant manual sections.
 
 ## 5. Storage Gate
 
-After the working repository is known, ask the user to choose LIBRARY or GITHUB.
+After the working repository is known, offer GITHUB or LIBRARY and record the choice and planning root in PROJECT.md.
 
-Record the choice and planning root in PROJECT.md.
+GITHUB is the recommended planning backend when available. LIBRARY is a fallback when GitHub storage is unavailable, unsuitable, or the user explicitly wants unfinished planning outside the repository.
 
-### LIBRARY
+### LIBRARY — fallback
 
-Use a dedicated persistent Library project folder after the implementation-planning gate.
+Library permission prompts can make long planning sessions tedious. Small expansions may trigger repeated approvals, sometimes several around a single write sequence. Warn the user before writes. If native mobile UI cannot present approval requests, use a web browser.
 
-Before a Library write, warn the user that a permission request may appear. If native mobile UI cannot present the request, use a web browser.
-
-Library mode keeps unfinished planning separate from the working repository.
-
-### GITHUB
+### GITHUB — recommended
 
 Inspect the working repository for an existing planning convention.
 
@@ -75,6 +71,8 @@ Always create a new folder for each independent plan. Reuse an existing plans/pl
 Explain that planning writes may create incremental commits and obtain authorization to maintain planning files inside that folder.
 
 After scoped authorization, routine writes inside that folder do not need a new confirmation. Writes outside it do.
+
+Avoid micro-commits without changing planning granularity. Continue working on one micro-expansion at a time and keep intermediate drafting in memory when practical. Consolidate related planning writes so one expansion preferably creates only one or two commits. Do not create a local file tree or artificial batch process solely to reduce commit count.
 
 GitHub mode requires no final publication step because the plan is already persistent in the repository.
 
