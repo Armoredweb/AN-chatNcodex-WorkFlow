@@ -109,7 +109,9 @@ This is a context-preservation rule.
 
 Target approximately 1,200-1,600 lines for implementation-planning files.
 
-Around 1,700-1,800 lines, strongly consider preventive subdivision.
+If a completed expansion lands only slightly above that target, for example around 1,600-1,700 lines, do not compact, recreate, or subdivide it solely to satisfy the target when the file remains coherent and manageable.
+
+Around 1,700-1,800 lines, strongly consider preventive subdivision prospectively, especially when complexity or structure also warrants it.
 
 Do not intentionally exceed about 2,000 lines.
 
