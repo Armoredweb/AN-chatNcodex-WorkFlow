@@ -77,7 +77,8 @@ For planning persistence, GitHub is recommended when available. Library remains 
 File safety:
 
 - normal target: about 1,200-1,600 lines;
-- preventive subdivision: around 1,700-1,800 lines;
+- a small overage around 1,600-1,700 lines is acceptable and does not require compacting, recreating, or subdividing an otherwise coherent file;
+- consider preventive subdivision prospectively around 1,700-1,800 lines, especially when complexity or structure also warrants it;
 - do not intentionally exceed about 2,000 lines;
 - split earlier when reasoning, research, repository inspection, or information density makes the operation risky.
 
