@@ -52,7 +52,7 @@ Do not begin microstep decomposition until the user explicitly says the plan is 
 
 FILE SAFETY
 
-Implementation-planning files should target about 1,200-1,600 lines. Consider preventive subdivision around 1,700-1,800 lines. Do not intentionally produce one above about 2,000 lines.
+Implementation-planning files should target about 1,200-1,600 lines. A small overage into roughly 1,600-1,700 lines is acceptable and does not by itself justify compacting, recreating, or subdividing an already coherent file. Consider preventive subdivision prospectively around 1,700-1,800 lines, especially when complexity or structure also warrants it. Do not intentionally produce one above about 2,000 lines.
 
 2,000 lines is a safety ceiling, not a target. Split earlier when reasoning, research, repository inspection, tool use, or information density raises timeout risk.
 
@@ -248,7 +248,7 @@ Normally ChatGPT expands one substantial plan file per invocation. Several clear
 
 Before each expansion it performs a Context Safety Check and re-reads the relevant current code directly from the working GitHub repository.
 
-Expanded implementation-planning files should normally target about 1,200-1,600 lines. Preventive subdivision should be considered around 1,700-1,800 lines. ChatGPT should not intentionally exceed about 2,000 lines and may split much earlier when reasoning is complex.
+Expanded implementation-planning files should normally target about 1,200-1,600 lines. A completed file around 1,600-1,700 lines does not need to be compacted, recreated, or subdivided solely for that small overage when it remains coherent and manageable. Preventive subdivision should be considered prospectively around 1,700-1,800 lines, especially when complexity or structure also warrants it. ChatGPT should not intentionally exceed about 2,000 lines and may split much earlier when reasoning is complex.
 
 ### Chat output during expansion
 
