@@ -120,7 +120,9 @@ Each microstep is LUA-high, SOL-high, or UNASSIGNED. UNASSIGNED is temporary and
 
 Implementation-planning files should normally target about 1,200-1,600 lines.
 
-Consider preventive subdivision around 1,700-1,800 lines.
+A small overage into roughly 1,600-1,700 lines is acceptable. Do not compact, recreate, or subdivide an already coherent and manageable file solely because it landed slightly above the normal target.
+
+Consider preventive subdivision prospectively around 1,700-1,800 lines, especially when complexity or structure also warrants it.
 
 Do not intentionally produce a plan file above approximately 2,000 lines.
 
