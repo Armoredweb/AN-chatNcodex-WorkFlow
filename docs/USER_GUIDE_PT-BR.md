@@ -52,7 +52,7 @@ Do not begin microstep decomposition until the user explicitly says the plan is 
 
 FILE SAFETY
 
-Implementation-planning files should target about 1,200-1,600 lines. Consider preventive subdivision around 1,700-1,800 lines. Do not intentionally produce one above about 2,000 lines.
+Implementation-planning files should target about 1,200-1,600 lines. A small overage into roughly 1,600-1,700 lines is acceptable and does not by itself justify compacting, recreating, or subdividing an already coherent file. Consider preventive subdivision prospectively around 1,700-1,800 lines, especially when complexity or structure also warrants it. Do not intentionally produce one above about 2,000 lines.
 
 2,000 lines is a safety ceiling, not a target. Split earlier when reasoning, research, repository inspection, tool use, or information density raises timeout risk.
 
@@ -276,7 +276,7 @@ Normalmente um arquivo substancial é expandido por invocação. Arquivos claram
 
 Antes de cada expansão, o ChatGPT faz um Context Safety Check e lê novamente o código atual relevante diretamente no repositório GitHub de trabalho.
 
-Arquivos expandidos devem mirar aproximadamente 1.200-1.600 linhas. Por volta de 1.700-1.800 deve considerar divisão preventiva e não deve tentar produzir intencionalmente um arquivo acima de aproximadamente 2.000 linhas.
+Arquivos expandidos devem mirar aproximadamente 1.200-1.600 linhas. Se um arquivo concluído ficar apenas um pouco acima dessa faixa, por exemplo em torno de 1.600-1.700 linhas, não é necessário compactar, recriar ou subdividir somente por esse pequeno excesso, desde que continue coerente e manejável. A divisão preventiva deve ser considerada prospectivamente por volta de 1.700-1.800 linhas, especialmente quando a complexidade ou a estrutura também indicarem essa necessidade, e não se deve tentar produzir intencionalmente um arquivo acima de aproximadamente 2.000 linhas.
 
 Trabalho complexo pode exigir divisão muito antes disso.
 
