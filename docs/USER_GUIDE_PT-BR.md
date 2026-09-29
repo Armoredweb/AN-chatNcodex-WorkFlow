@@ -16,7 +16,7 @@ AN-chatNcodex WORKFLOW - PROJECT INSTRUCTIONS
 Canonical manual:
 https://github.com/Armoredweb/AN-chatNcodex-WorkFlow.git
 
-Keep the canonical workflow manual as an active reference throughout the entire planning lifecycle. Read it at the start of every new or continuation chat. Refresh relevant sections before major phase transitions, after handoffs, and whenever workflow behavior is uncertain. Never rely only on remembered workflow rules.
+Keep the canonical manual active. Read it at every new or continuation chat; refresh relevant sections before major phase transitions, after handoffs, and whenever procedure is uncertain. Never rely only on remembered workflow rules.
 
 START OR RESUME
 
@@ -66,15 +66,13 @@ SAFE: continue.
 CAUTION: finish only the current bounded operation, then reassess.
 HANDOFF: do not start the next substantial operation; persist state and move to a new chat.
 
-There is no reliable exact remaining-context counter. Judge risk from accumulated conversation size, loaded material, required reasoning, expected output, repository inspection, repeated failures, loss of earlier details, abnormal incompleteness, or interface warnings.
-
-If uncertain whether enough context remains for the next substantial operation, prefer a planned handoff. Output below the file-size ceiling does not guarantee chat safety.
+There is no reliable exact remaining-context counter. Judge risk from conversation size, loaded material, reasoning/output, repository inspection, failures, lost details, incompleteness, or interface warnings. If uncertain about the next substantial operation, prefer a planned handoff. File-size safety does not guarantee chat safety.
 
 CHAT HANDOFF
 
-CHAT_HANDOFF.md is an operational checkpoint, not a transcript. Record current phase, storage mode/root, working repository/base, last completed item, next item, recent non-canonical decisions, blockers, decomposition changes, and safe continuation point.
+CHAT_HANDOFF.md is an operational checkpoint, not a transcript. Record phase, storage/root, repository/base, last completed item, next action, recent non-canonical decisions, blockers, decomposition changes, and safe continuation point.
 
-When handoff is needed, persist or update it and give the user the canonical continuation prompt. A successor chat must reconstruct state from persistent files, re-read the manual, and re-check relevant live code instead of relying on assumed memory.
+When the user requests handoff or Context Safety reaches HANDOFF, persist/update it, then END the response with a copyable plain-text continuation prompt populated with repository/base, storage/root, phase, last completed work, next action, and exact files to read first. No placeholders; no text after the prompt. The successor chat must re-read the manual, reconstruct persistent state, and re-check relevant live code.
 
 DECOMPOSITION
 
@@ -313,28 +311,56 @@ Isso vale na criação do MASTER_PLAN, decomposição, expansão, pesquisa, audi
 
 ## 10. Continue em um chat novo
 
-Quando o ChatGPT recomendar a troca, ele deve primeiro atualizar `CHAT_HANDOFF.md`.
+Quando você pedir um handoff, ou o ChatGPT determinar que a troca é necessária, ele primeiro atualiza `CHAT_HANDOFF.md`.
 
-Abra outro chat no mesmo Projeto e envie:
+Na mesma resposta, o último elemento deve ser uma caixa de texto simples e copiável com o prompt já preenchido para aquele projeto. Não deve existir explicação depois dessa caixa: basta copiar e colar no novo chat.
+
+O template raw é:
 
 ```text
-Read the instructions configured for this ChatGPT Project first.
+Continue the AN-chatNcodex planning workflow from the persisted handoff.
 
-Then read the canonical workflow manual:
+First read the ChatGPT Project Instructions and the canonical workflow manual:
 https://github.com/Armoredweb/AN-chatNcodex-WorkFlow.git
 
-Keep that manual as an active reference and refresh the relevant sections before continuing the current phase or crossing any major phase boundary.
+Working repository:
+<owner/repository>
 
-This chat continues an existing planning workflow.
+Working base:
+<branch/ref>
 
-Recover the project from its persistent planning storage. Start with PROJECT.md and CHAT_HANDOFF.md, then read MASTER_PLAN.md and PLAN_INDEX.md. Inventory the remaining planning files and load only those required for the next operation.
+Planning storage:
+<LIBRARY | GITHUB>
 
-Do not rely on assumed context from the previous conversation. Reconstruct project state from persistent artifacts.
+Planning root:
+<path>
 
-Before making implementation-level decisions or expanding another plan part, verify the relevant current code directly in the working GitHub repository.
+Current phase:
+<phase>
 
-Continue from the next safe action recorded in CHAT_HANDOFF.md and follow the workflow's File Safety and Context Safety rules.
+Last completed:
+<concrete artifact/action>
+
+Next action:
+<concrete next safe action>
+
+Read first:
+- <PROJECT.md path>
+- <CHAT_HANDOFF.md path>
+- <MASTER_PLAN.md path>
+- <PLAN_INDEX.md path>
+- <only additional plan files required for the next action>
+
+Do not rely on previous-chat memory. Reconstruct state from persistent artifacts and keep the canonical manual active.
+
+Inventory remaining planning files, but load only those needed for the next operation.
+
+Before implementation-level decisions or another expansion, verify the relevant current source directly in the working GitHub repository.
+
+Continue from the safe continuation point recorded in CHAT_HANDOFF.md and follow File Safety and Context Safety rules.
 ```
+
+Em um handoff real, todos os placeholders são substituídos pelos valores concretos: repositório/base, armazenamento/root, fase, último trabalho concluído, próxima ação e arquivos exatos para leitura inicial.
 
 O novo chat reconstrói o projeto pelos arquivos persistentes, relê o manual e não pede que você reconte toda a conversa anterior.
 

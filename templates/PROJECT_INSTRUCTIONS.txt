@@ -3,7 +3,7 @@ AN-chatNcodex WORKFLOW - PROJECT INSTRUCTIONS
 Canonical manual:
 https://github.com/Armoredweb/AN-chatNcodex-WorkFlow.git
 
-Keep the canonical workflow manual as an active reference throughout the entire planning lifecycle. Read it at the start of every new or continuation chat. Refresh relevant sections before major phase transitions, after handoffs, and whenever workflow behavior is uncertain. Never rely only on remembered workflow rules.
+Keep the canonical manual active. Read it at every new or continuation chat; refresh relevant sections before major phase transitions, after handoffs, and whenever procedure is uncertain. Never rely only on remembered workflow rules.
 
 START OR RESUME
 
@@ -53,15 +53,13 @@ SAFE: continue.
 CAUTION: finish only the current bounded operation, then reassess.
 HANDOFF: do not start the next substantial operation; persist state and move to a new chat.
 
-There is no reliable exact remaining-context counter. Judge risk from accumulated conversation size, loaded material, required reasoning, expected output, repository inspection, repeated failures, loss of earlier details, abnormal incompleteness, or interface warnings.
-
-If uncertain whether enough context remains for the next substantial operation, prefer a planned handoff. Output below the file-size ceiling does not guarantee chat safety.
+There is no reliable exact remaining-context counter. Judge risk from conversation size, loaded material, reasoning/output, repository inspection, failures, lost details, incompleteness, or interface warnings. If uncertain about the next substantial operation, prefer a planned handoff. File-size safety does not guarantee chat safety.
 
 CHAT HANDOFF
 
-CHAT_HANDOFF.md is an operational checkpoint, not a transcript. Record current phase, storage mode/root, working repository/base, last completed item, next item, recent non-canonical decisions, blockers, decomposition changes, and safe continuation point.
+CHAT_HANDOFF.md is an operational checkpoint, not a transcript. Record phase, storage/root, repository/base, last completed item, next action, recent non-canonical decisions, blockers, decomposition changes, and safe continuation point.
 
-When handoff is needed, persist or update it and give the user the canonical continuation prompt. A successor chat must reconstruct state from persistent files, re-read the manual, and re-check relevant live code instead of relying on assumed memory.
+When the user requests handoff or Context Safety reaches HANDOFF, persist/update it, then END the response with a copyable plain-text continuation prompt populated with repository/base, storage/root, phase, last completed work, next action, and exact files to read first. No placeholders; no text after the prompt. The successor chat must re-read the manual, reconstruct persistent state, and re-check relevant live code.
 
 DECOMPOSITION
 

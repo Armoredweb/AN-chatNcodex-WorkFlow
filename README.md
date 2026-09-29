@@ -86,7 +86,8 @@ Chat safety:
 - there is no exact reliable remaining-context counter;
 - ChatGPT performs a Context Safety Check before substantial operations;
 - states are SAFE, CAUTION, and HANDOFF;
-- when uncertain whether the next substantial operation can finish cleanly, prefer a planned handoff.
+- when uncertain whether the next substantial operation can finish cleanly, prefer a planned handoff;
+- every requested/triggered handoff ends with a concrete plain-text continuation prompt ready to copy into the next chat.
 
 ## Planning is not execution
 

@@ -54,6 +54,12 @@ Do not treat these notes as current evidence. Re-read the relevant live source.
 
 - <area/path>
 
-## Continuation rule
+## Continuation prompt output
 
-The successor chat must read the Project instructions and canonical workflow, reconstruct the state above, and verify relevant implementation facts against the current working GitHub repository before continuing.
+When the user requests this handoff or Context Safety triggers it, also produce a concrete continuation prompt from `templates/CHAT_CONTINUATION_PROMPT.txt`.
+
+Fill every field with current values: repository/base, storage/root, phase, last completed work, next action, and exact files to read first.
+
+The continuation prompt must be the final element of the chat response, inside a plain-text copyable code block, with no explanation after it.
+
+The successor chat must read the Project Instructions and canonical workflow, reconstruct the state above, and verify relevant implementation facts against the current working GitHub repository before continuing.

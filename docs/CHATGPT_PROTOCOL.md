@@ -133,15 +133,17 @@ Do not claim an exact percentage of context remaining.
 
 ## Handoff behavior
 
-When handoff is appropriate:
+When the user requests handoff or handoff is otherwise appropriate:
 
 1. finish or stop at a safe artifact boundary;
 2. persist/update CHAT_HANDOFF.md;
-3. make sure PROJECT.md and PLAN_INDEX.md point to the correct state;
-4. give the user CHAT_CONTINUATION_PROMPT;
-5. do not start the next large operation.
+3. ensure PROJECT.md and PLAN_INDEX.md point to the correct state;
+4. fill the continuation template with concrete current values;
+5. include repository/base, storage/root, phase, last completed work, next action, and exact files to read first;
+6. output it in a plain-text copyable code block as the final response element;
+7. put no text after it and do not start the next large operation.
 
-The successor chat must re-read the manual before continuing.
+Never leave placeholders in a real handoff. The successor chat must re-read the manual before continuing.
 
 ## Final audit
 

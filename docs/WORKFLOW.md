@@ -184,7 +184,11 @@ CHAT_HANDOFF.md is an operational checkpoint, not a conversation transcript.
 
 Maintain enough information to resume from a new chat: phase, storage mode/root, working repository/base, last completed item, next item, recent non-canonical decisions, blockers, decomposition changes, and safe continuation point.
 
-When a planned or emergency handoff is needed, persist/update it and provide CHAT_CONTINUATION_PROMPT.
+When the user requests a handoff, or a planned/emergency handoff is needed, persist/update CHAT_HANDOFF.md and generate the continuation prompt in the same response.
+
+The prompt must be dynamically populated, not returned as an unfilled template. Include working repository/base, storage mode/root, current phase, last completed work, next safe action, and exact persistent files to read first.
+
+Place it in a plain-text copyable code block as the final element of the response. Put no explanatory text after it.
 
 The successor chat must re-read the manual, then read PROJECT.md, CHAT_HANDOFF.md, MASTER_PLAN.md, and PLAN_INDEX.md, inventory the plan directory, load only the files required for the next operation, and re-verify relevant code against the current repository.
 

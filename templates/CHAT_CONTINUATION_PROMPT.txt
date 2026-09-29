@@ -1,16 +1,40 @@
-Read the instructions configured for this ChatGPT Project first.
+Continue the AN-chatNcodex planning workflow from the persisted handoff.
 
-Then read the canonical workflow manual:
+First read the ChatGPT Project Instructions and the canonical workflow manual:
 https://github.com/Armoredweb/AN-chatNcodex-WorkFlow.git
 
-Keep that manual as an active reference and refresh the relevant sections before continuing the current phase or crossing any major phase boundary.
+Working repository:
+<owner/repository>
 
-This chat continues an existing planning workflow.
+Working base:
+<branch/ref>
 
-Recover the project from its persistent planning storage. Start with PROJECT.md and CHAT_HANDOFF.md, then read MASTER_PLAN.md and PLAN_INDEX.md. Inventory the remaining planning files and load only those required for the next operation.
+Planning storage:
+<LIBRARY | GITHUB>
 
-Do not rely on assumed context from the previous conversation. Reconstruct project state from persistent artifacts.
+Planning root:
+<path>
 
-Before making implementation-level decisions or expanding another plan part, verify the relevant current code directly in the working GitHub repository.
+Current phase:
+<phase>
 
-Continue from the next safe action recorded in CHAT_HANDOFF.md and follow the workflow's File Safety and Context Safety rules.
+Last completed:
+<concrete artifact/action>
+
+Next action:
+<concrete next safe action>
+
+Read first:
+- <PROJECT.md path>
+- <CHAT_HANDOFF.md path>
+- <MASTER_PLAN.md path>
+- <PLAN_INDEX.md path>
+- <only additional plan files required for the next action>
+
+Do not rely on previous-chat memory. Reconstruct state from persistent artifacts and keep the canonical manual active.
+
+Inventory remaining planning files, but load only those needed for the next operation.
+
+Before implementation-level decisions or another expansion, verify the relevant current source directly in the working GitHub repository.
+
+Continue from the safe continuation point recorded in CHAT_HANDOFF.md and follow File Safety and Context Safety rules.
