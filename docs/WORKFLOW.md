@@ -170,6 +170,26 @@ An expanded plan should provide verified paths/symbols when available, state own
 
 Useful pseudocode or implementation code may be included when it materially reduces implementation-agent reasoning.
 
+### Continuous Expansion Mode
+
+Continuous Expansion Mode is an opt-in execution style for the expansion phase. Enable it when the user explicitly asks ChatGPT to continue across checkpoints without waiting for repeated "continue" messages.
+
+The planning granularity does not change: perform one bounded expansion or subdivision at a time, persist its checkpoint, reassess Context Safety, and only then proceed automatically.
+
+A hard per-chat ceiling applies: at most 4 continuous planning operations may be completed in one chat. After operation 4, ChatGPT must not begin operation 5. It must persist/update the operational state, update CHAT_HANDOFF.md, and end with a populated continuation prompt for a successor chat.
+
+For this counter, use semantic operations rather than commit count:
+
+- completing one plan-file expansion counts as 1;
+- structurally subdividing one pending plan into subplans counts as 1, even if several subfiles are created;
+- repository inspection, source re-verification, checkpoint persistence, and routine PLAN_INDEX.md or CHAT_HANDOFF.md synchronization do not count separately.
+
+The counter belongs to the chat, not to an individual user invocation. A manual "continue" in the same chat does not reset it. The successor chat begins at 0/4.
+
+This ceiling does not override Context Safety. CAUTION, HANDOFF, blockers, tool failures, abnormal latency, repeated response failures, or other signs of degradation may force an earlier handoff.
+
+CHAT_HANDOFF.md must record whether Continuous Expansion Mode remains active so the successor can continue automatically after reconstructing state.
+
 ## 12. Minimal chat output during expansion
 
 The persisted plan file is the primary output.
