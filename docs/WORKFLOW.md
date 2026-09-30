@@ -178,11 +178,13 @@ The planning granularity does not change: perform one bounded expansion or subdi
 
 A hard per-chat ceiling applies: at most 4 continuous planning operations may be completed in one chat. After operation 4, ChatGPT must not begin operation 5. It must persist/update the operational state, update CHAT_HANDOFF.md, and end with a populated continuation prompt for a successor chat.
 
-For this counter, use semantic operations rather than commit count:
+For this counter, count heavy ChatGPT operations rather than commits or files.
 
-- completing one plan-file expansion counts as 1;
-- structurally subdividing one pending plan into subplans counts as 1, even if several subfiles are created;
-- repository inspection, source re-verification, checkpoint persistence, and routine PLAN_INDEX.md or CHAT_HANDOFF.md synchronization do not count separately.
+A heavy operation is one bounded top-level task that materially consumes context, reasoning, research, repository inspection, tool work, or artifact production. As a default test, if the operation independently warrants a Context Safety Check, count it as 1 unit unless it is clearly supporting work within another already-counted operation.
+
+Examples include a substantial plan expansion, structural subdivision, substantial decomposition pass, major MASTER_PLAN consolidation/revision, research-heavy or repository-heavy architecture/reconciliation pass, substantial final-audit/optimization pass, substantial Codex-handoff preparation, or a large recovery/migration/reorganization task.
+
+Count the top-level operation once. Its required source reads, re-verification, reasoning, persistence, checkpoint writes, and routine PLAN_INDEX.md / CHAT_HANDOFF.md synchronization are included in that unit and do not count separately unless they become an independent substantial operation.
 
 The counter belongs to the chat, not to an individual user invocation. A manual "continue" in the same chat does not reset it. The successor chat begins at 0/4.
 
