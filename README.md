@@ -90,6 +90,23 @@ Chat safety:
 - when uncertain whether the next substantial operation can finish cleanly, prefer a planned handoff;
 - every requested/triggered handoff ends with a concrete plain-text continuation prompt ready to copy into the next chat.
 
+## Bounded continuous expansion
+
+When explicitly enabled by the user, ChatGPT may expand plans continuously across automatic checkpoints instead of stopping for a "continue" message after every part.
+
+The mode is deliberately bounded:
+
+- work remains one bounded expansion or subdivision at a time;
+- each completed plan expansion counts as 1 operation;
+- one structural subdivision into subplans also counts as 1 operation;
+- routine checkpoint/index/handoff synchronization does not count separately;
+- maximum: 4 continuous planning operations per chat;
+- after the 4th operation, ChatGPT persists state and produces a handoff to a successor chat instead of starting a 5th;
+- the counter resets only in the successor chat;
+- Context Safety or degradation can force an earlier handoff.
+
+This limit is based on planning operations rather than Git commit count because one semantic operation may require a different number of persistence writes depending on the available tooling.
+
 ## Planning is not execution
 
 A Plan Part is sized for safe ChatGPT planning. A Micro Step is a logical work unit. An Implementation Batch groups work before broad validation. A GOAL is a continuous autonomous mission assigned to one implementation agent.
