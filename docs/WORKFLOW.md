@@ -39,7 +39,7 @@ For workflow procedure, this manual is authoritative.
 
 For software implementation facts, the current working GitHub repository remains authoritative.
 
-## 3. Source precedence
+## 4. Source precedence
 
 For software facts, when sources conflict:
 
