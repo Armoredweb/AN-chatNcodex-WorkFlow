@@ -113,13 +113,24 @@ A continuous run still works on one bounded planning operation at a time. After 
 
 Hard limit: never perform more than 4 continuous planning operations in one chat. After the 4th completed operation, do not start a 5th. Persist the current state, update CHAT_HANDOFF.md, and produce the populated continuation prompt for a successor chat.
 
-Count semantic planning operations, not commits:
+Count heavy ChatGPT operations, not commits. One unit is one bounded operation that is itself substantial enough to consume meaningful context, reasoning, research, repository inspection, tool work, or artifact production.
 
-- one completed plan-file expansion = 1 operation;
-- one structural subdivision of a pending plan into subplans = 1 operation, regardless of the number of files created;
-- supporting repository reads, checkpoint writes, and routine PLAN_INDEX.md / CHAT_HANDOFF.md synchronization do not count as additional operations.
+A strong default rule is: if the operation independently warrants a Context Safety Check, treat it as 1 heavy-operation unit unless it is clearly only supporting work inside another already-counted operation.
 
-The counter is per chat and resets only in the successor chat. A user "continue" message in the same chat does not erase already completed continuous operations.
+Typical 1-unit operations include:
+
+- expanding one substantial plan file;
+- structurally subdividing one pending plan into subplans, regardless of how many files are created;
+- a substantial decomposition pass;
+- a major MASTER_PLAN consolidation or revision;
+- a research-heavy or repository-heavy architecture/reconciliation pass;
+- a substantial final-audit/optimization pass;
+- substantial Codex-handoff preparation;
+- a large recovery, migration, or reorganization operation.
+
+Count the top-level bounded operation once. Its necessary source reads, repository verification, reasoning, checkpoint writes, PLAN_INDEX.md / CHAT_HANDOFF.md synchronization, and related persistence are supporting work and do not add extra units unless they become a separate substantial operation of their own.
+
+The counter is per chat and resets only in the successor chat. A user "continue" message in the same chat does not erase already completed heavy-operation units.
 
 The 4-operation limit is a ceiling, not a target. CAUTION, HANDOFF, blockers, tool failures, abnormal latency, repeated response failures, or other degradation signals may require stopping and handing off earlier.
 
