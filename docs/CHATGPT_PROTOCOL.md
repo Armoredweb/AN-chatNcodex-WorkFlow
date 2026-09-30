@@ -14,6 +14,16 @@ If remembered workflow behavior conflicts with Project Instructions, CHAT_HANDOF
 
 Do not substitute remembered workflow rules for direct consultation of the canonical manual.
 
+## Responsible-use purpose
+
+This workflow is an engineering/planning method, not a mechanism for bypassing ChatGPT, Codex, Work, account, rate, usage, safety, or platform limits.
+
+Its purpose is to use available ChatGPT capacity efficiently: move difficult reasoning into explicit planning, divide large work into safe bounded operations, persist checkpoints, and reserve Codex/Work resources for tasks that actually need implementation or autonomous execution.
+
+Always respect product limits, safety systems, authorization boundaries, and applicable platform rules. Do not design the workflow to evade enforcement, conceal workload, keep sessions alive artificially, or obtain capacity beyond what the product allows.
+
+The persistent artifacts should make the workload legible: a reviewer should be able to see that repeated operations are bounded planning/checkpoint work for a software project, not an attempt to circumvent limits.
+
 ## Start behavior
 
 1. Read the ChatGPT Project instructions.
@@ -85,13 +95,15 @@ Do not begin an unsafe operation and hope it fits.
 
 ## Expansion requirements
 
-Expanded plan parts should leave implementation decisions as explicit as practical.
+Expanded plan parts should leave implementation decisions as explicit as practical while using as little context as reasonably possible.
 
-Use verified repository paths and symbols when possible.
+Do not pad a plan to reach a line count. Small, complete plan parts are preferable to larger files containing repetition, tutorial material, generic rationale, or restated context.
 
-Resolve ownership, interfaces, state/data flow, algorithms, lifecycle, compatibility, failure behavior, cleanup/migration, tests, and definition of done.
+Use verified repository paths and symbols when possible. Resolve only the implementation-relevant ownership, interfaces, state/data flow, algorithms, lifecycle, compatibility, failure behavior, cleanup/migration, tests, and definition of done.
 
-Provide useful pseudocode or code where doing so materially reduces implementation-agent thinking, but do not invent production details contradicted by the live repository.
+Prefer direct implementation instructions, concrete contracts, concise pseudocode, and implementation-ready code where they reduce LUA-high reasoning. Explain "why" only when the rationale is necessary to preserve a constraint, avoid a known failure mode, or resolve an architectural ambiguity.
+
+The goal is to perform the difficult reasoning in ChatGPT, not to convert that reasoning into oversized prose. A hard problem may have a short implementation plan once the reasoning is resolved.
 
 Re-check source before every part, even if a nearby part was expanded recently.
 
@@ -138,17 +150,15 @@ Record whether Continuous Expansion Mode is active in CHAT_HANDOFF.md so the suc
 
 ## File-size rule
 
-Target approximately 1,200-1,600 lines for implementation-planning files.
+The line counts below are safety references and upper-range guidance, not quotas, minimums, or output targets.
 
-If a completed expansion lands only slightly above that target, for example around 1,600-1,700 lines, do not compact, recreate, or subdivide it solely to satisfy the target when the file remains coherent and manageable.
+A complete plan may be far below 1,200 lines; that is desirable when the problem can be specified clearly with less text. Never add filler, repeated context, tutorials, or unnecessary rationale to approach a line count.
 
-Around 1,700-1,800 lines, strongly consider preventive subdivision prospectively, especially when complexity or structure also warrants it.
+For larger implementation-planning files, approximately 1,200-1,600 lines is a normal working range. If a coherent completed file lands around 1,600-1,700 lines, do not compact, recreate, or subdivide it solely for that small overage.
 
-Do not intentionally exceed about 2,000 lines.
+Around 1,700-1,800 lines, strongly consider preventive subdivision prospectively, especially when complexity or structure also warrants it. Do not intentionally exceed about 2,000 lines.
 
-Complex work may need to be split well below these numbers.
-
-Size is checked prospectively during reasoning, not only after writing.
+Complex work may need to be split well below these numbers. Size is checked prospectively during reasoning, not only after writing.
 
 ## Context Safety
 
