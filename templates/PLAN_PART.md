@@ -13,9 +13,9 @@ GOAL: <id/TBD>
 
 Describe the exact implementation state this part must produce.
 
-## Why this part exists
+## Rationale / constraints
 
-Explain the architectural purpose and why this is a useful planning boundary.
+Include only rationale required to preserve a non-obvious architectural decision, compatibility constraint, or known failure mode. Omit this section when implementation instructions are self-explanatory.
 
 ## Current repository evidence
 
@@ -49,22 +49,20 @@ Produces:
 
 ## Implementation instructions
 
-Describe concrete work using verified paths/symbols when available.
+Use the smallest amount of text that makes implementation unambiguous. Be direct and implementation-oriented; do not add tutorial prose, repeated background, generic explanations, or filler.
 
-Resolve as applicable:
+Use verified paths/symbols when available. Resolve only what applies:
 
 - ownership;
-- interfaces and contracts;
+- interfaces/contracts;
 - state/data flow;
 - lifecycle;
 - algorithms;
-- compatibility behavior;
-- failure/error behavior;
-- migration;
-- cleanup/removal;
+- compatibility/error behavior;
+- migration/cleanup;
 - concurrency/performance constraints.
 
-Include useful pseudocode or implementation code when it materially reduces implementation-agent reasoning.
+Prefer concise contracts, pseudocode, or implementation-ready code when they reduce LUA-high reasoning. A small complete solution is preferable to a large document.
 
 ## Invariants
 
@@ -97,6 +95,6 @@ After implementation, later work may assume:
 
 ## Planning notes
 
-Keep only information useful to implementation or later plan maintenance.
+Optional. Keep only implementation-relevant information not already stated above. No filler or repeated context.
 
 - <note>
