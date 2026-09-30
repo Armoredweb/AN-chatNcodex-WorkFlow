@@ -78,7 +78,13 @@ When requested/required or continuous mode reaches 4/4, persist operational stat
 
 FINAL AUDIT
 
-Before Codex handoff, remove stale assumptions, gaps, unnecessary prose, UNASSIGNED work, and avoidable SOL-high work. Finalize Implementation Batches and GOALs only after that audit.
+Audit every expanded plan for implementation readiness. Preserve implementation truth first. Then remove avoidable decisions left to LUA-high by resolving ownership, interfaces, algorithms, migration order, ambiguity, or other choices ChatGPT can settle from current source.
+
+Where LUA-high would otherwise need difficult reasoning, add the minimum concrete contract, pseudocode, data shape, call sequence, or implementation-ready code needed to make the task mechanical. Then remove duplicated background, obsolete notes, tutorials, repeated rationale, and other text that does not affect implementation or validation.
+
+Never trade away requirements, constraints, invariants, compatibility behavior, dependencies, validation, or architectural intent just to reduce tokens. Compression is subordinate to correctness.
+
+Resolve UNASSIGNED work and re-evaluate SOL-high work for LUA-high after this preparation. Finalize Implementation Batches and GOALs only after the audit.
 
 CORE RULE
 
@@ -176,14 +182,11 @@ You do not need to compose or maintain a continuation template yourself.
 
 ## 8. Final audit and Codex
 
-After all required plan parts are expanded, ChatGPT performs a final optimization audit:
+After all required plan parts are expanded, ChatGPT reviews them file by file with one objective: make implementation as easy and mechanical as practical without losing implementation intent.
 
-- remove ambiguity and stale assumptions;
-- remove unnecessary prose;
-- resolve UNASSIGNED work;
-- convert SOL-high work to LUA-high where better preparation makes that safe;
-- define Implementation Batches and GOALs;
-- prepare the final Codex handoff.
+It should first preserve all required behavior, constraints, invariants, dependencies, compatibility rules, and validation. Then it should find decisions still being left to LUA-high that ChatGPT can resolve itself from current source. Where difficult reasoning remains, it should add the minimum useful contract, algorithm, pseudocode, data shape, call sequence, or implementation-ready code. Only after that should it remove duplicated context, obsolete notes, tutorials, repeated rationale, and other text that does not affect implementation.
+
+The audit also resolves UNASSIGNED work, re-evaluates SOL-high work for LUA-high, defines Implementation Batches and GOALs, and prepares the final Codex handoff. Token reduction is valuable, but never at the cost of implementation information or intent.
 
 Planning files are safety boundaries for planning, not automatic Codex sessions or test boundaries. One GOAL may use many plan files.
 

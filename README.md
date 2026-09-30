@@ -35,7 +35,7 @@ Checkpoints, multiple chats, handoffs, and continuous mode divide work into boun
 - Context Safety and file size are independent.
 - Every chat counts heavy ChatGPT operations, even in manual `continue` mode. At 4/4, no 5th heavy operation starts; manual mode recommends handoff and continuous mode performs it automatically.
 - Planning-file boundaries do not imply one Codex session or one test cycle per file.
-- LUA-high is the default implementation role; SOL-high is retained only where strong preparation cannot remove substantial implementation reasoning.
+- LUA-high is the default implementation role; the final audit removes avoidable decisions from LUA, adds concrete code/contracts where needed, and trims irrelevant text without sacrificing implementation intent.
 
 ## Repository contents
 

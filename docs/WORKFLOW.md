@@ -359,16 +359,37 @@ They must not silently redesign prepared architecture or revive superseded plans
 
 After all required parts are expanded, audit the plan file by file.
 
-Look for:
+The purpose is not to enlarge the plans. It is to make implementation as direct and mechanical as practical for LUA-high while preserving the full implementation intent.
+
+Use this priority order:
+
+1. **Preserve implementation truth first.** Do not remove requirements, constraints, invariants, compatibility behavior, dependencies, failure behavior, validation, or architectural intent merely to save tokens.
+2. **Remove delegated thinking.** Find places where the plan still asks LUA-high to choose an approach, infer ownership, design an interface, resolve an ambiguity, select an algorithm, decide migration order, or make another decision ChatGPT can resolve from repository evidence. Resolve it in the plan instead.
+3. **Materialize difficult implementation where useful.** When a section would require reasoning beyond the intended LUA-high role, provide the concrete contract, algorithm, pseudocode, data shape, call sequence, or implementation-ready code needed to make the work mechanical. Do not add code merely for volume.
+4. **Re-check current source.** Verify any decision whose correctness depends on repository state before making it explicit.
+5. **Reduce without losing meaning.** Remove duplicated background, obsolete notes, tutorial prose, repeated rationale, redundant examples, and context the implementation agent can obtain directly from cited source files.
+6. **Prefer the shortest complete form.** If a complex planning problem resolves to a small implementation, keep the plan small.
+
+For every plan part, ask:
+
+- Does LUA-high still have to make an avoidable architectural or implementation decision?
+- Is any instruction vague enough that two reasonable implementations could diverge materially?
+- Can ChatGPT resolve that ambiguity now from current source?
+- Would concise code/pseudocode/contract text remove substantial implementation reasoning?
+- Is any paragraph irrelevant to actually implementing, validating, or preserving the intended behavior?
+- Can text be removed or compressed without losing implementation information or intent?
+
+Also check for:
 
 - missing implementation detail;
 - stale assumptions;
-- unnecessary prose/repetition;
-- unsafe size;
 - dependency gaps/overlap;
 - unresolved UNASSIGNED;
-- SOL-high work that can become LUA-high after better preparation;
-- missing validation or downstream contracts.
+- SOL-high work that can become LUA-high after stronger preparation;
+- missing validation or downstream contracts;
+- unsafe file size.
+
+Compression is subordinate to correctness. When there is a conflict, preserve implementation information and intent.
 
 Only after this audit finalize Implementation Batches and GOALs and create `CODEX_HANDOFF.md`.
 
