@@ -41,6 +41,14 @@ Planning templates:
 - templates/CHAT_HANDOFF.md
 - templates/CODEX_HANDOFF.md
 
+## Purpose and responsible use
+
+This workflow is for legitimate software planning and resource-efficient orchestration. It is not intended to bypass ChatGPT, Codex, Work, account, rate, usage, safety, or platform limits.
+
+The method uses bounded work, checkpoint persistence, decomposition, and handoffs so difficult reasoning can be done in ChatGPT and implementation resources can be reserved for work that needs them. Product limits and safety/authorization boundaries always take precedence; continuous mode and multi-chat handoffs must not be used as an evasion mechanism.
+
+The persisted planning trail also makes the workload explicit: repeated operations are bounded planning tasks for a software project.
+
 ## Manual Context Rule
 
 The canonical workflow manual must remain an active reference during the entire lifecycle.
@@ -76,10 +84,11 @@ For planning persistence, GitHub is recommended when available. Library remains 
 
 File safety:
 
-- normal target: about 1,200-1,600 lines;
-- a small overage around 1,600-1,700 lines is acceptable and does not require compacting, recreating, or subdividing an otherwise coherent file;
-- consider preventive subdivision prospectively around 1,700-1,800 lines, especially when complexity or structure also warrants it;
-- do not intentionally exceed about 2,000 lines;
+- line counts are safety references, never quotas or minimums;
+- a short complete plan is preferable to padding or repeated explanation;
+- for larger files, about 1,200-1,600 lines is a normal working range;
+- a coherent file around 1,600-1,700 lines does not need rewriting solely for that small overage;
+- consider preventive subdivision around 1,700-1,800 lines and do not intentionally exceed about 2,000 lines;
 - split earlier when reasoning, research, repository inspection, or information density makes the operation risky.
 
 Chat safety:
@@ -106,6 +115,12 @@ The mode is deliberately bounded:
 - Context Safety or degradation can force an earlier handoff.
 
 A practical test is: if a top-level operation independently warrants a Context Safety Check, it normally counts as 1 unit. The limit is intentionally based on heavy ChatGPT work rather than Git commit count.
+
+## Context and token efficiency
+
+The objective is implementation readiness per token, not document size. Expansion should remove ambiguity for the implementation agent without reproducing the planner's entire reasoning process.
+
+Prefer concise contracts, paths, symbols, algorithms, tests, and implementation-ready code. Avoid filler, generic tutorials, repeated background, and unnecessary explanations. A difficult planning problem may legitimately produce a very small subplan once the difficult decisions have been resolved.
 
 ## Planning is not execution
 
