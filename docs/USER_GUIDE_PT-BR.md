@@ -352,6 +352,8 @@ Inventory remaining planning files, but load only those needed for the next oper
 Before implementation-level decisions or another expansion, verify the relevant current source directly in the working GitHub repository.
 
 Continue from the safe continuation point recorded in CHAT_HANDOFF.md and follow File Safety and Context Safety rules.
+
+If CHAT_HANDOFF.md says Continuous Expansion Mode is ACTIVE, resume it automatically after reconstruction. Start this successor chat with a fresh 0/4 operation counter, count expansions and structural subdivisions as defined by the canonical manual, and hand off again after the 4th continuous planning operation or earlier if Context Safety requires it.
 ```
 
 Em um handoff real, todos os placeholders são substituídos pelos valores concretos: repositório/base, armazenamento/root, fase, último trabalho concluído, próxima ação e arquivos exatos para leitura inicial.
