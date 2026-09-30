@@ -1,6 +1,6 @@
 # User Guide
 
-This is the complete user-facing guide. You do not need to open any template files.
+This is the complete user-facing guide. There are no separate template files to open or maintain.
 
 The operational rules used by ChatGPT live in `docs/WORKFLOW.md`. The two copyable blocks below are the only setup text you need.
 
