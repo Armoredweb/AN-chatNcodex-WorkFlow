@@ -12,7 +12,17 @@ Persistent planning storage may be either ChatGPT Library or a dedicated plan fo
 
 Codex agents implement prepared GOALs, test, debug, validate, and report material deviations.
 
-## 2. Manual Context Rule
+## 2. Responsible-use purpose
+
+This workflow exists to organize legitimate software planning efficiently. It is not intended to bypass or weaken ChatGPT, Codex, Work, account, rate, usage, safety, or platform limits.
+
+The workflow deliberately divides large jobs into bounded operations, persists checkpoints, and moves difficult reasoning into planning so implementation agents receive clearer work and expensive autonomous resources are used only when needed.
+
+All product limits, safety systems, authorization boundaries, and applicable platform rules remain authoritative. Do not use checkpointing, handoffs, multiple chats, continuous mode, or repository persistence as an evasion technique, to conceal workload, to artificially keep execution alive, or to obtain capacity beyond what the product permits.
+
+Planning artifacts should make the nature of the workload clear to both users and reviewers: the repeated operations are bounded architecture/planning work with explicit persistence and handoff boundaries.
+
+## 3. Manual Context Rule
 
 The canonical workflow manual must remain an active reference throughout the entire planning lifecycle.
 
@@ -40,7 +50,7 @@ For software facts, when sources conflict:
 
 Do not revive superseded architecture merely because an older document contains more detail.
 
-## 4. Initialization
+## 5. Initialization
 
 A ChatGPT Project should contain the generic plain-text PROJECT_INSTRUCTIONS template.
 
@@ -52,7 +62,7 @@ If the working repository is unknown, ask for it. Verify access and inspect its 
 
 Before advancing into a major phase, refresh the relevant manual sections.
 
-## 5. Storage Gate
+## 6. Storage Gate
 
 After the working repository is known, offer GITHUB or LIBRARY and record the choice and planning root in PROJECT.md.
 
@@ -76,7 +86,7 @@ Avoid micro-commits without changing planning granularity. Continue working on o
 
 GitHub mode requires no final publication step because the plan is already persistent in the repository.
 
-## 6. Master-plan phase
+## 7. Master-plan phase
 
 The user may provide requirements over many invocations. Brainstorm, research, inspect code, compare alternatives, and refine decisions.
 
@@ -92,7 +102,7 @@ Split the master plan into coherent subfiles if necessary, but preserve a compac
 
 Do not begin implementation decomposition until the user explicitly approves the master plan for implementation planning.
 
-## 7. Implementation-planning gate
+## 8. Implementation-planning gate
 
 At user approval:
 
@@ -104,7 +114,7 @@ At user approval:
 
 The original backup is an immutable semantic baseline. Git history does not replace its purpose.
 
-## 8. Decomposition phase
+## 9. Decomposition phase
 
 Decomposition and expansion are separate.
 
@@ -116,21 +126,19 @@ Do not fully expand implementation details during decomposition.
 
 Each microstep is LUA-high, SOL-high, or UNASSIGNED. UNASSIGNED is temporary and forbidden in the final handoff.
 
-## 9. File Safety
+## 10. File Safety
 
-Implementation-planning files should normally target about 1,200-1,600 lines.
+Line counts are safety references, not quotas, minimums, or desired output sizes.
 
-A small overage into roughly 1,600-1,700 lines is acceptable. Do not compact, recreate, or subdivide an already coherent and manageable file solely because it landed slightly above the normal target.
+A complete implementation-planning file may be much shorter than 1,200 lines. If the implementation can be made unambiguous in a small file, keep it small. Never add filler, repeated background, tutorial prose, or unnecessary rationale to approach a line count.
 
-Consider preventive subdivision prospectively around 1,700-1,800 lines, especially when complexity or structure also warrants it.
+For larger files, about 1,200-1,600 lines is a normal working range. A coherent file around 1,600-1,700 lines does not need compacting, recreation, or subdivision solely for that small overage.
 
-Do not intentionally produce a plan file above approximately 2,000 lines.
+Consider preventive subdivision prospectively around 1,700-1,800 lines, especially when complexity or structure also warrants it. Do not intentionally produce a plan file above approximately 2,000 lines.
 
-The ceiling is not a target. High reasoning complexity, research, tool usage, repository inspection, or dense implementation detail may require splitting much earlier.
+High reasoning complexity, research, tool usage, repository inspection, or dense implementation detail may require splitting much earlier. Estimate size and complexity before drafting.
 
-Estimate size and complexity before drafting. Recursively subdivide when needed.
-
-## 10. Context Safety Check
+## 11. Context Safety Check
 
 File size and conversation-context pressure are independent constraints.
 
@@ -148,7 +156,7 @@ When uncertain, prefer a planned handoff.
 
 This applies during master-plan consolidation, decomposition, expansion, research, audits, and final Codex handoff preparation.
 
-## 11. Expansion phase
+## 12. Expansion phase
 
 Before entering the expansion phase, refresh the relevant manual sections.
 
@@ -166,9 +174,11 @@ Before every expansion:
 
 Planning files are not evidence of current code state. Conversation memory and old repository inspections are not substitutes for current source.
 
-An expanded plan should provide verified paths/symbols when available, state ownership, interfaces/contracts, data flow, algorithms, invariants, compatibility rules, error behavior, migration/cleanup requirements, validation, and definition of done.
+An expanded plan should contain only implementation-relevant material: verified paths/symbols when available, required ownership, interfaces/contracts, data flow, algorithms, invariants, compatibility rules, error behavior, migration/cleanup, validation, and definition of done.
 
-Useful pseudocode or implementation code may be included when it materially reduces implementation-agent reasoning.
+Optimize for token efficiency and LUA-high execution. Prefer direct instructions, concrete contracts, concise pseudocode, and implementation-ready code over explanatory prose. Do not repeat context the implementation agent can already obtain from the referenced files. Include rationale only when it protects a requirement, constraint, compatibility rule, or non-obvious architectural decision.
+
+The planning model should spend the heavy reasoning needed to make the solution simple; it should not externalize all of that reasoning as a giant document. Short plans are correct when the resolved implementation is small.
 
 ### Continuous Expansion Mode
 
@@ -192,7 +202,7 @@ This ceiling does not override Context Safety. CAUTION, HANDOFF, blockers, tool 
 
 CHAT_HANDOFF.md must record whether Continuous Expansion Mode remains active so the successor can continue automatically after reconstructing state.
 
-## 12. Minimal chat output during expansion
+## 13. Minimal chat output during expansion
 
 The persisted plan file is the primary output.
 
@@ -202,7 +212,7 @@ Chat output should normally contain only continuity information: completed/updat
 
 Avoid spending context twice on the same implementation content.
 
-## 13. Chat Handoff
+## 14. Chat Handoff
 
 CHAT_HANDOFF.md is an operational checkpoint, not a conversation transcript.
 
@@ -216,7 +226,7 @@ Place it in a plain-text copyable code block as the final element of the respons
 
 The successor chat must re-read the manual, then read PROJECT.md, CHAT_HANDOFF.md, MASTER_PLAN.md, and PLAN_INDEX.md, inventory the plan directory, load only the files required for the next operation, and re-verify relevant code against the current repository.
 
-## 14. Final optimization audit
+## 15. Final optimization audit
 
 Before starting the final audit, refresh the relevant manual sections.
 
@@ -228,7 +238,7 @@ The final audit may subdivide parts again.
 
 Only after this audit should PLAN_INDEX.md be considered implementation-ready.
 
-## 15. Execution model
+## 16. Execution model
 
 Keep four concepts distinct:
 
@@ -244,7 +254,7 @@ Planning granularity must not dictate execution or test granularity.
 
 Many plan files may belong to one GOAL. Minimize agent switches. Prefer broad coherent implementation and validation at meaningful technical boundaries rather than full test cycles after every small part.
 
-## 16. Codex handoff
+## 17. Codex handoff
 
 Before preparing CODEX_HANDOFF.md, refresh the relevant manual sections.
 
@@ -256,7 +266,7 @@ In GITHUB storage mode, the plan is already available to implementation agents.
 
 In LIBRARY mode, ask the user for authorization before publishing the completed planning package into a new plan folder in the working repository.
 
-## 17. Review loop
+## 18. Review loop
 
 After implementation, review the current repository rather than extending old assumptions.
 
