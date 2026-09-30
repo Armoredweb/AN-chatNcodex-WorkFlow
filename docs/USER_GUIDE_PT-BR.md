@@ -4,6 +4,14 @@ Este guia é autossuficiente para o uso normal. Você não precisa abrir os arqu
 
 Os documentos operacionais e as instruções para ChatGPT/Codex permanecem em inglês para existir um único protocolo canônico. Os prompts humanos de brainstorm deste guia estão em português.
 
+## Uso responsável e objetivo
+
+Este workflow não é uma forma de burlar limites do ChatGPT, Codex, Work, conta, taxa de uso, segurança ou regras da plataforma. Checkpoints, vários chats, persistência do planejamento e modo contínuo servem para dividir trabalho legítimo de planejamento de software em partes limitadas e preservar o estado com segurança.
+
+O objetivo é usar o ChatGPT de forma eficiente para arquitetura e planejamento pesado, reservando recursos de Codex/Work para implementação ou execução autônoma que realmente precise deles. Limites do produto, salvaguardas, autorizações e regras da plataforma sempre têm precedência.
+
+O planejamento persistido também deixa a carga de trabalho explícita: outro revisor consegue identificar que as operações repetidas são tarefas limitadas de planejamento de software, e não uma tentativa de contornar limites.
+
 ## 1. Crie um Projeto no ChatGPT
 
 Crie um novo Projeto do ChatGPT para o trabalho que deseja planejar.
@@ -18,6 +26,12 @@ https://github.com/Armoredweb/AN-chatNcodex-WorkFlow.git
 
 Keep the canonical manual active. Read it at every new or continuation chat; refresh relevant sections before major phase changes, after handoffs, and whenever procedure is uncertain. Do not rely only on remembered workflow rules.
 
+RESPONSIBLE USE
+
+This workflow is for legitimate software planning and resource-efficient orchestration. It is not intended to bypass ChatGPT, Codex, Work, account, rate, usage, safety, or platform limits. Respect all product limits, safeguards, authorization boundaries, and platform rules.
+
+Checkpointing, handoffs, multiple chats, and continuous mode exist to divide work safely and preserve planning state, not to evade enforcement or obtain capacity beyond what the product permits. Use ChatGPT for heavy planning so Codex/Work resources can be reserved for implementation or autonomous work that actually needs them. Keep persistent artifacts clear enough that the workload is visibly bounded software-planning work.
+
 START OR RESUME
 
 1. Read these instructions and the canonical manual.
@@ -28,25 +42,27 @@ START OR RESUME
 
 WORKING REPOSITORY
 
-If PROJECT.md does not identify the working GitHub repository, ask for it. Verify access and inspect current state before repository-specific planning.
+If PROJECT.md does not identify the working GitHub repository, ask for it. Verify access and current state before repository-specific planning.
 
-Software-fact precedence: current repository/active architecture, newest canonical plan, newer implementation plans/macroblocks, historical plans/notes. For workflow procedure, the canonical manual is authoritative.
+Software facts: current repository/active architecture > newest canonical plan > newer implementation plans/macroblocks > historical notes. Workflow procedure: canonical manual.
 
 STORAGE
 
 After confirming the repository, offer GITHUB (recommended) or LIBRARY (fallback) and record mode/root in PROJECT.md.
 
-LIBRARY: use when GitHub storage is unavailable or unsuitable. Repeated approval prompts can make small expansions tedious.
-
-GITHUB: follow an existing plans convention or use plans/<plan-name>/; create a new folder per independent plan. Obtain scoped authorization for that folder. Avoid micro-commits: keep micro-expansions one-by-one, but consolidate related writes when practical. Do not create local file trees or artificial batches solely to reduce commits. Writes outside the authorized folder require separate approval.
+LIBRARY may require repeated approvals. GITHUB should use an existing plans convention or plans/<plan-name>/ with scoped authorization. Avoid micro-commits where practical, but do not change planning granularity or create artificial local batching just to reduce commits. Writes outside the authorized planning folder require separate approval.
 
 MASTER PLAN
 
-Brainstorm, research, inspect code, and refine decisions across as many messages as needed. MASTER_PLAN.md is a compact backbone of requirements, architecture, constraints, dependencies, non-goals, major systems, and expected results. Do not turn it into a giant implementation document. Do not begin decomposition until the user explicitly approves implementation planning. At that gate, persist the project and preserve backup/MASTER_PLAN.original.md.
+Brainstorm, research, inspect code, and refine decisions as needed. MASTER_PLAN.md is a compact backbone of requirements, architecture, constraints, dependencies, non-goals, major systems, and expected results. Do not turn it into a giant implementation document. Do not begin decomposition until the user explicitly approves implementation planning. At that gate, persist the project and preserve backup/MASTER_PLAN.original.md.
 
-FILE SAFETY
+FILE SAFETY AND TOKEN EFFICIENCY
 
-Target about 1,200-1,600 lines per implementation-planning file. A coherent file around 1,600-1,700 lines does not need compacting, recreation, or subdivision solely for that small overage. Consider preventive subdivision prospectively around 1,700-1,800 lines, especially when complexity also warrants it. Do not intentionally exceed about 2,000 lines. Split earlier when reasoning, research, repository inspection, tool use, or information density makes the operation risky.
+Line counts are safety references, not quotas, minimums, or goals. A complete subplan may be very small; that is preferable when the solution is simple.
+
+Never add filler, repeated context, tutorials, generic rationale, or prose merely to approach a line count. For larger files, about 1,200-1,600 lines is a normal working range. A coherent file around 1,600-1,700 lines does not need rewriting solely for that small overage. Consider subdivision around 1,700-1,800 lines and do not intentionally exceed about 2,000. Split earlier when complexity or context risk warrants it.
+
+Optimize for implementation readiness per token. Do the difficult reasoning in ChatGPT, then write only what the implementation agent needs: verified paths/symbols, concrete contracts, state/data flow, algorithms, constraints, concise pseudocode/code, tests, and definition of done. Explain why only when needed to preserve a constraint, compatibility rule, failure mode, or non-obvious architectural decision.
 
 CONTEXT SAFETY
 
@@ -56,67 +72,55 @@ SAFE: continue.
 CAUTION: finish only the current bounded operation; do not automatically start another substantial one.
 HANDOFF: persist state and move to a successor chat before more substantial work.
 
-There is no reliable exact remaining-context counter. Judge risk from conversation size, loaded material, reasoning/output, repository work, failures, lost details, incompleteness, or interface warnings. File-size safety does not guarantee chat safety.
+There is no reliable exact remaining-context counter. Judge risk from conversation size, loaded material, reasoning/output, repository work, failures, lost details, incompleteness, or interface warnings.
 
 CONTINUOUS EXPANSION MODE
 
-Enable only when the user requests continuous expansion/checkpoints without repeated "continue" prompts.
+Enable only when the user requests automatic continuation across checkpoints.
 
-After each bounded heavy operation, persist its checkpoint and continue automatically only if Context Safety remains SAFE and no user decision is required.
+After each bounded heavy operation, persist its checkpoint and continue only if Context Safety remains SAFE and no user decision is required.
 
-Hard cap: at most 4 heavy operations in one chat. The 4th heavy operation ends the run: persist state, update CHAT_HANDOFF.md, and return a populated handoff prompt for a successor chat. Never start a 5th operation in that chat.
+Hard cap: 4 heavy operations per chat. Complete operation 4, persist state, update CHAT_HANDOFF.md, and return a populated handoff prompt. Never start operation 5 in that chat.
 
-Count heavy ChatGPT operations, not commits. One unit is one bounded top-level task that materially consumes context, reasoning, research, repository inspection, tool work, or artifact production. If it independently warrants a Context Safety Check, normally count it as 1 unit.
+A heavy operation is a substantial top-level task consuming meaningful context/reasoning/research/repository/tool/artifact work. If it independently warrants a Context Safety Check, normally count 1 unit. Examples: substantial expansion, structural subdivision, major decomposition or MASTER_PLAN consolidation, research/repository-heavy reconciliation, substantial audit, Codex-handoff preparation, or large recovery/migration.
 
-Examples: substantial expansion, structural subdivision, major decomposition or MASTER_PLAN consolidation, research/repository-heavy reconciliation, substantial final audit, substantial Codex-handoff preparation, or large recovery/migration work.
-
-Count the parent operation once. Its required reads, source verification, reasoning, persistence, and routine PLAN_INDEX.md / CHAT_HANDOFF.md synchronization do not add units unless they become a separate substantial operation.
-
-The counter is per chat and resets only in the successor chat. A user "continue" message in the same chat does not erase completed units. CAUTION, HANDOFF, blockers, tool failures, or degradation may stop the run before 4.
-
-Record whether Continuous Expansion Mode is active in CHAT_HANDOFF.md so a successor can resume it with a fresh 0/4 counter.
+Count the parent operation once; its required reads, verification, reasoning, persistence, and routine PLAN_INDEX.md / CHAT_HANDOFF.md synchronization are included. The counter is per chat; "continue" does not reset it. Successor chat starts at 0/4. Safety/degradation may force earlier handoff.
 
 CHAT HANDOFF
 
-CHAT_HANDOFF.md is an operational checkpoint, not a transcript. Record phase, storage/root, repository/base, last completed item, next action, recent non-canonical decisions, blockers, decomposition changes, continuous-mode state, and safe continuation point.
+CHAT_HANDOFF.md records phase, storage/root, repository/base, last completed item, next action, blockers, decomposition changes, continuous-mode state, and safe continuation point.
 
-When the user requests handoff, Context Safety requires it, or Continuous Expansion Mode reaches 4/4, persist/update CHAT_HANDOFF.md and END the response with a populated plain-text continuation prompt. Include repository/base, storage/root, phase, last completed work, next action, and exact files to read first. No placeholders and no text after the prompt.
+When handoff is requested/required or continuous mode reaches 4/4, persist/update state and END the response with a populated plain-text continuation prompt. No placeholders and no text after it.
 
 DECOMPOSITION
 
-After the approved master plan is persisted and backed up, define ordered macroblocks/microsteps, dependencies, outputs, provisional files, and preliminary agent assignment in PLAN_INDEX.md. Decomposition and expansion are separate.
+After the approved master plan is persisted/backed up, define ordered macroblocks/microsteps, dependencies, outputs, provisional files, and preliminary agent assignment in PLAN_INDEX.md. Decomposition and expansion are separate.
 
-Use LUA-high by default, SOL-high only for work that remains genuinely complex after preparation, and UNASSIGNED only temporarily. No UNASSIGNED work may remain in the final handoff.
+Use LUA-high by default, SOL-high only where work remains genuinely complex after preparation, and UNASSIGNED only temporarily. No UNASSIGNED may remain in the final handoff.
 
 PLANNING VS EXECUTION
 
-Plan Part = safe planning artifact. Micro Step = logical implementation unit. Implementation Batch = compatible work before broad validation. GOAL = continuous autonomous mission for one implementation agent.
-
-Many plan files may belong to one GOAL. Minimize agent switching. Planning granularity must not dictate test granularity.
+Plan Part = safe planning artifact. Micro Step = logical implementation unit. Implementation Batch = compatible work before broad validation. GOAL = continuous autonomous mission for one implementation agent. Many plan files may belong to one GOAL; minimize agent switching.
 
 EXPANSION
 
-Before the expansion phase, refresh the relevant manual sections. Expand one substantial part at a time.
-
-Before each part:
+Before each substantial part:
 1. Perform Context Safety Check.
-2. Re-read relevant current code from the working GitHub repository.
-3. Reconcile repository reality with the master plan, index, dependencies, and previous interfaces.
+2. Re-read relevant current code.
+3. Reconcile repository reality with master plan, index, dependencies, and prior interfaces.
 4. Resolve implementation questions from evidence.
-5. Add concrete paths/symbols, ownership, data flow, invariants, compatibility behavior, algorithms, useful pseudocode/code, tests, and definition of done.
-6. Persist the result and update index/handoff state as needed.
+5. Write the smallest implementation-ready plan: direct instructions, required contracts/code/tests, no filler.
+6. Persist result and update index/handoff as needed.
 
-Never rely solely on memory, old repository inspection, handoff text, or planning files for current implementation facts.
-
-The persisted plan file is the primary output. Do not duplicate its detailed content in chat unless asked. Keep chat output to continuity information, blockers, permissions, Context Safety, or handoff.
+Never rely solely on memory, old repository inspection, handoff text, or planning files for current implementation facts. The persisted plan is the primary output; do not duplicate its detail in chat unless asked.
 
 FINAL AUDIT
 
-Refresh the manual, then audit every expanded file for missing detail, stale assumptions, contracts/code/pseudocode/tests, unsafe size, overlap/gaps, UNASSIGNED work, and SOL-high work that can become LUA-high. Define final Implementation Batches and GOALs only after this audit, then prepare CODEX_HANDOFF.md.
+Refresh the manual, then audit expanded files for missing implementation detail, stale assumptions, unsafe size, overlap/gaps, UNASSIGNED work, and SOL-high work that can become LUA-high. Remove unnecessary prose as well as missing detail. Define final Implementation Batches and GOALs, then prepare CODEX_HANDOFF.md.
 
 CORE RULE
 
-Move difficult reasoning out of implementation time. Leave agents explicit, evidence-based work. Give LUA as much as practical after preparation; use SOL only where capability is genuinely required.
+Spend reasoning to simplify implementation. Deliver the minimum complete, evidence-based plan the implementation agent needs; do not confuse heavy thinking with large output.
 
 ```
 
@@ -266,9 +270,17 @@ Normalmente um arquivo substancial é expandido por invocação. Arquivos claram
 
 Antes de cada expansão, o ChatGPT faz um Context Safety Check e lê novamente o código atual relevante diretamente no repositório GitHub de trabalho.
 
-Arquivos expandidos devem mirar aproximadamente 1.200-1.600 linhas. Se um arquivo concluído ficar apenas um pouco acima dessa faixa, por exemplo em torno de 1.600-1.700 linhas, não é necessário compactar, recriar ou subdividir somente por esse pequeno excesso, desde que continue coerente e manejável. A divisão preventiva deve ser considerada prospectivamente por volta de 1.700-1.800 linhas, especialmente quando a complexidade ou a estrutura também indicarem essa necessidade, e não se deve tentar produzir intencionalmente um arquivo acima de aproximadamente 2.000 linhas.
+As contagens de linhas são referências de segurança, não metas de saída. Um subplano completo pode ter muito menos de 1.200 linhas, e isso é preferível quando a implementação pode ser especificada claramente com menos texto. Para arquivos maiores, cerca de 1.200-1.600 linhas é uma faixa normal de trabalho. Um arquivo coerente em torno de 1.600-1.700 linhas não precisa ser refeito apenas por esse pequeno excesso; considere subdivisão por volta de 1.700-1.800 linhas e não tente ultrapassar intencionalmente aproximadamente 2.000 linhas.
 
 Trabalho complexo pode exigir divisão muito antes disso.
+
+### Expansão eficiente
+
+A expansão é avaliada pela prontidão para implementação por token, e não pelo tamanho do documento. O ChatGPT deve fazer o raciocínio difícil e depois escrever o menor plano que permita ao agente de implementação agir corretamente.
+
+Prefira caminhos/símbolos verificados, instruções diretas, contratos concretos, algoritmos/pseudocódigo concisos, código pronto para implementação quando útil, testes e definição de pronto. Evite enchimento, contexto repetido, tutoriais genéricos e explicações de escolhas óbvias. Justificativas só devem entrar quando preservarem uma restrição, regra de compatibilidade, falha conhecida ou decisão arquitetural não óbvia.
+
+Um problema difícil pode gerar legitimamente um subplano muito pequeno depois que as decisões difíceis já foram resolvidas.
 
 ### Modo de expansão contínua
 
