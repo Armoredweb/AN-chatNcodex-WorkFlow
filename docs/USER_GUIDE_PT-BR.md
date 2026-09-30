@@ -56,13 +56,15 @@ SAFE: proceed.
 CAUTION: finish only the current bounded operation, persist it, then reassess.
 HANDOFF: do not start another substantial operation; persist state and move to a successor chat.
 
-CONTINUOUS MODE
+HEAVY-OPERATION LIMIT
 
-Enable only when the user explicitly requests automatic continuation across checkpoints.
+Count heavy top-level ChatGPT operations in every chat, whether Continuous Mode is active or not. A task that independently warrants Context Safety normally counts as 1 unit. Required reads, verification, reasoning, persistence, and routine index/handoff updates are included in that parent unit.
 
-Count heavy top-level ChatGPT operations, not commits/files. A task that independently warrants Context Safety normally counts as 1 unit. Required reads, verification, reasoning, persistence, and routine index/handoff updates are included in that parent unit.
+Hard limit: 4 heavy operations per chat. A user "continue" does not reset the counter; only a successor chat starts at 0/4.
 
-Hard limit: 4 heavy operations per chat. After operation 4, never start operation 5. Persist state, update CHAT_HANDOFF.md, and end with a populated continuation prompt. A user "continue" in the same chat does not reset the counter; the successor starts at 0/4. Safety/degradation may force earlier handoff.
+In manual mode, after operation 4 persist/update handoff state, recommend a new chat, and do not start operation 5. Do not emit the full handoff prompt unless requested; if the next message is merely "continue", perform the handoff instead of heavy operation 5.
+
+Continuous Mode is opt-in. When active, use the same counter but automatically generate the populated handoff after operation 4. Safety/degradation may force earlier handoff in either mode.
 
 EXPANSION
 
@@ -144,19 +146,21 @@ A expansão é otimizada por prontidão para implementação por token. Um probl
 
 As contagens de linhas são apenas referências de segurança. O ChatGPT não deve aumentar arquivos com tutoriais, contexto repetido, justificativas genéricas ou enchimento.
 
-## 6. Modo contínuo
+## 6. Limite de operações pesadas e Modo Contínuo
 
-Para o ChatGPT continuar automaticamente depois de cada checkpoint, envie:
+O limite de 4 operações pesadas vale para todo chat, inclusive no uso manual normal em que você envia `continue` entre as etapas.
+
+Operação pesada é uma tarefa principal substancial, como expansão grande, subdivisão, decomposição, reconciliação de arquitetura/repositório, auditoria final, recuperação/migração ou preparação do handoff para Codex.
+
+No modo manual, depois da operação 4 o ChatGPT persiste o checkpoint e recomenda mudar para um novo chat. Ele não deve iniciar a operação 5. Se você então enviar apenas `continue`, o ChatGPT deve preparar o handoff em vez de executar outra operação pesada.
+
+Para continuar automaticamente depois de cada checkpoint, envie:
 
 ```text
 Ative o Modo Contínuo e continue automaticamente entre checkpoints seguindo o workflow canônico.
 ```
 
-O modo contínuo continua executando uma operação pesada limitada por vez.
-
-Operação pesada é uma tarefa principal substancial, como expansão grande, subdivisão, decomposição, reconciliação de arquitetura/repositório, auditoria final, recuperação/migração ou preparação do handoff para Codex.
-
-O limite rígido é 4 operações pesadas por chat. Depois da operação 4, o ChatGPT persiste o estado e retorna um handoff para o chat sucessor, sem iniciar a operação 5. O novo chat começa em 0/4. Context Safety pode forçar handoff antes disso.
+O Modo Contínuo usa o mesmo contador de 4 operações, mas após a operação 4 retorna automaticamente o prompt de handoff preenchido. O chat sucessor começa em 0/4. Context Safety pode forçar handoff antes disso em qualquer modo.
 
 ## 7. Handoff para outro chat
 
