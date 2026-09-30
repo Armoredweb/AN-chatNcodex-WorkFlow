@@ -76,7 +76,7 @@ The persisted plan is the primary output. Do not duplicate detailed implementati
 
 HANDOFF
 
-When requested/required or continuous mode reaches 4/4, persist operational state and END the response with a concrete plain-text continuation prompt. Include repository/base, storage/root, phase, last completed work, next safe action, exact files to read first, and continuous-mode state. No placeholders and no text after the prompt.
+When requested by the user, required by Context Safety, or Continuous Mode reaches 12/12 in the current chat, persist operational state and END the response with a concrete plain-text continuation prompt. Include repository/base, storage/root, phase, last completed work, next safe action, exact files to read first, and continuous-mode state. No placeholders and no text after the prompt.
 
 FINAL AUDIT
 
