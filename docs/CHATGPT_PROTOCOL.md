@@ -105,6 +105,26 @@ Return only continuity information needed by the user: completed/subdivided file
 
 This is a context-preservation rule.
 
+## Continuous expansion mode
+
+Continuous expansion is opt-in. Use it only when the user asks to continue through multiple planning checkpoints without repeated "continue" prompts.
+
+A continuous run still works on one bounded planning operation at a time. After each operation, persist the checkpoint and reassess Context Safety before starting the next one.
+
+Hard limit: never perform more than 4 continuous planning operations in one chat. After the 4th completed operation, do not start a 5th. Persist the current state, update CHAT_HANDOFF.md, and produce the populated continuation prompt for a successor chat.
+
+Count semantic planning operations, not commits:
+
+- one completed plan-file expansion = 1 operation;
+- one structural subdivision of a pending plan into subplans = 1 operation, regardless of the number of files created;
+- supporting repository reads, checkpoint writes, and routine PLAN_INDEX.md / CHAT_HANDOFF.md synchronization do not count as additional operations.
+
+The counter is per chat and resets only in the successor chat. A user "continue" message in the same chat does not erase already completed continuous operations.
+
+The 4-operation limit is a ceiling, not a target. CAUTION, HANDOFF, blockers, tool failures, abnormal latency, repeated response failures, or other degradation signals may require stopping and handing off earlier.
+
+Record whether Continuous Expansion Mode is active in CHAT_HANDOFF.md so the successor can resume the mode with a fresh 0/4 counter.
+
 ## File-size rule
 
 Target approximately 1,200-1,600 lines for implementation-planning files.
