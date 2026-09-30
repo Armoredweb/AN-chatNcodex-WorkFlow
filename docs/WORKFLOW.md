@@ -1,272 +1,363 @@
 # Canonical Workflow
 
-This document defines the canonical lifecycle for converting a large project/change into implementation-ready work for Codex.
+This is the single operational source of truth for AN-chatNcodex-WorkFlow.
 
-## 1. Roles
+User guides explain how to start. This file defines how ChatGPT must operate.
 
-ChatGPT is the planning and orchestration layer. It performs architecture reasoning, research, repository inspection, decomposition, expansion, optimization, context recovery, and implementation review.
+## 1. Purpose and responsible use
 
-The working GitHub repository is the source of truth for current code and active architecture.
+The workflow organizes legitimate software planning across ChatGPT, GitHub, and implementation agents.
 
-Persistent planning storage may be either ChatGPT Library or a dedicated plan folder in the working GitHub repository.
+It is not intended to bypass or weaken ChatGPT, Codex, Work, account, rate, usage, safety, or platform limits. Checkpoints, multiple chats, handoffs, persistent files, and continuous mode are workload-organization mechanisms, not evasion mechanisms.
 
-Codex agents implement prepared GOALs, test, debug, validate, and report material deviations.
+Respect all product limits, safeguards, authorization boundaries, and platform rules. Do not use the workflow to conceal workload, keep execution alive artificially, evade enforcement, or obtain capacity beyond what the product permits.
 
-## 2. Responsible-use purpose
+The intended efficiency is: do difficult architecture and planning in ChatGPT, persist the smallest implementation-ready result, and reserve Codex/Work resources for implementation or autonomous execution that actually needs them.
 
-This workflow exists to organize legitimate software planning efficiently. It is not intended to bypass or weaken ChatGPT, Codex, Work, account, rate, usage, safety, or platform limits.
+## 2. Roles and source precedence
 
-The workflow deliberately divides large jobs into bounded operations, persists checkpoints, and moves difficult reasoning into planning so implementation agents receive clearer work and expensive autonomous resources are used only when needed.
+ChatGPT performs architecture reasoning, research, repository inspection, decomposition, implementation planning, optimization, recovery, and implementation review.
 
-All product limits, safety systems, authorization boundaries, and applicable platform rules remain authoritative. Do not use checkpointing, handoffs, multiple chats, continuous mode, or repository persistence as an evasion technique, to conceal workload, to artificially keep execution alive, or to obtain capacity beyond what the product permits.
+The working GitHub repository is the source of truth for current code and active architecture and is the recommended planning backend.
 
-Planning artifacts should make the nature of the workload clear to both users and reviewers: the repeated operations are bounded architecture/planning work with explicit persistence and handoff boundaries.
+Codex agents execute prepared GOALs, test, debug, validate, and report material deviations.
 
-## 3. Manual Context Rule
-
-The canonical workflow manual must remain an active reference throughout the entire planning lifecycle.
-
-ChatGPT must:
-
-- read the manual at the beginning of every new or continuation chat;
-- refresh the relevant sections before major phase transitions;
-- refresh it after a handoff before continuing substantial work;
-- re-read it whenever workflow behavior is uncertain or apparently conflicts with conversation memory, Project Instructions, handoff state, or planning artifacts.
-
-Do not rely solely on remembered workflow rules when the canonical manual can be read directly.
-
-For workflow procedure, this manual is authoritative.
-
-For software implementation facts, the current working GitHub repository remains authoritative.
-
-## 4. Source precedence
-
-For software facts, when sources conflict:
+For software facts:
 
 1. current working repository code and active architecture;
 2. newest canonical/consolidated plan;
-3. newer implementation plan parts and macroblocks;
+3. newer implementation plan parts;
 4. historical plans and notes.
 
-Do not revive superseded architecture merely because an older document contains more detail.
+For workflow procedure, this file is authoritative.
 
-## 5. Initialization
+Never substitute conversation memory, old repository inspections, or old plan text for current source.
 
-A ChatGPT Project should contain the generic plain-text PROJECT_INSTRUCTIONS template.
+## 3. Start and recovery
 
-The first chat uses START_PROMPT.
+At every new or continuation chat:
 
-ChatGPT reads the local instructions and this canonical manual.
+1. read the ChatGPT Project Instructions;
+2. read this workflow;
+3. determine whether work is new or continuing;
+4. if continuing, read `PROJECT.md`, `CHAT_HANDOFF.md`, `MASTER_PLAN.md`, and `PLAN_INDEX.md`;
+5. inventory remaining planning files without loading all of them;
+6. load only files required for the next operation;
+7. re-inspect relevant current source before implementation-level decisions.
 
-If the working repository is unknown, ask for it. Verify access and inspect its current state before project planning becomes repository-specific.
+Refresh relevant workflow sections before major phase transitions and whenever procedure is uncertain.
 
-Before advancing into a major phase, refresh the relevant manual sections.
+If the working repository is unknown, ask for it and verify access before repository-specific planning.
 
-## 6. Storage Gate
+## 4. Planning storage
 
-After the working repository is known, offer GITHUB or LIBRARY and record the choice and planning root in PROJECT.md.
+Record the selected backend and root in `PROJECT.md`.
 
-GITHUB is the recommended planning backend when available. LIBRARY is a fallback when GitHub storage is unavailable, unsuitable, or the user explicitly wants unfinished planning outside the repository.
+### GitHub — recommended
 
-### LIBRARY — fallback
+Use an existing plans/planning convention when present; otherwise use:
 
-Library permission prompts can make long planning sessions tedious. Small expansions may trigger repeated approvals, sometimes several around a single write sequence. Warn the user before writes. If native mobile UI cannot present approval requests, use a web browser.
+    plans/<plan-name>/
 
-### GITHUB — recommended
+Always create a plan-specific folder.
 
-Inspect the working repository for an existing planning convention.
+Explain that planning writes create commits and obtain scoped authorization for routine writes inside that folder. Authorization does not extend to application source or unrelated files.
 
-Always create a new folder for each independent plan. Reuse an existing plans/planning parent directory when appropriate. Otherwise default to plans/<plan-name>/.
+Preserve small planning operations, but avoid micro-commits when practical. Consolidate writes belonging to the same operation when tooling allows. Do not create artificial local batching solely to reduce commits.
 
-Explain that planning writes may create incremental commits and obtain authorization to maintain planning files inside that folder.
+### Library — fallback
 
-After scoped authorization, routine writes inside that folder do not need a new confirmation. Writes outside it do.
+Use Library when GitHub is unavailable, unsuitable, or unfinished planning must stay outside the repository.
 
-Avoid micro-commits without changing planning granularity. Continue working on one micro-expansion at a time and keep intermediate drafting in memory when practical. Consolidate related planning writes so one expansion preferably creates only one or two commits. Do not create a local file tree or artificial batch process solely to reduce commit count.
+Repeated approvals can make Library tedious, including several approvals around one small operation. Warn the user before relying on it.
 
-GitHub mode requires no final publication step because the plan is already persistent in the repository.
+Before Codex implementation, obtain authorization to publish a completed Library planning package to the working repository.
 
-## 7. Master-plan phase
+## 5. Required planning artifacts
 
-The user may provide requirements over many invocations. Brainstorm, research, inspect code, compare alternatives, and refine decisions.
+The workflow has artifact contracts, not separate template files. Create only sections that carry useful state.
 
-Before consolidating or materially revising MASTER_PLAN.md, refresh the relevant manual guidance.
+### PROJECT.md
 
-MASTER_PLAN.md is the first canonical planning artifact. It is a compact backbone, not an implementation expansion.
+Durable entry point containing:
 
-Capture requirements/outcomes, architecture decisions, constraints/invariants, non-goals, major systems, high-level dependencies, compatibility expectations, and unresolved decisions that truly require user input.
+- project/plan name;
+- working repository and base;
+- storage mode and planning root;
+- authorized GitHub planning scope when relevant;
+- current phase;
+- paths to master plan, approved backup, plan index, chat handoff, and Codex handoff;
+- last known repository baseline when useful;
+- important superseded material only when needed for recovery.
 
-Avoid large production-code examples and file-by-file implementation detail.
+Keep it concise; never turn it into a transcript.
 
-Split the master plan into coherent subfiles if necessary, but preserve a compact top-level MASTER_PLAN.md.
+### MASTER_PLAN.md
 
-Do not begin implementation decomposition until the user explicitly approves the master plan for implementation planning.
+Compact architectural backbone containing:
 
-## 8. Implementation-planning gate
+- intended outcome;
+- requirements;
+- architecture decisions;
+- constraints/invariants;
+- non-goals;
+- major work areas and high-level dependencies;
+- compatibility/migration expectations;
+- unresolved decisions that genuinely require more information;
+- completion state.
 
-At user approval:
+Detailed implementation belongs in plan parts, not here.
 
-1. refresh the relevant manual sections;
-2. establish persistent project storage if not already established;
-3. create/update PROJECT.md;
-4. preserve backup/MASTER_PLAN.original.md;
-5. start decomposition.
+At the implementation-planning gate preserve `backup/MASTER_PLAN.original.md` as the immutable approved semantic baseline. Git history does not replace it.
 
-The original backup is an immutable semantic baseline. Git history does not replace its purpose.
+### PLAN_INDEX.md
 
-## 9. Decomposition phase
+Dependency-oriented index containing:
+
+- macroblocks;
+- ordered microsteps;
+- plan-file paths and status;
+- dependencies and outputs;
+- agent assignment: LUA-high, SOL-high, or temporary UNASSIGNED;
+- cross-part invariants;
+- Implementation Batches;
+- final GOALs and validation boundaries.
+
+No UNASSIGNED may remain when implementation-ready.
+
+### Plan parts
+
+Each expanded plan part should contain only what applies:
+
+- identity/status, inspected repository base, agent/batch/GOAL;
+- exact objective;
+- current repository evidence;
+- fixed decisions and relevant constraints;
+- scope/non-scope when ambiguity exists;
+- dependencies and outputs;
+- direct implementation instructions;
+- invariants;
+- targeted validation;
+- observable definition of done;
+- downstream guarantees when useful.
+
+Rationale is optional. Include it only when needed to preserve a non-obvious architectural decision, compatibility constraint, or known failure mode.
+
+### CHAT_HANDOFF.md
+
+Operational checkpoint containing:
+
+- repository/base, storage/root, phase;
+- Context Safety state;
+- continuous-mode ACTIVE/INACTIVE;
+- heavy operations completed in the current chat: 0-4;
+- last completed work;
+- next safe action;
+- exact files to read first;
+- blockers/user decisions;
+- recent operational/decomposition changes not obvious elsewhere;
+- repository facts that must be re-checked.
+
+It is not a conversation transcript.
+
+### CODEX_HANDOFF.md
+
+Final implementation handoff containing:
+
+- repository/base and plan root;
+- authoritative plan index;
+- ordered GOALs;
+- agent per GOAL;
+- plan files/batches per GOAL;
+- dependencies;
+- required validation;
+- deviation-reporting rules.
+
+Planning-file subdivisions are not automatic agent-session or test boundaries.
+
+## 6. Master-plan phase and gate
+
+Before implementation planning, brainstorm, research, inspect code, compare alternatives, and resolve requirements across as many messages as needed.
+
+Keep `MASTER_PLAN.md` compact. Split supporting material only if necessary.
+
+Do not begin decomposition until the user explicitly approves implementation planning.
+
+At approval:
+
+1. persist/update `PROJECT.md`;
+2. persist the approved `MASTER_PLAN.md`;
+3. preserve `backup/MASTER_PLAN.original.md`;
+4. begin `PLAN_INDEX.md`.
+
+## 7. Decomposition
 
 Decomposition and expansion are separate.
 
-First define macroblocks, ordered microsteps, dependencies, outputs, preliminary agent assignment, and provisional plan files.
+Read the whole approved master plan and create ordered macroblocks and microsteps with prerequisites, outputs, provisional plan files, and preliminary agents.
 
-Create PLAN_INDEX.md and small skeleton files where useful.
+Think in small implementation units, but do not fully expand them yet.
 
-Do not fully expand implementation details during decomposition.
+Agent roles:
 
-Each microstep is LUA-high, SOL-high, or UNASSIGNED. UNASSIGNED is temporary and forbidden in the final handoff.
+- **LUA-high** — default when planning can make implementation mechanical.
+- **SOL-high** — only when substantial architecture/debugging/cross-system reasoning remains after strong preparation.
+- **UNASSIGNED** — temporary during planning only.
 
-## 10. File Safety
+The role names describe capability/cost classes, not specific model versions.
 
-Line counts are safety references, not quotas, minimums, or desired output sizes.
+Before retaining SOL-high, ask whether better contracts, repository evidence, algorithms, pseudocode/code, migration order, tests, or narrower subdivision can make the work suitable for LUA-high.
 
-A complete implementation-planning file may be much shorter than 1,200 lines. If the implementation can be made unambiguous in a small file, keep it small. Never add filler, repeated background, tutorial prose, or unnecessary rationale to approach a line count.
+## 8. Planning efficiency and file safety
 
-For larger files, about 1,200-1,600 lines is a normal working range. A coherent file around 1,600-1,700 lines does not need compacting, recreation, or subdivision solely for that small overage.
+The objective is implementation readiness per token.
 
-Consider preventive subdivision prospectively around 1,700-1,800 lines, especially when complexity or structure also warrants it. Do not intentionally produce a plan file above approximately 2,000 lines.
+Do the difficult reasoning in ChatGPT, then persist only what implementation needs. Heavy thinking does not imply large output, and a difficult problem may legitimately produce a very small plan.
 
-High reasoning complexity, research, tool usage, repository inspection, or dense implementation detail may require splitting much earlier. Estimate size and complexity before drafting.
+Prefer verified paths/symbols, explicit contracts, necessary data/state flow, concise algorithms, relevant invariants, applicable failure/migration/cleanup behavior, targeted code/pseudocode, tests, and definition of done.
 
-## 11. Context Safety Check
+Avoid filler, repeated background, generic tutorials, obvious rationale, duplicated source context, and prose added only to increase file size.
 
-File size and conversation-context pressure are independent constraints.
+Line counts are safety guidance, never quotas, minimums, or goals.
 
-Before every substantial planning operation assess whether the current chat can finish it cleanly.
+For larger implementation-planning files:
 
-SAFE - continue normally.
+- about 1,200-1,600 lines is a normal working range;
+- a coherent 1,600-1,700-line file does not need rewriting solely for that small overage;
+- consider subdivision around 1,700-1,800 when complexity/structure also warrants it;
+- do not intentionally exceed about 2,000 lines.
 
-CAUTION - complete only the current bounded operation; reassess before starting another large operation.
+Split much earlier when reasoning, research, tool usage, repository inspection, or information density makes the operation risky.
 
-HANDOFF - do not start the next substantial operation; persist state and move to a successor chat.
+Estimate size and complexity before drafting.
 
-There is no reliable exact remaining-context counter. Use observable risk factors: accumulated conversation size, recently loaded material, required repository inspection, expected reasoning/output, repeated tool/response failures, loss of earlier details, abnormal incompleteness, or interface warnings.
+## 9. Context Safety
+
+File size and conversation-context pressure are independent.
+
+Before every substantial operation assess:
+
+- **SAFE** — proceed;
+- **CAUTION** — finish only the current bounded operation, persist it, then reassess;
+- **HANDOFF** — do not start another substantial operation; persist state and move to a successor chat.
+
+There is no reliable exact remaining-context counter.
+
+Use observable signals: accumulated conversation size, loaded material, repository inspection volume, expected reasoning/output, abnormal latency, tool/response failures, incomplete output, loss of earlier details, or interface warnings.
 
 When uncertain, prefer a planned handoff.
 
-This applies during master-plan consolidation, decomposition, expansion, research, audits, and final Codex handoff preparation.
+## 10. Expansion
 
-## 12. Expansion phase
+Before each substantial expansion:
 
-Before entering the expansion phase, refresh the relevant manual sections.
+1. perform Context Safety;
+2. inspect relevant current source;
+3. reconcile source with the master plan, index, dependencies, and previously established interfaces;
+4. resolve questions that repository evidence can answer;
+5. write the smallest implementation-ready plan;
+6. persist it;
+7. update index/handoff state only as needed.
 
-Expand one substantial plan part at a time unless several parts are clearly small and safe.
+Re-check current source before every part even when nearby parts were expanded recently.
 
-Before every expansion:
+The persisted file is the primary output. Do not duplicate its implementation content in chat unless asked.
 
-1. perform a Context Safety Check;
-2. inspect the relevant current source code directly in the working GitHub repository;
-3. reconcile it with the master plan, index, dependencies, and previously expanded interfaces;
-4. resolve architectural questions that repository evidence can answer;
-5. expand the part into concrete implementation instructions;
-6. persist the result;
-7. update PLAN_INDEX.md and CHAT_HANDOFF.md when state changes require it.
+Normal chat output during expansion should contain only continuity information: completed/subdivided artifact, permission, blocker/user decision, next action, Context Safety, or handoff.
 
-Planning files are not evidence of current code state. Conversation memory and old repository inspections are not substitutes for current source.
+## 11. Continuous mode
 
-An expanded plan should contain only implementation-relevant material: verified paths/symbols when available, required ownership, interfaces/contracts, data flow, algorithms, invariants, compatibility rules, error behavior, migration/cleanup, validation, and definition of done.
+Continuous mode is opt-in. Enable it only when the user explicitly asks ChatGPT to continue automatically across checkpoints without repeated `continue` messages.
 
-Optimize for token efficiency and LUA-high execution. Prefer direct instructions, concrete contracts, concise pseudocode, and implementation-ready code over explanatory prose. Do not repeat context the implementation agent can already obtain from the referenced files. Include rationale only when it protects a requirement, constraint, compatibility rule, or non-obvious architectural decision.
+Work remains one bounded top-level heavy operation at a time, with persistence and Context Safety reassessment after each operation.
 
-The planning model should spend the heavy reasoning needed to make the solution simple; it should not externalize all of that reasoning as a giant document. Short plans are correct when the resolved implementation is small.
+A **heavy operation** materially consumes context, reasoning, research, repository inspection, tool work, or artifact production. If it independently warrants a Context Safety Check, it normally counts as one unit.
 
-### Continuous Expansion Mode
+Examples:
 
-Continuous Expansion Mode is an opt-in execution style for the expansion phase. Enable it when the user explicitly asks ChatGPT to continue across checkpoints without waiting for repeated "continue" messages.
+- substantial plan expansion;
+- structural subdivision;
+- substantial decomposition;
+- major master-plan consolidation/revision;
+- research/repository-heavy architecture reconciliation;
+- substantial final audit;
+- substantial Codex-handoff preparation;
+- large recovery/migration/reorganization.
 
-The workflow remains bounded: perform one top-level heavy operation at a time, persist its checkpoint, reassess Context Safety, and only then proceed automatically.
+Count the parent operation once. Required reads, source verification, reasoning, persistence, and routine index/handoff synchronization are included unless they become a separate substantial operation.
 
-A hard per-chat ceiling applies: at most 4 heavy operations may be completed in one chat. After heavy operation 4, ChatGPT must not begin a 5th. It must persist/update the operational state, update CHAT_HANDOFF.md, and end with a populated continuation prompt for a successor chat.
+Hard limit: **4 heavy operations per chat**.
 
-For this counter, count heavy ChatGPT operations rather than commits or files.
+After operation 4:
 
-A heavy operation is one bounded top-level task that materially consumes context, reasoning, research, repository inspection, tool work, or artifact production. As a default test, if the operation independently warrants a Context Safety Check, count it as 1 unit unless it is clearly supporting work within another already-counted operation.
+1. do not start operation 5;
+2. persist the current state;
+3. update `CHAT_HANDOFF.md`;
+4. output a populated continuation prompt as the final response element.
 
-Examples include a substantial plan expansion, structural subdivision, substantial decomposition pass, major MASTER_PLAN consolidation/revision, research-heavy or repository-heavy architecture/reconciliation pass, substantial final-audit/optimization pass, substantial Codex-handoff preparation, or a large recovery/migration/reorganization task.
+The counter belongs to the chat. A user `continue` message does not reset it. The successor chat starts at 0/4.
 
-Count the top-level operation once. Its required source reads, re-verification, reasoning, persistence, checkpoint writes, and routine PLAN_INDEX.md / CHAT_HANDOFF.md synchronization are included in that unit and do not count separately unless they become an independent substantial operation.
+CAUTION, HANDOFF, blockers, abnormal latency, tool/response failures, or degradation may force handoff before 4.
 
-The counter belongs to the chat, not to an individual user invocation. A manual "continue" in the same chat does not reset it. The successor chat begins at 0/4.
+## 12. Chat handoff
 
-This ceiling does not override Context Safety. CAUTION, HANDOFF, blockers, tool failures, abnormal latency, repeated response failures, or other signs of degradation may force an earlier handoff.
+Handoff is required when the user asks for it, Context Safety requires it, or continuous mode reaches 4/4.
 
-CHAT_HANDOFF.md must record whether Continuous Expansion Mode remains active so the successor can continue automatically after reconstructing state.
+Finish or stop at a safe artifact boundary, persist `CHAT_HANDOFF.md`, and ensure `PROJECT.md`/`PLAN_INDEX.md` point to the correct state.
 
-## 13. Minimal chat output during expansion
+The final chat response must end with a plain-text copyable continuation prompt containing concrete current values:
 
-The persisted plan file is the primary output.
+- working repository/base;
+- storage mode/root;
+- phase;
+- last completed work;
+- next safe action;
+- exact persistent files to read first;
+- instruction to read this canonical workflow;
+- instruction to re-check relevant current source;
+- if continuous mode is ACTIVE, instruction to restart at 0/4.
 
-Do not reproduce or summarize the expanded content in chat unless the user asks.
+Never leave placeholders in a real handoff. Put no explanatory text after the continuation prompt.
 
-Chat output should normally contain only continuity information: completed/updated/subdivided file, storage permission needed, blocker/user decision, next file/action, Context Safety warning, or handoff status.
+## 13. Execution model and validation
 
-Avoid spending context twice on the same implementation content.
+Keep these units distinct:
 
-## 14. Chat Handoff
+- **Plan Part** — safely sized planning artifact.
+- **Micro Step** — logical implementation unit.
+- **Implementation Batch** — compatible work before a meaningful validation boundary.
+- **GOAL** — continuous autonomous mission assigned to one implementation agent.
 
-CHAT_HANDOFF.md is an operational checkpoint, not a conversation transcript.
+Many plan files may belong to one GOAL. Minimize LUA/SOL switching without violating dependencies.
 
-Maintain enough information to resume from a new chat: phase, storage mode/root, working repository/base, last completed item, next item, recent non-canonical decisions, blockers, decomposition changes, and safe continuation point.
+Planning granularity must not dictate test granularity. Validate at meaningful technical boundaries, earlier only when needed to prove an invariant, expose API breakage, de-risk a migration, or localize failures.
 
-When the user requests a handoff, or a planned/emergency handoff is needed, persist/update CHAT_HANDOFF.md and generate the continuation prompt in the same response.
+Final GOAL validation is mandatory.
 
-The prompt must be dynamically populated, not returned as an unfilled template. Include working repository/base, storage mode/root, current phase, last completed work, next safe action, and exact persistent files to read first.
+Implementation agents should inspect current source, read the required GOAL plans, implement in dependency order, preserve scope/invariants, validate, fix regressions they introduce, document material deviations with evidence, and leave the repository coherent.
 
-Place it in a plain-text copyable code block as the final element of the response. Put no explanatory text after it.
+They must not silently redesign prepared architecture or revive superseded plans.
 
-The successor chat must re-read the manual, then read PROJECT.md, CHAT_HANDOFF.md, MASTER_PLAN.md, and PLAN_INDEX.md, inventory the plan directory, load only the files required for the next operation, and re-verify relevant code against the current repository.
+## 14. Final optimization and Codex handoff
 
-## 15. Final optimization audit
+After all required parts are expanded, audit the plan file by file.
 
-Before starting the final audit, refresh the relevant manual sections.
+Look for:
 
-After every plan part is expanded, inspect the complete plan file by file.
+- missing implementation detail;
+- stale assumptions;
+- unnecessary prose/repetition;
+- unsafe size;
+- dependency gaps/overlap;
+- unresolved UNASSIGNED;
+- SOL-high work that can become LUA-high after better preparation;
+- missing validation or downstream contracts.
 
-Look for unresolved ambiguity, stale repository assumptions, missing interfaces/contracts/algorithms/tests, opportunities to provide more implementation-ready code/pseudocode, unsafe file sizes, overlaps/gaps, incorrect dependencies, UNASSIGNED work, and SOL-high work that can become LUA-high after preparation.
+Only after this audit finalize Implementation Batches and GOALs and create `CODEX_HANDOFF.md`.
 
-The final audit may subdivide parts again.
+In GitHub mode the plan is already persistent. In Library mode, publish it to the working repository only with user authorization.
 
-Only after this audit should PLAN_INDEX.md be considered implementation-ready.
-
-## 16. Execution model
-
-Keep four concepts distinct:
-
-Plan Part - safely sized ChatGPT planning artifact.
-
-Micro Step - logical unit of work.
-
-Implementation Batch - compatible microsteps implemented before a broad validation boundary.
-
-GOAL - continuous autonomous mission assigned to one implementation agent.
-
-Planning granularity must not dictate execution or test granularity.
-
-Many plan files may belong to one GOAL. Minimize agent switches. Prefer broad coherent implementation and validation at meaningful technical boundaries rather than full test cycles after every small part.
-
-## 17. Codex handoff
-
-Before preparing CODEX_HANDOFF.md, refresh the relevant manual sections.
-
-Prepare it only after final optimization.
-
-It must identify working repository/base, plan root, authoritative plan index, GOAL order, assigned agent for each GOAL, plan files/batches included, cross-GOAL dependencies, required validation, and deviation-reporting rules.
-
-In GITHUB storage mode, the plan is already available to implementation agents.
-
-In LIBRARY mode, ask the user for authorization before publishing the completed planning package into a new plan folder in the working repository.
-
-## 18. Review loop
+## 15. Review loop
 
 After implementation, review the current repository rather than extending old assumptions.
 
