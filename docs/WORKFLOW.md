@@ -265,9 +265,9 @@ The persisted file is the primary output. Do not duplicate its implementation co
 
 Normal chat output during expansion should contain only continuity information: completed/subdivided artifact, permission, blocker/user decision, next action, Context Safety, or handoff.
 
-## 11. Continuous mode
+## 11. Heavy-operation counter and Continuous Mode
 
-Continuous mode is opt-in. Enable it only when the user explicitly asks ChatGPT to continue automatically across checkpoints without repeated `continue` messages.
+The heavy-operation counter applies to every chat, whether Continuous Mode is ACTIVE or INACTIVE.
 
 Work remains one bounded top-level heavy operation at a time, with persistence and Context Safety reassessment after each operation.
 
@@ -286,22 +286,39 @@ Examples:
 
 Count the parent operation once. Required reads, source verification, reasoning, persistence, and routine index/handoff synchronization are included unless they become a separate substantial operation.
 
-Hard limit: **4 heavy operations per chat**.
+Hard limit: **4 heavy operations per chat**. The counter belongs to the chat and resets only in the successor chat.
+
+### Manual mode
+
+When Continuous Mode is INACTIVE, each user-requested heavy operation, including one started by a `continue` message, increments the same counter.
 
 After operation 4:
+
+1. persist the current state;
+2. update `CHAT_HANDOFF.md`;
+3. tell the user that the 4/4 boundary has been reached and recommend a handoff before more heavy work;
+4. do not start a 5th heavy operation in that chat.
+
+Do not automatically emit the full continuation prompt at 4/4 unless the user requested a handoff. If the next user message is merely `continue`, treat it as a request to perform the handoff rather than beginning operation 5.
+
+### Continuous Mode
+
+Continuous Mode is opt-in. Enable it only when the user explicitly asks ChatGPT to continue automatically across checkpoints without repeated `continue` messages.
+
+It uses the same counter. After operation 4:
 
 1. do not start operation 5;
 2. persist the current state;
 3. update `CHAT_HANDOFF.md`;
-4. output a populated continuation prompt as the final response element.
+4. automatically output a populated continuation prompt as the final response element.
 
-The counter belongs to the chat. A user `continue` message does not reset it. The successor chat starts at 0/4.
+A user `continue` message in the same chat never resets the counter. The successor chat starts at 0/4.
 
-CAUTION, HANDOFF, blockers, abnormal latency, tool/response failures, or degradation may force handoff before 4.
+CAUTION, HANDOFF, blockers, abnormal latency, tool/response failures, or degradation may force handoff before 4 in either mode.
 
 ## 12. Chat handoff
 
-Handoff is required when the user asks for it, Context Safety requires it, or continuous mode reaches 4/4.
+Handoff is required when the user asks for it, Context Safety requires it, Continuous Mode reaches 4/4, or Manual Mode has already reached 4/4 and more heavy work is requested.
 
 Finish or stop at a safe artifact boundary, persist `CHAT_HANDOFF.md`, and ensure `PROJECT.md`/`PLAN_INDEX.md` point to the correct state.
 
