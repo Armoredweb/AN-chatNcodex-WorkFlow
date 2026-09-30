@@ -33,7 +33,7 @@ Checkpoints, multiple chats, handoffs, and continuous mode divide work into boun
 - Plan files contain the minimum complete implementation information. No filler, tutorials, repeated context, or prose added to reach a size.
 - Line counts are safety guidance only. Small complete subplans are desirable.
 - Context Safety and file size are independent.
-- Every chat counts heavy ChatGPT operations, even in manual `continue` mode. At 4/4, no 5th heavy operation starts; manual mode recommends handoff and continuous mode performs it automatically.
+- Manual Mode performs one heavy operation per user invocation with no fixed accumulated handoff count. Continuous Mode runs four blocks of three heavy operations (3×4=12), pausing for `continue` after each 3-operation block and handing off after operation 12.
 - Planning-file boundaries do not imply one Codex session or one test cycle per file.
 - LUA-high is the default implementation role; the final audit removes avoidable decisions from LUA, adds concrete code/contracts where needed, and trims irrelevant text without sacrificing implementation intent.
 

@@ -150,13 +150,15 @@ Operational checkpoint containing:
 - repository/base, storage/root, phase;
 - Context Safety state;
 - continuous-mode ACTIVE/INACTIVE;
-- heavy operations completed in the current chat: 0-4;
+- when Continuous Mode is ACTIVE: current block 1-4, operations completed in the current block 0-3, and total continuous heavy operations in the chat 0-12;
 - last completed work;
 - next safe action;
 - exact files to read first;
 - blockers/user decisions;
 - recent operational/decomposition changes not obvious elsewhere;
 - repository facts that must be re-checked.
+
+Manual Mode does not require an accumulated heavy-operation counter. A successor chat resets Continuous Mode cadence to block 1/4, 0/3 operations, 0/12 total.
 
 It is not a conversation transcript.
 
@@ -265,13 +267,9 @@ The persisted file is the primary output. Do not duplicate its implementation co
 
 Normal chat output during expansion should contain only continuity information: completed/subdivided artifact, permission, blocker/user decision, next action, Context Safety, or handoff.
 
-## 11. Heavy-operation counter and Continuous Mode
+## 11. Heavy operations and Continuous Mode
 
-The heavy-operation counter applies to every chat, whether Continuous Mode is ACTIVE or INACTIVE.
-
-Work remains one bounded top-level heavy operation at a time, with persistence and Context Safety reassessment after each operation.
-
-A **heavy operation** materially consumes context, reasoning, research, repository inspection, tool work, or artifact production. If it independently warrants a Context Safety Check, it normally counts as one unit.
+A **heavy operation** is one bounded top-level task that materially consumes context, reasoning, research, repository inspection, tool work, or artifact production. If a task independently warrants a Context Safety Check, it normally counts as one heavy operation.
 
 Examples:
 
@@ -284,41 +282,57 @@ Examples:
 - substantial Codex-handoff preparation;
 - large recovery/migration/reorganization.
 
-Count the parent operation once. Required reads, source verification, reasoning, persistence, and routine index/handoff synchronization are included unless they become a separate substantial operation.
+Count the parent operation once. Required reads, source verification, reasoning, persistence, and routine index/handoff synchronization are supporting work unless they become a separate substantial operation.
 
-Hard limit: **4 heavy operations per chat**. The counter belongs to the chat and resets only in the successor chat.
+The cadence below is an empirical workflow safeguard, not a statement about ChatGPT platform limits. Context Safety always has precedence and may require an earlier stop or handoff.
 
-### Manual mode
+### Manual Mode
 
-When Continuous Mode is INACTIVE, each user-requested heavy operation, including one started by a `continue` message, increments the same counter.
+When Continuous Mode is INACTIVE, perform at most **one heavy operation per user invocation**.
 
-After operation 4:
+After that operation, persist the result/checkpoint and return control to the user. A later `continue` may start one more heavy operation.
 
-1. persist the current state;
-2. update `CHAT_HANDOFF.md`;
-3. tell the user that the 4/4 boundary has been reached and recommend a handoff before more heavy work;
-4. do not start a 5th heavy operation in that chat.
+Manual Mode has **no fixed accumulated heavy-operation handoff threshold**. The user may continue requesting one heavy operation at a time until they request a handoff.
 
-Do not automatically emit the full continuation prompt at 4/4 unless the user requested a handoff. If the next user message is merely `continue`, treat it as a request to perform the handoff rather than beginning operation 5.
+Context Safety still applies on every operation. If it reaches HANDOFF, do not begin another heavy operation even if the user has not requested the handoff yet.
 
 ### Continuous Mode
 
-Continuous Mode is opt-in. Enable it only when the user explicitly asks ChatGPT to continue automatically across checkpoints without repeated `continue` messages.
+Continuous Mode is opt-in. Enable it only when the user explicitly requests automatic continuation across checkpoints.
 
-It uses the same counter. After operation 4:
+Continuous Mode runs in **blocks of 3 heavy operations**:
 
-1. do not start operation 5;
+1. perform one heavy operation;
+2. persist its checkpoint and reassess Context Safety;
+3. if SAFE and no user decision is required, automatically continue;
+4. after the 3rd heavy operation in the block, persist state and stop automatic execution;
+5. return control to the user and ask for `continue` before starting another block.
+
+A `continue` after a completed block starts the next block in the **same chat**. It does not reset the chat-level total.
+
+Allow at most **4 continuous blocks per chat**, for a maximum of **12 continuous heavy operations**:
+
+- block 1: operations 1-3, then pause for `continue`;
+- block 2: operations 4-6, then pause for `continue`;
+- block 3: operations 7-9, then pause for `continue`;
+- block 4: operations 10-12, then mandatory handoff.
+
+After continuous operation 12:
+
+1. do not begin operation 13;
 2. persist the current state;
 3. update `CHAT_HANDOFF.md`;
 4. automatically output a populated continuation prompt as the final response element.
 
-A user `continue` message in the same chat never resets the counter. The successor chat starts at 0/4.
+Track the current block, operations completed inside the block, and total continuous heavy operations in `CHAT_HANDOFF.md` at block boundaries and whenever an earlier handoff is needed.
 
-CAUTION, HANDOFF, blockers, abnormal latency, tool/response failures, or degradation may force handoff before 4 in either mode.
+A successor chat starts a fresh Continuous Mode cadence at block 1/4, 0/3 operations in the block, and 0/12 total.
+
+The user may request handoff at any earlier point. CAUTION, HANDOFF, blockers, abnormal latency, tool/response failures, or other degradation may stop a block before 3 or force an earlier handoff.
 
 ## 12. Chat handoff
 
-Handoff is required when the user asks for it, Context Safety requires it, Continuous Mode reaches 4/4, or Manual Mode has already reached 4/4 and more heavy work is requested.
+Handoff is required when the user asks for it, Context Safety requires it, or Continuous Mode reaches 12 continuous heavy operations in the current chat.
 
 Finish or stop at a safe artifact boundary, persist `CHAT_HANDOFF.md`, and ensure `PROJECT.md`/`PLAN_INDEX.md` point to the correct state.
 
@@ -332,7 +346,7 @@ The final chat response must end with a plain-text copyable continuation prompt 
 - exact persistent files to read first;
 - instruction to read this canonical workflow;
 - instruction to re-check relevant current source;
-- if continuous mode is ACTIVE, instruction to restart at 0/4.
+- if Continuous Mode is ACTIVE, instruction that the successor starts a fresh cadence at block 1/4, 0/3 operations, 0/12 total.
 
 Never leave placeholders in a real handoff. Put no explanatory text after the continuation prompt.
 
