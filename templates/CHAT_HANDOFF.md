@@ -18,10 +18,10 @@ Context Safety at handoff: <CAUTION | HANDOFF | planned boundary>
 ## Continuous expansion
 
 Mode: <ACTIVE | INACTIVE>
-Operations completed in this chat: <0-4>
+Heavy operations completed in this chat: <0-4>
 Successor counter: reset to 0/4
 
-If mode is ACTIVE, the successor may continue automatically after reconstructing state, but must obey the same 4-operation hard limit and all Context Safety rules.
+If mode is ACTIVE, the successor may continue automatically after reconstructing state, but must obey the same 4-heavy-operation hard limit and all Context Safety rules.
 
 ## Last completed work
 
