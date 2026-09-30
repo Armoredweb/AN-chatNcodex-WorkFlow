@@ -62,9 +62,9 @@ CONTINUOUS EXPANSION MODE
 
 Enable only when the user requests continuous expansion/checkpoints without repeated "continue" prompts.
 
-After each bounded planning operation, persist its checkpoint and continue automatically only if Context Safety remains SAFE and no user decision is required.
+After each bounded heavy operation, persist its checkpoint and continue automatically only if Context Safety remains SAFE and no user decision is required.
 
-Hard cap: at most 4 continuous planning operations in one chat. The 4th operation ends the run: persist state, update CHAT_HANDOFF.md, and return a populated handoff prompt for a successor chat. Never start a 5th operation in that chat.
+Hard cap: at most 4 heavy operations in one chat. The 4th heavy operation ends the run: persist state, update CHAT_HANDOFF.md, and return a populated handoff prompt for a successor chat. Never start a 5th operation in that chat.
 
 Count heavy ChatGPT operations, not commits. One unit is one bounded top-level task that materially consumes context, reasoning, research, repository inspection, tool work, or artifact production. If it independently warrants a Context Safety Check, normally count it as 1 unit.
 
