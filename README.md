@@ -35,7 +35,10 @@ Checkpoints, multiple chats, handoffs, and continuous mode divide work into boun
 - Context Safety and file size are independent.
 - Manual Mode performs one heavy operation per user invocation with no fixed accumulated handoff count. Continuous Mode runs four blocks of three heavy operations (3×4=12), pausing for `continue` after each 3-operation block and handing off after operation 12.
 - Planning-file boundaries do not imply one Codex session or one test cycle per file.
-- LUA-high is the default implementation role; the final audit removes avoidable decisions from LUA, adds concrete code/contracts where needed, and trims irrelevant text without sacrificing implementation intent.
+- LUA-high is the default implementation role; SOL-high survives only after an explicit LUA-conversion audit.
+- After expansion, a Consistency Gate checks traceability and contradictions across the master plan, index, Plan Parts, and current repository.
+- Every GOAL defines Expected Evidence; foundational GOALs gate dependent work.
+- Post-implementation Convergence Checks compare the real repository back to the canonical plan until required behavior converges.
 
 ## Repository contents
 

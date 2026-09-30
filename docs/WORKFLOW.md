@@ -33,19 +33,23 @@ For workflow procedure, this file is authoritative.
 
 Never substitute conversation memory, old repository inspections, or old plan text for current source.
 
-## 3. Start and recovery
+## 3. Start, manual refresh, and recovery
+
+Project Instructions are only a compact bootstrap. This file remains the authoritative operational manual.
 
 At every new or continuation chat:
 
 1. read the ChatGPT Project Instructions;
-2. read this workflow;
+2. **read this workflow directly before doing substantive project work**;
 3. determine whether work is new or continuing;
 4. if continuing, read `PROJECT.md`, `CHAT_HANDOFF.md`, `MASTER_PLAN.md`, and `PLAN_INDEX.md`;
 5. inventory remaining planning files without loading all of them;
 6. load only files required for the next operation;
 7. re-inspect relevant current source before implementation-level decisions.
 
-Refresh relevant workflow sections before major phase transitions and whenever procedure is uncertain.
+Re-read the relevant workflow sections before every major phase transition, after a handoff, before finalizing implementation planning, before Codex handoff, and whenever workflow behavior is uncertain.
+
+Never rely on remembered workflow rules when the manual can be read directly. If Project Instructions, conversation memory, or old handoff wording conflicts with this file, this file wins.
 
 If the working repository is unknown, ask for it and verify access before repository-specific planning.
 
@@ -160,6 +164,8 @@ Operational checkpoint containing:
 
 Manual Mode does not require an accumulated heavy-operation counter. A successor chat resets Continuous Mode cadence to block 1/4, 0/3 operations, 0/12 total.
 
+At each Continuous Mode block boundary, compact `CHAT_HANDOFF.md`: remove resolved transient notes and decisions already represented in canonical artifacts; preserve only live state, counters, blockers, next action, and repository facts that still require re-checking. This compaction must not delete implementation information from `MASTER_PLAN.md`, `PLAN_INDEX.md`, or Plan Parts and does not replace the full post-expansion optimization audit.
+
 It is not a conversation transcript.
 
 ### CODEX_HANDOFF.md
@@ -173,6 +179,8 @@ Final implementation handoff containing:
 - plan files/batches per GOAL;
 - dependencies;
 - required validation;
+- **Expected Evidence** for each GOAL: the observable repository/runtime/test evidence that demonstrates the intended result, not merely that a command exited successfully;
+- whether a GOAL is foundational and therefore gates dependent GOALs;
 - deviation-reporting rules.
 
 Planning-file subdivisions are not automatic agent-session or test boundaries.
@@ -278,8 +286,9 @@ Examples:
 - substantial decomposition;
 - major master-plan consolidation/revision;
 - research/repository-heavy architecture reconciliation;
-- substantial final audit;
+- substantial final audit or Consistency Gate;
 - substantial Codex-handoff preparation;
+- substantial post-implementation Convergence Check;
 - large recovery/migration/reorganization.
 
 Count the parent operation once. Required reads, source verification, reasoning, persistence, and routine index/handoff synchronization are supporting work unless they become a separate substantial operation.
@@ -305,8 +314,10 @@ Continuous Mode runs in **blocks of 3 heavy operations**:
 1. perform one heavy operation;
 2. persist its checkpoint and reassess Context Safety;
 3. if SAFE and no user decision is required, automatically continue;
-4. after the 3rd heavy operation in the block, persist state and stop automatic execution;
+4. after the 3rd heavy operation in the block, persist state, compact `CHAT_HANDOFF.md` to live operational information, and stop automatic execution;
 5. return control to the user and ask for `continue` before starting another block.
+
+Block-boundary compaction is only a context/state hygiene step. It never substitutes for the full final optimization performed after all required plan expansion is complete.
 
 A `continue` after a completed block starts the next block in the **same chat**. It does not reset the chat-level total.
 
@@ -361,58 +372,144 @@ Keep these units distinct:
 
 Many plan files may belong to one GOAL. Minimize LUA/SOL switching without violating dependencies.
 
+### Agent preparation density
+
+LUA-high is the default target. Give LUA-high enough verified paths, decisions, contracts, algorithms, pseudocode/code, tests, and ordering to make implementation as mechanical as practical.
+
+Do not optimize a task for SOL-high until the final audit has established that stronger planning cannot reasonably move it to LUA-high.
+
+For work that genuinely remains SOL-high, optimize differently: preserve intent, invariants, interfaces, repository evidence, boundaries, risks, and Expected Evidence, but remove unnecessary recipe-level scaffolding that would constrain useful higher-capability reasoning without reducing risk.
+
+Perform this SOL-specific optimization twice when useful:
+
+1. after the task survives the final LUA-conversion audit and before final GOAL/Codex handoff;
+2. immediately before a SOL-high GOAL executes, re-checking current repository state because upstream work may have changed the assumptions.
+
+### Validation and Expected Evidence
+
 Planning granularity must not dictate test granularity. Validate at meaningful technical boundaries, earlier only when needed to prove an invariant, expose API breakage, de-risk a migration, or localize failures.
 
+Every GOAL must define **Expected Evidence**: concrete evidence that demonstrates the intended behavior or state. Passing existing tests alone is insufficient when those tests do not prove the GOAL's intent.
+
+Evidence may include targeted tests, build/runtime behavior, inspected generated state, API/ABI shape, migration result, measured invariant, or another observable result appropriate to the GOAL.
+
 Final GOAL validation is mandatory.
+
+### Foundational GOALs
+
+Mark a GOAL as **foundational** when it establishes architecture, ownership, interfaces, formats, pipelines, or patterns that many later GOALs will reuse.
+
+A foundational GOAL must satisfy its Expected Evidence before dependent GOALs proceed. Do not multiply an unvalidated foundational mistake across downstream work.
 
 Implementation agents should inspect current source, read the required GOAL plans, implement in dependency order, preserve scope/invariants, validate, fix regressions they introduce, document material deviations with evidence, and leave the repository coherent.
 
 They must not silently redesign prepared architecture or revive superseded plans.
 
-## 14. Final optimization and Codex handoff
+## 14. Final optimization, Consistency Gate, and Codex handoff
 
-After all required parts are expanded, audit the plan file by file.
+The full final optimization happens **after all required Plan Parts have been expanded**. Block-boundary compaction does not replace it.
 
-The purpose is not to enlarge the plans. It is to make implementation as direct and mechanical as practical for LUA-high while preserving the full implementation intent.
+Audit the plan file by file. The purpose is not to enlarge the plans; it is to make implementation as direct and mechanical as practical while preserving full implementation intent.
+
+### Pass A — implementation-preserving optimization
 
 Use this priority order:
 
 1. **Preserve implementation truth first.** Do not remove requirements, constraints, invariants, compatibility behavior, dependencies, failure behavior, validation, or architectural intent merely to save tokens.
-2. **Remove delegated thinking.** Find places where the plan still asks LUA-high to choose an approach, infer ownership, design an interface, resolve an ambiguity, select an algorithm, decide migration order, or make another decision ChatGPT can resolve from repository evidence. Resolve it in the plan instead.
-3. **Materialize difficult implementation where useful.** When a section would require reasoning beyond the intended LUA-high role, provide the concrete contract, algorithm, pseudocode, data shape, call sequence, or implementation-ready code needed to make the work mechanical. Do not add code merely for volume.
-4. **Re-check current source.** Verify any decision whose correctness depends on repository state before making it explicit.
+2. **Remove delegated thinking.** Find places where LUA-high is still asked to choose an approach, infer ownership, design an interface, resolve ambiguity, select an algorithm, decide migration order, or make another decision ChatGPT can resolve from current repository evidence. Resolve it in the plan.
+3. **Materialize difficult implementation where useful.** Provide the minimum concrete contract, algorithm, pseudocode, data shape, call sequence, or implementation-ready code needed to remove avoidable reasoning. Do not add code for volume.
+4. **Re-check current source.** Verify decisions whose correctness depends on repository state.
 5. **Reduce without losing meaning.** Remove duplicated background, obsolete notes, tutorial prose, repeated rationale, redundant examples, and context the implementation agent can obtain directly from cited source files.
-6. **Prefer the shortest complete form.** If a complex planning problem resolves to a small implementation, keep the plan small.
+6. **Prefer the shortest complete form.** A complex planning problem may resolve to a small implementation plan.
 
-For every plan part, ask:
+For every Plan Part ask:
 
-- Does LUA-high still have to make an avoidable architectural or implementation decision?
-- Is any instruction vague enough that two reasonable implementations could diverge materially?
+- Does LUA-high still have to make an avoidable architecture or implementation decision?
+- Is an instruction vague enough that two reasonable implementations could diverge materially?
 - Can ChatGPT resolve that ambiguity now from current source?
 - Would concise code/pseudocode/contract text remove substantial implementation reasoning?
-- Is any paragraph irrelevant to actually implementing, validating, or preserving the intended behavior?
-- Can text be removed or compressed without losing implementation information or intent?
+- Is any paragraph irrelevant to implementing, validating, or preserving the intended behavior?
+- Can it be compressed without losing implementation information or intent?
 
-Also check for:
+Compression is subordinate to correctness.
 
-- missing implementation detail;
-- stale assumptions;
-- dependency gaps/overlap;
-- unresolved UNASSIGNED;
-- SOL-high work that can become LUA-high after stronger preparation;
-- missing validation or downstream contracts;
-- unsafe file size.
+### Pass B — LUA-conversion gate
 
-Compression is subordinate to correctness. When there is a conflict, preserve implementation information and intent.
+Resolve every UNASSIGNED item.
 
-Only after this audit finalize Implementation Batches and GOALs and create `CODEX_HANDOFF.md`.
+Challenge every preliminary SOL-high assignment. Try to move it to LUA-high using stronger repository evidence, narrower scope, explicit ownership, contracts, algorithms, migration order, pseudocode/code, validation, or subdivision.
+
+Only retain SOL-high after this pass demonstrates that substantial reasoning remains that should not or cannot reasonably be removed by planning.
+
+Then perform the SOL-specific preparation described in Section 13. This occurs only **after** the work has survived the LUA-conversion gate.
+
+### Pass C — Consistency Gate
+
+Before finalizing Implementation Batches or GOALs, perform a read-only cross-artifact consistency analysis across:
+
+`MASTER_PLAN.md → PLAN_INDEX.md → expanded Plan Parts → current repository evidence`
+
+Check that:
+
+- every implementation-relevant master-plan requirement is represented downstream;
+- every Plan Part traces to a valid requirement/microstep and is not orphaned;
+- dependencies, ownership, interfaces, data/state flows, invariants, migration order, and validation agree across files;
+- no superseded architecture has re-entered through an older Plan Part;
+- no requirement is represented by contradictory implementation instructions;
+- no important decision exists only in chat history;
+- current repository evidence has not invalidated a planned assumption.
+
+When a problem is found, **repair it at its owning source**:
+
+- requirement/architecture problem → `MASTER_PLAN.md`;
+- decomposition/dependency/assignment problem → `PLAN_INDEX.md`;
+- implementation-detail problem → the owning Plan Part.
+
+Propagate the correction downstream as needed. Do not patch only the final handoff if that would leave contradictory canonical artifacts.
+
+Repeat the Consistency Gate after material repairs until no implementation-relevant inconsistency remains or a genuine blocker/user decision is recorded.
+
+### Final GOAL construction
+
+Only after Passes A-C:
+
+1. finalize Implementation Batches;
+2. identify foundational GOALs;
+3. finalize GOAL order and LUA/SOL assignments;
+4. define Expected Evidence for every GOAL;
+5. minimize unnecessary agent switching;
+6. create `CODEX_HANDOFF.md`.
 
 In GitHub mode the plan is already persistent. In Library mode, publish it to the working repository only with user authorization.
 
-## 15. Review loop
+## 15. Implementation convergence and review loop
 
-After implementation, review the current repository rather than extending old assumptions.
+Implementation completion is not defined only by "tests passed".
 
-Classify findings as implementation defect, planning defect, newly discovered repository constraint, optional improvement, or follow-up work.
+After each GOAL, validate its Expected Evidence. A foundational GOAL must converge before dependent GOALs continue.
 
-Any follow-up plan begins from the repository state that exists at that time.
+After the planned GOAL sequence is implemented, perform a **Convergence Check** against the current repository and the canonical planning chain:
+
+`MASTER_PLAN.md → PLAN_INDEX.md → relevant Plan Parts → CODEX_HANDOFF.md → implemented repository`
+
+Classify meaningful differences as:
+
+- **missing** — planned behavior/state is absent;
+- **partial** — implemented, but not to the required contract or completion state;
+- **contradicts** — implementation conflicts with canonical intent/invariants;
+- **unrequested** — material behavior/change exists outside the prepared scope.
+
+Also distinguish whether a finding is an implementation defect, planning defect, newly discovered repository constraint, optional improvement, or genuine follow-up work.
+
+For non-converged required work:
+
+1. repair planning at the owning source if the plan itself is wrong or incomplete;
+2. create the smallest bounded correction work necessary;
+3. implement and validate it;
+4. repeat the Convergence Check.
+
+Stop when required behavior converges, or when a real blocker/user decision makes further convergence impossible.
+
+Optional improvements and genuinely new scope must not be silently folded into completion.
+
+Any later follow-up plan starts from the repository state that exists at that time, not from stale assumptions.
