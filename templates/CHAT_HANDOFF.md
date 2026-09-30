@@ -15,6 +15,14 @@ Workflow manual: https://github.com/Armoredweb/AN-chatNcodex-WorkFlow.git
 Phase: <phase>
 Context Safety at handoff: <CAUTION | HANDOFF | planned boundary>
 
+## Continuous expansion
+
+Mode: <ACTIVE | INACTIVE>
+Operations completed in this chat: <0-4>
+Successor counter: reset to 0/4
+
+If mode is ACTIVE, the successor may continue automatically after reconstructing state, but must obey the same 4-operation hard limit and all Context Safety rules.
+
 ## Last completed work
 
 - <artifact/action>
@@ -56,7 +64,7 @@ Do not treat these notes as current evidence. Re-read the relevant live source.
 
 ## Continuation prompt output
 
-When the user requests this handoff or Context Safety triggers it, also produce a concrete continuation prompt from `templates/CHAT_CONTINUATION_PROMPT.txt`.
+When the user requests this handoff, Context Safety triggers it, or Continuous Expansion Mode reaches 4/4, also produce a concrete continuation prompt from `templates/CHAT_CONTINUATION_PROMPT.txt`.
 
 Fill every field with current values: repository/base, storage/root, phase, last completed work, next action, and exact files to read first.
 
