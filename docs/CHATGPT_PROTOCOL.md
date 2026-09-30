@@ -109,9 +109,9 @@ This is a context-preservation rule.
 
 Continuous expansion is opt-in. Use it only when the user asks to continue through multiple planning checkpoints without repeated "continue" prompts.
 
-A continuous run still works on one bounded planning operation at a time. After each operation, persist the checkpoint and reassess Context Safety before starting the next one.
+A continuous run still works on one bounded top-level operation at a time. After each heavy operation, persist the checkpoint and reassess Context Safety before starting the next one.
 
-Hard limit: never perform more than 4 continuous planning operations in one chat. After the 4th completed operation, do not start a 5th. Persist the current state, update CHAT_HANDOFF.md, and produce the populated continuation prompt for a successor chat.
+Hard limit: never perform more than 4 heavy operations in one chat. After the 4th completed heavy operation, do not start a 5th. Persist the current state, update CHAT_HANDOFF.md, and produce the populated continuation prompt for a successor chat.
 
 Count heavy ChatGPT operations, not commits. One unit is one bounded operation that is itself substantial enough to consume meaningful context, reasoning, research, repository inspection, tool work, or artifact production.
 
