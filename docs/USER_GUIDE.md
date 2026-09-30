@@ -66,7 +66,11 @@ After each bounded planning operation, persist its checkpoint and continue autom
 
 Hard cap: at most 4 continuous planning operations in one chat. The 4th operation ends the run: persist state, update CHAT_HANDOFF.md, and return a populated handoff prompt for a successor chat. Never start a 5th operation in that chat.
 
-Count semantic operations, not commits. One completed plan expansion = 1. One structural subdivision of a plan into subplans = 1, regardless of how many files it creates. Supporting repository reads and routine PLAN_INDEX.md / CHAT_HANDOFF.md synchronization do not add extra units.
+Count heavy ChatGPT operations, not commits. One unit is one bounded top-level task that materially consumes context, reasoning, research, repository inspection, tool work, or artifact production. If it independently warrants a Context Safety Check, normally count it as 1 unit.
+
+Examples: substantial expansion, structural subdivision, major decomposition or MASTER_PLAN consolidation, research/repository-heavy reconciliation, substantial final audit, substantial Codex-handoff preparation, or large recovery/migration work.
+
+Count the parent operation once. Its required reads, source verification, reasoning, persistence, and routine PLAN_INDEX.md / CHAT_HANDOFF.md synchronization do not add units unless they become a separate substantial operation.
 
 The counter is per chat and resets only in the successor chat. A user "continue" message in the same chat does not erase completed units. CAUTION, HANDOFF, blockers, tool failures, or degradation may stop the run before 4.
 
@@ -240,9 +244,11 @@ Expanded implementation-planning files should normally target about 1,200-1,600 
 
 If you want ChatGPT to continue expanding without waiting for a new "continue" message after every checkpoint, explicitly enable Continuous Expansion Mode.
 
-In this mode, ChatGPT still performs one bounded planning operation at a time and persists a checkpoint after each one. A completed plan expansion counts as one operation, and structurally subdividing a plan into subplans also counts as one operation. Routine index/handoff synchronization does not count separately.
+In this mode, ChatGPT still performs one bounded top-level operation at a time and persists a checkpoint after each one. The counter measures heavy ChatGPT work, not just expansion files: a substantial expansion, structural subdivision, major decomposition or consolidation, research/repository-heavy reconciliation, substantial audit, handoff preparation, or large recovery/migration task normally counts as one unit.
 
-For safety, a single chat may complete at most 4 continuous planning operations. After the 4th, ChatGPT must stop, persist the current state, and return a populated handoff prompt for a successor chat instead of starting a 5th. The counter resets only in the successor chat. Context Safety or signs of degradation can trigger an earlier handoff.
+As a practical rule, if a top-level task independently warrants a Context Safety Check, it normally counts as one heavy-operation unit. Supporting reads, source verification, reasoning, persistence, and routine index/handoff synchronization are included in that unit rather than counted again.
+
+For safety, a single chat may complete at most 4 heavy operations. After the 4th, ChatGPT must stop, persist the current state, and return a populated handoff prompt for a successor chat instead of starting a 5th. The counter resets only in the successor chat. Context Safety or signs of degradation can trigger an earlier handoff.
 
 ### Chat output during expansion
 
@@ -323,7 +329,7 @@ Before implementation-level decisions or another expansion, verify the relevant 
 
 Continue from the safe continuation point recorded in CHAT_HANDOFF.md and follow File Safety and Context Safety rules.
 
-If CHAT_HANDOFF.md says Continuous Expansion Mode is ACTIVE, resume it automatically after reconstruction. Start this successor chat with a fresh 0/4 operation counter, count expansions and structural subdivisions as defined by the canonical manual, and hand off again after the 4th continuous planning operation or earlier if Context Safety requires it.
+If CHAT_HANDOFF.md says Continuous Expansion Mode is ACTIVE, resume it automatically after reconstruction. Start this successor chat with a fresh 0/4 heavy-operation counter. Count every substantial top-level ChatGPT process according to the canonical manual, not just expansions or subdivisions, and hand off again after the 4th heavy operation or earlier if Context Safety requires it.
 ```
 
 During a real handoff, ChatGPT replaces every placeholder with concrete values: repository/base, planning storage/root, phase, last completed work, next action, and exact files to read first.
