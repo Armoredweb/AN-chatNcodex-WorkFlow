@@ -174,9 +174,9 @@ Useful pseudocode or implementation code may be included when it materially redu
 
 Continuous Expansion Mode is an opt-in execution style for the expansion phase. Enable it when the user explicitly asks ChatGPT to continue across checkpoints without waiting for repeated "continue" messages.
 
-The planning granularity does not change: perform one bounded expansion or subdivision at a time, persist its checkpoint, reassess Context Safety, and only then proceed automatically.
+The workflow remains bounded: perform one top-level heavy operation at a time, persist its checkpoint, reassess Context Safety, and only then proceed automatically.
 
-A hard per-chat ceiling applies: at most 4 continuous planning operations may be completed in one chat. After operation 4, ChatGPT must not begin operation 5. It must persist/update the operational state, update CHAT_HANDOFF.md, and end with a populated continuation prompt for a successor chat.
+A hard per-chat ceiling applies: at most 4 heavy operations may be completed in one chat. After heavy operation 4, ChatGPT must not begin a 5th. It must persist/update the operational state, update CHAT_HANDOFF.md, and end with a populated continuation prompt for a successor chat.
 
 For this counter, count heavy ChatGPT operations rather than commits or files.
 
