@@ -96,16 +96,16 @@ When explicitly enabled by the user, ChatGPT may expand plans continuously acros
 
 The mode is deliberately bounded:
 
-- work remains one bounded expansion or subdivision at a time;
-- each completed plan expansion counts as 1 operation;
-- one structural subdivision into subplans also counts as 1 operation;
-- routine checkpoint/index/handoff synchronization does not count separately;
-- maximum: 4 continuous planning operations per chat;
+- work remains one bounded top-level operation at a time;
+- any heavy ChatGPT process counts as 1 unit when it independently consumes substantial context, reasoning, research, repository inspection, tool work, or artifact production;
+- examples include expansion, subdivision, major decomposition/consolidation, research-heavy reconciliation, substantial audits, handoff preparation, and large recovery/migration work;
+- supporting reads, verification, persistence, and routine checkpoint/index/handoff synchronization are included in the parent operation rather than counted again;
+- maximum: 4 heavy operations per chat;
 - after the 4th operation, ChatGPT persists state and produces a handoff to a successor chat instead of starting a 5th;
 - the counter resets only in the successor chat;
 - Context Safety or degradation can force an earlier handoff.
 
-This limit is based on planning operations rather than Git commit count because one semantic operation may require a different number of persistence writes depending on the available tooling.
+A practical test is: if a top-level operation independently warrants a Context Safety Check, it normally counts as 1 unit. The limit is intentionally based on heavy ChatGPT work rather than Git commit count.
 
 ## Planning is not execution
 
