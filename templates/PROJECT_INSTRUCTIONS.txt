@@ -53,7 +53,11 @@ After each bounded planning operation, persist its checkpoint and continue autom
 
 Hard cap: at most 4 continuous planning operations in one chat. The 4th operation ends the run: persist state, update CHAT_HANDOFF.md, and return a populated handoff prompt for a successor chat. Never start a 5th operation in that chat.
 
-Count semantic operations, not commits. One completed plan expansion = 1. One structural subdivision of a plan into subplans = 1, regardless of how many files it creates. Supporting repository reads and routine PLAN_INDEX.md / CHAT_HANDOFF.md synchronization do not add extra units.
+Count heavy ChatGPT operations, not commits. One unit is one bounded top-level task that materially consumes context, reasoning, research, repository inspection, tool work, or artifact production. If it independently warrants a Context Safety Check, normally count it as 1 unit.
+
+Examples: substantial expansion, structural subdivision, major decomposition or MASTER_PLAN consolidation, research/repository-heavy reconciliation, substantial final audit, substantial Codex-handoff preparation, or large recovery/migration work.
+
+Count the parent operation once. Its required reads, source verification, reasoning, persistence, and routine PLAN_INDEX.md / CHAT_HANDOFF.md synchronization do not add units unless they become a separate substantial operation.
 
 The counter is per chat and resets only in the successor chat. A user "continue" message in the same chat does not erase completed units. CAUTION, HANDOFF, blockers, tool failures, or degradation may stop the run before 4.
 
