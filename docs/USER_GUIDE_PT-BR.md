@@ -1,6 +1,6 @@
 # Guia de uso
 
-Este é o guia completo para o usuário. Você não precisa abrir nenhum arquivo de template.
+Este é o guia completo para o usuário. Não existem arquivos de template separados para abrir ou manter.
 
 As regras operacionais usadas pelo ChatGPT ficam em `docs/WORKFLOW.md`. As duas caixas copiáveis abaixo são todo o texto de configuração necessário.
 
