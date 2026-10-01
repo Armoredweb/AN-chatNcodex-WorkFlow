@@ -67,7 +67,9 @@ Always create a plan-specific folder.
 
 Explain that planning writes create commits and obtain scoped authorization for routine writes inside that folder. Authorization does not extend to application source or unrelated files.
 
-Preserve small planning operations, but avoid micro-commits when practical. Consolidate writes belonging to the same operation when tooling allows. Do not create artificial local batching solely to reduce commits.
+Preserve small planning operations, but avoid micro-commits when practical. When one heavy operation updates several planning files or performs several small edits within the same bounded task, prefer **one coherent commit for that heavy-operation unit** when tooling allows. This is especially important during post-expansion Pass A and Pass B, which may touch many Plan Parts. Intermediate in-memory/tool edits may remain fine-grained, but persistence should not create one commit per tiny edit when those edits belong to the same heavy operation.
+
+Do not delay required checkpoints, mix unrelated heavy operations, or create artificial batching solely to reduce commit count. Correctness, recoverability, and safe boundaries take precedence over commit minimization.
 
 ### Library — fallback
 
@@ -130,6 +132,10 @@ Dependency-oriented index containing:
 No UNASSIGNED may remain when implementation-ready.
 
 ### Plan parts
+
+Plan-part filenames and directory names must be **agent-neutral**. Do not include `LUA`, `SOL`, `LUA-high`, `SOL-high`, or another mutable agent assignment in the plan filename/path. Name files from stable work identity: macroblock/microstep/order/scope or another implementation-domain label.
+
+Agent assignment may appear in `PLAN_INDEX.md`, Plan Part headers/metadata, GOAL definitions, handoffs, and references where useful. If work changes from SOL-high to LUA-high or vice versa, update those assignments without renaming the Plan Part solely because of the agent change. This preserves stable paths and references throughout optimization.
 
 Each expanded plan part should contain only what applies:
 
@@ -205,6 +211,8 @@ At approval:
 Decomposition and expansion are separate.
 
 Read the whole approved master plan and create ordered macroblocks and microsteps with prerequisites, outputs, provisional plan files, and preliminary agents.
+
+Provisional plan filenames must describe stable work identity rather than the preliminary agent. Agent assignment is expected to change during optimization, so it must not be encoded into the file path.
 
 Think in small implementation units, but do not fully expand them yet.
 
@@ -413,6 +421,8 @@ Audit the plan file by file. The purpose is not to enlarge the plans; it is to m
 
 ### Pass A — implementation-preserving optimization
 
+Treat one bounded Pass A review/optimization task as the natural persistence unit. It may inspect or edit multiple related Plan Parts. When tooling supports it, persist the completed heavy-operation unit in one coherent commit instead of emitting micro-commits for each tiny cleanup or file edit. Do not merge unrelated work merely to reduce commits.
+
 Use this priority order:
 
 1. **Preserve implementation truth first.** Do not remove requirements, constraints, invariants, compatibility behavior, dependencies, failure behavior, validation, or architectural intent merely to save tokens.
@@ -435,11 +445,15 @@ Compression is subordinate to correctness.
 
 ### Pass B — LUA-conversion gate
 
+Use the same commit discipline as Pass A: fine-grained analysis/edits are allowed inside the heavy operation, but when practical persist the resulting related plan/index updates as one coherent commit for that bounded Pass B task rather than many micro-commits.
+
 Resolve every UNASSIGNED item.
 
 Challenge every preliminary SOL-high assignment. Try to move it to LUA-high using stronger repository evidence, narrower scope, explicit ownership, contracts, algorithms, migration order, pseudocode/code, validation, or subdivision.
 
 Only retain SOL-high after this pass demonstrates that substantial reasoning remains that should not or cannot reasonably be removed by planning.
+
+Changing an assignment between LUA-high and SOL-high must not rename an otherwise correctly named Plan Part. Update assignment metadata/index/GOAL references while preserving the stable agent-neutral file path.
 
 Then perform the SOL-specific preparation described in Section 13. This occurs only **after** the work has survived the LUA-conversion gate.
 

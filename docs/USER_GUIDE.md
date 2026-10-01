@@ -20,11 +20,11 @@ Read the canonical manual directly at the start of every new or continuation cha
 CORE OPERATION
 Use the current working GitHub repository as source of truth for code/architecture. For continuation, reconstruct state from PROJECT.md, CHAT_HANDOFF.md, MASTER_PLAN.md, PLAN_INDEX.md, and only the Plan Parts needed next. Re-check current source before implementation-level decisions.
 
-Prefer GitHub as planning storage in a dedicated plan folder; Library is fallback. Respect scoped write authorization.
+Prefer GitHub as planning storage in a dedicated plan folder; Library is fallback. Respect scoped write authorization. For a bounded heavy operation that updates several related planning files, prefer one coherent commit when tooling allows; especially avoid Pass A/B micro-commits.
 
 Optimize for implementation readiness per token: do difficult reasoning in ChatGPT, persist the shortest complete implementation-ready result, and never add filler or remove implementation truth merely to save tokens.
 
-LUA-high is the default implementation target. Resolve avoidable decisions in planning and provide contracts/algorithms/code where that makes LUA mechanical. Retain SOL-high only after a final LUA-conversion audit; then optimize surviving SOL work for high-capability reasoning without unnecessary scaffolding.
+LUA-high is the default implementation target. Resolve avoidable decisions in planning and provide contracts/algorithms/code where that makes LUA mechanical. Retain SOL-high only after a final LUA-conversion audit; then optimize surviving SOL work for high-capability reasoning without unnecessary scaffolding. Never encode LUA/SOL assignment in Plan Part filenames or paths; assignments belong in indexes/metadata/references so they can change without renaming plans.
 
 CONTEXT / EXECUTION
 Before substantial work apply Context Safety: SAFE / CAUTION / HANDOFF.
@@ -101,6 +101,8 @@ At that gate ChatGPT preserves the approved master-plan baseline and starts deco
 
 Decomposition first defines macroblocks, microsteps, dependencies, provisional plan files, and preliminary LUA-high/SOL-high assignments. Detailed expansion comes later.
 
+Plan filenames remain agent-neutral: they describe the work, not whether the current assignment is LUA-high or SOL-high. Agent changes update the index/header/GOAL metadata without forcing plan-file renames or breaking references.
+
 Expansion is optimized for implementation readiness per token. A difficult problem does not need a large plan. Small complete subplans are desirable.
 
 Line counts are safety guidance only. ChatGPT must not pad files with tutorials, repeated background, generic rationale, or filler.
@@ -141,7 +143,7 @@ You do not need to compose or maintain a continuation template yourself.
 
 ## 8. After expansion: audit, consistency, Codex, and convergence
 
-After all required Plan Parts are expanded, the earlier 3-operation block compactions do **not** replace the full final audit.
+After all required Plan Parts are expanded, the earlier 3-operation block compactions do **not** replace the full final audit. During Pass A and Pass B, ChatGPT should group related edits into a coherent commit per bounded heavy-operation unit when practical instead of creating micro-commits for every small file edit.
 
 ChatGPT then:
 
