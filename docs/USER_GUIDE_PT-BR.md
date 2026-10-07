@@ -20,6 +20,8 @@ Read the canonical manual directly at the start of every new or continuation cha
 CORE OPERATION
 Use the current working GitHub repository as source of truth for code/architecture. For continuation, reconstruct state from PROJECT.md, CHAT_HANDOFF.md, MASTER_PLAN.md, PLAN_INDEX.md, and only the Plan Parts needed next. Re-check current source before implementation-level decisions.
 
+Whenever ChatGPT already needs to read implementation source for the current operation, use that same reading pass to look for material bugs, architecture inconsistencies, dead/obsolete paths, unnecessary complexity, avoidable hot-path work, and clear optimization opportunities. Do not start extra unrelated source browsing merely to hunt for issues; inspect only minimal adjacent context needed to classify a discovered issue.
+
 Prefer GitHub as planning storage in a dedicated plan folder; Library is fallback. Respect scoped write authorization. For a bounded heavy operation that updates several related planning files, prefer one coherent commit when tooling allows; especially avoid Pass A/B micro-commits.
 
 Optimize for implementation readiness per token: do difficult reasoning in ChatGPT, persist the shortest complete implementation-ready result, and never add filler or remove implementation truth merely to save tokens.
@@ -37,6 +39,8 @@ FINALIZATION
 After all Plan Parts are expanded, always run the full file-by-file optimization, LUA-conversion gate, cross-artifact Consistency Gate, GOAL/Batch construction, Expected Evidence definition, and Codex handoff described in the manual.
 
 After implementation, validate Expected Evidence and run the Convergence Check until required planned behavior converges or a real blocker/user decision remains.
+
+After convergence, ChatGPT—not Codex—performs Cleanup Preparation under the same Context Safety/heavy-operation rules, resolves cleanup decisions, and prepares a mechanical CODEX_CLEAN_HANDOFF.md for one LUA-high Cleanup GOAL. Cleanup never starts automatically: stop and wait for the user to explicitly start that GOAL. Luna executes the prepared cleanup; it does not design the cleanup. The closed cycle leaves a concise CLEANUP_FINDINGS.md for the next planning cycle.
 
 HANDOFF
 When handoff is requested/required, persist state and end the response with a concrete plain-text continuation prompt containing current repository/base, storage/root, phase, last completed work, next action, exact files to read first, and continuous-mode state. No placeholders and no text after it.
@@ -66,6 +70,8 @@ If the working GitHub repository is not already known, ask me for it and verify 
 Do not assume current code or architecture from conversation memory. Use the working repository as the source of truth.
 
 For a new workflow, run the Storage Gate after verifying the repository.
+
+If CLEANUP_FINDINGS.md exists from a previous closed cycle, read it early and reconcile its still-live findings into the new planning cycle.
 
 ```
 
@@ -160,7 +166,36 @@ Depois da implementação, o ChatGPT executa um Convergence Check contra o plano
 
 Arquivos de planejamento são limites de segurança do planejamento, não sessões automáticas do Codex nem ciclos individuais de teste. Um GOAL pode usar muitos Plan Parts.
 
-## 9. Armazenamento
+## 9. Cycle Closure e limpeza
+
+Um Convergence Check concluído torna o ciclo elegível para limpeza; ele não inicia a
+limpeza.
+
+O ChatGPT faz o Cleanup Preparation como trabalho de planejamento. Quando substancial,
+essa preparação segue as mesmas regras de Context Safety, Modo Manual/Contínuo,
+checkpoints, commits coerentes e handoff das outras operações pesadas. O ChatGPT resolve
+precedência arquitetural, regras de exclusão/preservação, limpeza local de
+build/generated, formato dos findings e validação limpa, então prepara
+`CODEX_CLEAN_HANDOFF.md` especificamente para que LUA-high possa executá-lo de forma
+mecânica.
+
+Quando esse handoff estiver pronto, o ChatGPT para. Você inicia explicitamente o Cleanup
+GOAL quando quiser executá-lo.
+
+O Cleanup GOAL é uma missão contínua única para LUA-high. Ele reconcilia a arquitetura
+permanente, confere a implementação contra o plano final, remove planejamento/histórico
+concluído e resíduos classificados de arquitetura/build/generated, reconstrói a partir de
+estado limpo, remove o próprio handoff temporário e deixa `CLEANUP_FINDINGS.md` contendo
+somente reconciliações arquiteturais e divergências reais de implementação ainda abertas.
+
+O próximo ciclo de planejamento lê esses findings cedo, absorve/resolve/rejeita/adia cada
+um e não mantém findings antigos como arquivo histórico.
+
+O ciclo pretendido é:
+
+`Planejar -> Implementar -> Convergir -> Limpar -> alimentar o próximo Planejamento`
+
+## 10. Armazenamento
 
 GitHub é recomendado porque o planejamento pode ser persistido diretamente em uma pasta dedicada e retomado por outro chat.
 

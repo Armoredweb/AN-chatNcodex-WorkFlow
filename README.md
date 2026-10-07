@@ -41,6 +41,16 @@ Checkpoints, multiple chats, handoffs, and continuous mode divide work into boun
 - After expansion, a Consistency Gate checks traceability and contradictions across the master plan, index, Plan Parts, and current repository.
 - Every GOAL defines Expected Evidence; foundational GOALs gate dependent work.
 - Post-implementation Convergence Checks compare the real repository back to the canonical plan until required behavior converges.
+- Whenever ChatGPT already has to read source code, it opportunistically checks the same
+  code for material bugs, architecture inconsistencies, dead paths, avoidable cost and
+  clear optimizations without starting unrelated source audits.
+- After convergence, ChatGPT plans Cycle Closure under the normal heavy-planning rules
+  and prepares a Luna-high `CODEX_CLEAN_HANDOFF.md`; cleanup never starts automatically.
+- The user explicitly starts the single Cleanup GOAL. It removes completed planning and
+  classified build/generated residue, validates from a clean build, and leaves only a
+  concise `CLEANUP_FINDINGS.md` delta for the next planning cycle.
+- The recurring loop is: **Plan -> Implement -> Converge -> Clean -> feed findings into
+  the next Plan**.
 
 ## Repository contents
 

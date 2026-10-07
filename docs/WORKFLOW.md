@@ -33,6 +33,40 @@ For workflow procedure, this file is authoritative.
 
 Never substitute conversation memory, old repository inspections, or old plan text for current source.
 
+During Convergence and Cycle Closure, current source is evidence of what was actually
+implemented; it does not erase an approved final requirement merely because the code
+diverged. Reconstruct the intended final contract from the active architecture, newest
+canonical/consolidated plan and newest applicable Plan Parts, then classify the code
+against that contract.
+
+### Opportunistic source review
+
+Whenever ChatGPT already needs to read implementation source code for a required workflow
+operation, use that same reading pass to look for material correctness bugs, architectural
+inconsistencies, dead or obsolete paths, avoidable hot-path work or allocations,
+unnecessary complexity, and clear optimization opportunities.
+
+This rule does **not** authorize extra repository browsing merely to hunt for unrelated
+problems. A discovered issue may justify reading only the minimum adjacent code needed to
+confirm or dismiss it. Do not expand into a repository-wide audit unless that audit is
+already part of the current operation.
+
+Handle confirmed findings according to the current phase:
+
+- if directly relevant to the active plan, repair or enrich the artifact that owns the
+  requirement;
+- if it invalidates a planning assumption, repair that assumption at its owning source;
+- if it is real but outside the current approved scope, preserve it as concise follow-up
+  information rather than implementing it opportunistically;
+- during Cycle Closure, unresolved material implementation findings belong in
+  `CLEANUP_FINDINGS.md`;
+- do not record trivial style preferences or speculative optimizations without concrete
+  evidence of value.
+
+Optimization findings should have a material reason: an obvious repeated cost, hot-path
+problem, avoidable allocation/work, measured evidence, or another concrete performance
+risk. Do not manufacture optimization backlog from ordinary source reading.
+
 ## 3. Start, manual refresh, and recovery
 
 Project Instructions are only a compact bootstrap. This file remains the authoritative operational manual.
@@ -45,7 +79,10 @@ At every new or continuation chat:
 4. if continuing, read `PROJECT.md`, `CHAT_HANDOFF.md`, `MASTER_PLAN.md`, and `PLAN_INDEX.md`;
 5. inventory remaining planning files without loading all of them;
 6. load only files required for the next operation;
-7. re-inspect relevant current source before implementation-level decisions.
+7. re-inspect relevant current source before implementation-level decisions;
+8. when beginning a new planning cycle, if `CLEANUP_FINDINGS.md` exists from the
+   previous Cycle Closure, read it early and reconcile each live finding into the new
+   planning state rather than relying on conversation memory.
 
 Re-read the relevant workflow sections before every major phase transition, after a handoff, before finalizing implementation planning, before Codex handoff, and whenever workflow behavior is uncertain.
 
@@ -92,7 +129,8 @@ Durable entry point containing:
 - storage mode and planning root;
 - authorized GitHub planning scope when relevant;
 - current phase;
-- paths to master plan, approved backup, plan index, chat handoff, and Codex handoff;
+- paths to master plan, approved backup, plan index, chat handoff, Codex handoff, and
+  cleanup handoff/findings when those phases exist;
 - last known repository baseline when useful;
 - important superseded material only when needed for recovery.
 
@@ -114,7 +152,11 @@ Compact architectural backbone containing:
 
 Detailed implementation belongs in plan parts, not here.
 
-At the implementation-planning gate preserve `backup/MASTER_PLAN.original.md` as the immutable approved semantic baseline. Git history does not replace it.
+At the implementation-planning gate preserve `backup/MASTER_PLAN.original.md` as the
+immutable approved semantic baseline. Git history does not replace it while the cycle is
+active. After a completed Cycle Closure has reconciled permanent architecture and
+successfully removed the completed planning package, Git history becomes the archive for
+that closed cycle.
 
 ### PLAN_INDEX.md
 
@@ -190,6 +232,46 @@ Final implementation handoff containing:
 - deviation-reporting rules.
 
 Planning-file subdivisions are not automatic agent-session or test boundaries.
+
+### CODEX_CLEAN_HANDOFF.md
+
+Temporary Cleanup GOAL handoff prepared by ChatGPT after implementation convergence.
+
+It must contain only the information needed to make cleanup mechanical for **LUA-high**,
+including:
+
+- repository/base and completed planning chain to reconcile;
+- explicit source/decision precedence;
+- permanent architecture/documentation reconciliation rules;
+- deletion and preservation boundaries;
+- local build/cache/generated-state cleanup policy;
+- exact rules for distinguishing dead legacy code from an active implementation
+  divergence;
+- `CLEANUP_FINDINGS.md` schema and exclusion rules;
+- clean-from-zero rebuild/validation requirements;
+- expected final repository shape;
+- self-removal requirement for the cleanup handoff itself;
+- blockers that must stop execution rather than be invented by the agent.
+
+This is a planning artifact produced by ChatGPT, not a request for Codex to design the
+cleanup.
+
+### CLEANUP_FINDINGS.md
+
+The only intentionally surviving feedback artifact from a completed Cycle Closure.
+
+Keep it concise. It may contain only:
+
+- durable architecture decisions that had to be added or corrected in permanent
+  architecture during cleanup;
+- real current-source implementation divergences that remain for future planning.
+
+Do not turn it into a cleanup log. Do not list deleted files, inspected files, passing
+tests, build commands, OK checklists, benchmark transcripts, GOAL history, or correctly
+superseded decisions.
+
+The next planning cycle reads and classifies its live findings before the file is
+retired or replaced by a later closure.
 
 ## 6. Master-plan phase and gate
 
@@ -297,6 +379,10 @@ Examples:
 - substantial final audit or Consistency Gate;
 - substantial Codex-handoff preparation;
 - substantial post-implementation Convergence Check;
+- substantial post-implementation Cleanup Preparation;
+- architecture reconciliation before cleanup;
+- repository-wide deletion/preservation classification;
+- substantial `CODEX_CLEAN_HANDOFF.md` preparation;
 - large recovery/migration/reorganization.
 
 Count the parent operation once. Required reads, source verification, reasoning, persistence, and routine index/handoff synchronization are supporting work unless they become a separate substantial operation.
@@ -413,6 +499,20 @@ Implementation agents should inspect current source, read the required GOAL plan
 
 They must not silently redesign prepared architecture or revive superseded plans.
 
+### Cleanup GOAL
+
+The Cleanup GOAL is deliberately different from normal implementation planning:
+
+- ChatGPT performs the cleanup reasoning and prepares `CODEX_CLEAN_HANDOFF.md`;
+- the execution target is **LUA-high by design**;
+- it should be one continuous autonomous GOAL from start to finish;
+- Luna executes the prepared procedure and must not reconstruct architectural
+  precedence, invent deletion policy, or redesign cleanup strategy;
+- if substantial architectural judgment still remains, improve ChatGPT preparation
+  instead of escalating the execution agent, unless the uncertainty is genuinely
+  irreducible;
+- cleanup execution never begins automatically and requires explicit user initiation.
+
 ## 14. Final optimization, Consistency Gate, and Codex handoff
 
 The full final optimization happens **after all required Plan Parts have been expanded**. Block-boundary compaction does not replace it.
@@ -527,3 +627,163 @@ Stop when required behavior converges, or when a real blocker/user decision make
 Optional improvements and genuinely new scope must not be silently folded into completion.
 
 Any later follow-up plan starts from the repository state that exists at that time, not from stale assumptions.
+
+A successful Convergence Check does **not** automatically start cleanup. It only makes
+the project eligible for the Cycle Closure preparation described below.
+
+## 16. Cycle Closure, cleanup, and feedback
+
+Cycle Closure turns a converged implementation into a clean permanent repository state
+and a small, explicit feedback input for the next planning cycle.
+
+The canonical cycle is:
+
+```text
+Plan -> Implement -> Converge -> ChatGPT prepares cleanup
+     -> user explicitly starts Cleanup GOAL
+     -> LUA-high cleans and validates
+     -> CLEANUP_FINDINGS.md feeds the next plan
+```
+
+### 16.1 Cleanup Preparation belongs to ChatGPT planning
+
+Cleanup Preparation is a **ChatGPT planning phase**, not a Codex planning task.
+
+ChatGPT must perform the architecture/repository reasoning needed to make cleanup
+mechanical: inspect the current repository, reconcile the completed planning chain,
+resolve source precedence, define what may be deleted or must survive, specify local
+build/cache/generated-state cleanup, define clean validation, and prepare
+`CODEX_CLEAN_HANDOFF.md`.
+
+When substantial, this work is a normal heavy planning operation. It follows the same
+Context Safety, Manual/Continuous Mode, checkpoint, coherent-commit, and chat-handoff
+rules as other large planning work. It may span multiple ChatGPT heavy operations or
+successor chats when needed.
+
+Codex/Luna must not be asked to invent the cleanup plan, reconstruct which historical
+decisions survived, decide architectural precedence, or design the deletion strategy.
+
+Apply Opportunistic Source Review to every implementation file that Cleanup Preparation
+already needs to inspect.
+
+### 16.2 Cleanup planning precedence and architecture reconciliation
+
+Before preparing deletion, determine the final intended contract from:
+
+1. current permanent architecture for decisions already canonicalized;
+2. the newest approved master/consolidated semantic plan for the closing cycle;
+3. the newest applicable implementation-ready Plan Parts where they intentionally refine
+   or replace earlier planning;
+4. current source as evidence of actual implementation;
+5. historical plans only as non-authoritative context when needed to classify residue.
+
+Older plans must never resurrect a decision superseded by newer approved planning.
+
+Before a planning artifact may be deleted, satisfy this gate:
+
+```text
+NO DURABLE DECISION EXISTS ONLY IN DELETABLE PLANNING ARTIFACTS
+```
+
+Move missing durable decisions into the permanent architecture. Correct permanent
+architecture that still describes a superseded final decision.
+
+Then verify implementation-relevant final contracts against actual current source.
+Correct implementation is not logged. Active missing/partial/contradictory behavior that
+should not be silently redesigned during cleanup becomes a concise
+`CLEANUP_FINDINGS.md` entry. Provably dead legacy code with no supported caller may be
+removed as part of cleanup.
+
+### 16.3 Luna-readiness gate
+
+Prepare the Cleanup GOAL specifically for **LUA-high**. Before
+`CODEX_CLEAN_HANDOFF.md` is ready, verify that:
+
+- no avoidable architecture decision is delegated to Luna;
+- final source precedence is explicit;
+- deletion and preservation boundaries are bounded;
+- ambiguous destructive cases have deterministic inspection rules;
+- dead-code versus active-divergence classification is explicit;
+- local build/cache/generated cleanup is explicit;
+- `CLEANUP_FINDINGS.md` content and exclusions are fixed;
+- clean rebuild/validation commands or discovery rules are known;
+- final repository shape and handoff self-removal are defined.
+
+If substantial reasoning remains, continue ChatGPT preparation. Do not make Luna solve a
+planning defect.
+
+### 16.4 Mandatory user-start gate
+
+After ChatGPT persists a ready `CODEX_CLEAN_HANDOFF.md`, **stop and return control to
+the user**.
+
+Cleanup execution is never automatic, including after perfect convergence and even when
+Continuous Mode is active. The user is responsible for explicitly starting the prepared
+Cleanup GOAL.
+
+Preparing the handoff is authorization to persist planning only. It is not authorization
+to execute destructive cleanup.
+
+### 16.5 Cleanup GOAL execution
+
+After explicit user initiation, LUA-high executes the prepared cleanup as one continuous
+GOAL from start to finish.
+
+The prepared mission normally includes:
+
+- reconcile permanent architecture before deleting its planning sources;
+- inspect current implementation against final contracts;
+- record only unresolved material divergences in `CLEANUP_FINDINGS.md`;
+- remove completed planning roots, backups, handoffs and duplicate planning packages
+  after their durable information has migrated;
+- remove proven dead/superseded architecture residue;
+- remove disposable tracked generated/package/preview artifacts;
+- inventory ignored/untracked state before deletion;
+- remove classified local build/output/generated/test residue, including old build
+  directories, without blanket destructive commands such as `git clean -xfd`;
+- preserve authored source assets, licenses, current fixtures, required tool/source
+  caches and other supported inputs;
+- update ignore rules when necessary without hiding legitimate source;
+- remove live references to deleted planning/history;
+- rebuild and validate supported products from a genuinely clean build state;
+- remove `CODEX_CLEAN_HANDOFF.md` itself after successful closure.
+
+A cached external tool or source is not disposable merely because it is ignored; preserve
+intentional pinned caches and classify ambiguous local data before deleting it.
+
+### 16.6 Clean rebuild gate
+
+Cycle Closure is not complete until old build state is removed and supported products
+are rebuilt from zero:
+
+```text
+OLD BUILD STATE REMOVED
+        ->
+CONFIGURE / BUILD / TEST FROM ZERO
+        ->
+SUPPORTED PRODUCTS PROVEN INDEPENDENT OF DELETED STATE
+```
+
+Use the working repository's own build/validation rules. Passing stale incremental
+artifacts is not evidence.
+
+### 16.7 Feedback into the next cycle
+
+`CLEANUP_FINDINGS.md` survives the closed cycle as a small delta, not as planning
+history.
+
+At the beginning of the next planning cycle, inspect current repository/permanent
+architecture first, then reconcile each still-live finding as one of:
+
+- **ABSORB** — becomes a requirement of the new plan;
+- **ALREADY_RESOLVED** — current source no longer exhibits it;
+- **REJECT** — the user deliberately decides not to pursue it;
+- **DEFER** — remains follow-up scope with a stated reason.
+
+Once the findings have been absorbed/classified into durable new planning state, remove
+or replace the old findings file as appropriate. Do not accumulate findings files as an
+archive.
+
+After successful Cycle Closure, the completed planning package may be removed from the
+working tree. Git history is the archive for the closed cycle; permanent architecture,
+current source and the concise findings delta are the active truth.
