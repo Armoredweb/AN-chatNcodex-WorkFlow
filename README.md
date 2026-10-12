@@ -31,6 +31,7 @@ Checkpoints, multiple chats, handoffs, and continuous mode divide work into boun
 - GitHub is the recommended planning backend; Library is a fallback.
 - `MASTER_PLAN.md` stays compact; decomposition and detailed expansion happen later.
 - Plan files contain the minimum complete implementation information. No filler, tutorials, repeated context, or prose added to reach a size.
+- Every substantial expansion combines current-source inspection with targeted external research on comparable solutions/techniques, comparing trade-offs before choosing the approach that best fits the project's canonical direction; research informs design and is not used to copy external code.
 - Line counts are safety guidance only. Small complete subplans are desirable.
 - Context Safety and file size are independent.
 - Manual Mode performs one heavy operation per user invocation with no fixed accumulated handoff count. Continuous Mode runs four blocks of three heavy operations (3×4=12), pausing for `continue` after each 3-operation block and handing off after operation 12.

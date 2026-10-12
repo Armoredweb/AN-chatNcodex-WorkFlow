@@ -193,7 +193,9 @@ Each expanded plan part should contain only what applies:
 - observable definition of done;
 - downstream guarantees when useful.
 
-Rationale is optional. Include it only when needed to preserve a non-obvious architectural decision, compatibility constraint, or known failure mode.
+Rationale is optional. Include it only when needed to preserve a non-obvious architectural decision, compatibility constraint, known failure mode, or a material research-driven trade-off.
+
+When external comparative research materially affects a Plan Part, persist only a compact implementation-relevant record: alternatives considered, decisive trade-offs, selected direction, and source references when useful for later verification. Do not paste research transcripts or external code into the plan.
 
 ### CHAT_HANDOFF.md
 
@@ -349,21 +351,39 @@ When uncertain, prefer a planned handoff.
 
 ## 10. Expansion
 
+Every substantial expansion combines **current-repository inspection** with **targeted external comparative research** before the Plan Part is finalized.
+
+External research is for design intelligence, not code acquisition. Its purpose is to expose the planner to comparable solutions, established techniques, alternative architectures, operational patterns, performance strategies, failure modes, and trade-offs that may not be obvious from the current repository alone.
+
 Before each substantial expansion:
 
 1. perform Context Safety;
-2. inspect relevant current source;
-3. reconcile source with the master plan, index, dependencies, and previously established interfaces;
-4. resolve questions that repository evidence can answer;
-5. write the smallest implementation-ready plan;
-6. persist it;
-7. update index/handoff state only as needed.
+2. inspect the relevant current source and active project architecture;
+3. identify the implementation/design questions that materially affect this Plan Part;
+4. perform targeted internet research for comparable solutions, techniques, standards, papers, official documentation, engineering write-ups, or relevant open-source designs;
+5. prefer primary/authoritative sources when available and compare more than one approach when the design space is material;
+6. build a concise alternatives comparison with relevant advantages, disadvantages, complexity, performance/resource cost, maintainability, compatibility, operational risk, and fit with the project's existing direction;
+7. treat external approaches as evidence and inspiration only: **do not copy external implementation code into the plan or project as part of this research step**;
+8. reconcile the research with the current repository, approved master plan, project constraints, dependencies, interfaces, target hardware/performance, and previously established direction;
+9. make the planning/implementation decision that best serves this project rather than automatically choosing the most common, newest, or externally popular approach;
+10. resolve questions that repository and research evidence can answer;
+11. write the smallest implementation-ready Plan Part;
+12. persist it;
+13. update index/handoff state only as needed.
+
+The project's approved intent and current repository remain authoritative. External research may improve the technique used to achieve that intent, reveal a risk, or justify revisiting an assumption, but it must not silently redirect scope or replace an approved architectural decision. If research reveals a material conflict with an approved requirement or architecture, repair the owning artifact or raise the user decision according to the normal source-precedence rules.
+
+Research breadth must be proportional to the decision. Do not turn routine implementation details into broad literature reviews. Conversely, do not skip comparison when a choice materially affects architecture, performance, persistence, networking, concurrency, security, compatibility, rendering, storage, deployment, or another important system property.
+
+If the internet/research capability is unavailable, do not fabricate external findings. Continue from repository and canonical project evidence where safe, and record the limitation when it materially affects confidence.
 
 Re-check current source before every part even when nearby parts were expanded recently.
 
-The persisted file is the primary output. Do not duplicate its implementation content in chat unless asked.
+The external research performed for one Plan Part is normally supporting work inside that expansion heavy operation. Count it separately only when the research itself becomes a distinct substantial top-level operation.
 
-Normal chat output during expansion should contain only continuity information: completed/subdivided artifact, permission, blocker/user decision, next action, Context Safety, or handoff.
+The persisted Plan Part is the primary output. Do not duplicate its implementation content or a full research transcript in chat unless asked.
+
+Normal chat output during expansion should contain only continuity information: completed/subdivided artifact, material trade-off requiring user choice, permission, blocker, next action, Context Safety, or handoff.
 
 ## 11. Heavy operations and Continuous Mode
 

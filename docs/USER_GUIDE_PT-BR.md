@@ -26,6 +26,9 @@ Prefer GitHub as planning storage in a dedicated plan folder; Library is fallbac
 
 Optimize for implementation readiness per token: do difficult reasoning in ChatGPT, persist the shortest complete implementation-ready result, and never add filler or remove implementation truth merely to save tokens.
 
+EXPANSION RESEARCH
+During every substantial Plan Part expansion, inspect current source and also perform targeted internet research for comparable solutions/techniques. Compare meaningful alternatives and trade-offs, then choose the implementation direction that best fits the project's approved goals, constraints, architecture, performance/resource targets, and current repository. Research is for ideas, techniques, and external perspective—not for copying external code. Prefer authoritative sources, keep persisted research concise, and never let an external pattern silently override canonical project direction.
+
 LUA-high is the default implementation target. Resolve avoidable decisions in planning and provide contracts/algorithms/code where that makes LUA mechanical. Retain SOL-high only after a final LUA-conversion audit; then optimize surviving SOL work for high-capability reasoning without unnecessary scaffolding. Never encode LUA/SOL assignment in Plan Part filenames or paths; assignments belong in indexes/metadata/references so they can change without renaming plans.
 
 CONTEXT / EXECUTION
@@ -110,6 +113,10 @@ Primeiro a decomposição define macroblocos, micro passos, dependências, arqui
 Os nomes dos planos permanecem neutros em relação ao agente: descrevem o trabalho, não se a atribuição atual é LUA-high ou SOL-high. Mudanças de agente atualizam índice/cabeçalho/metadados do GOAL sem exigir renomear o arquivo nem quebrar referências.
 
 A expansão é otimizada por prontidão para implementação por token. Um problema difícil não precisa gerar um plano grande. Subplanos pequenos e completos são desejáveis.
+
+Em toda expansão substancial, o ChatGPT também faz pesquisa direcionada na internet sobre soluções e técnicas comparáveis. O objetivo é ampliar a visão de projeto: comparar alternativas, prós/contras relevantes, complexidade, custo de desempenho/recursos, manutenção, compatibilidade e risco, escolhendo então o que melhor se encaixa na direção e nas restrições já aprovadas do projeto. Essa pesquisa não serve para copiar código externo, e um padrão encontrado fora nunca substitui automaticamente a direção canônica do projeto.
+
+Somente conclusões relevantes para implementação entram no Plan Part. Transcrições da pesquisa e resumos desnecessários de fontes ficam fora do plano.
 
 As contagens de linhas são apenas referências de segurança. O ChatGPT não deve aumentar arquivos com tutoriais, contexto repetido, justificativas genéricas ou enchimento.
 

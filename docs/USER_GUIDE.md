@@ -26,6 +26,9 @@ Prefer GitHub as planning storage in a dedicated plan folder; Library is fallbac
 
 Optimize for implementation readiness per token: do difficult reasoning in ChatGPT, persist the shortest complete implementation-ready result, and never add filler or remove implementation truth merely to save tokens.
 
+EXPANSION RESEARCH
+During every substantial Plan Part expansion, inspect current source and also perform targeted internet research for comparable solutions/techniques. Compare meaningful alternatives and trade-offs, then choose the implementation direction that best fits the project's approved goals, constraints, architecture, performance/resource targets, and current repository. Research is for ideas, techniques, and external perspective—not for copying external code. Prefer authoritative sources, keep persisted research concise, and never let an external pattern silently override canonical project direction.
+
 LUA-high is the default implementation target. Resolve avoidable decisions in planning and provide contracts/algorithms/code where that makes LUA mechanical. Retain SOL-high only after a final LUA-conversion audit; then optimize surviving SOL work for high-capability reasoning without unnecessary scaffolding. Never encode LUA/SOL assignment in Plan Part filenames or paths; assignments belong in indexes/metadata/references so they can change without renaming plans.
 
 CONTEXT / EXECUTION
@@ -110,6 +113,10 @@ Decomposition first defines macroblocks, microsteps, dependencies, provisional p
 Plan filenames remain agent-neutral: they describe the work, not whether the current assignment is LUA-high or SOL-high. Agent changes update the index/header/GOAL metadata without forcing plan-file renames or breaking references.
 
 Expansion is optimized for implementation readiness per token. A difficult problem does not need a large plan. Small complete subplans are desirable.
+
+For every substantial expansion, ChatGPT also performs targeted internet research on comparable solutions and techniques. The goal is to widen the design view: compare alternatives, relevant pros/cons, complexity, performance/resource cost, maintainability, compatibility, and risk, then choose what best fits the project's existing direction and constraints. This research is not for copying external code, and an external pattern never overrides the approved project direction automatically.
+
+Only implementation-relevant conclusions should enter the Plan Part. Research transcripts and unnecessary source summaries stay out of the plan.
 
 Line counts are safety guidance only. ChatGPT must not pad files with tutorials, repeated background, generic rationale, or filler.
 
