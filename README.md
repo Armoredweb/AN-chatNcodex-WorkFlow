@@ -30,6 +30,7 @@ Checkpoints, multiple chats, handoffs, and continuous mode divide work into boun
 - Current working-repository code and active architecture are authoritative for software facts.
 - GitHub is the recommended planning backend; Library is a fallback.
 - `MASTER_PLAN.md` stays compact; decomposition and detailed expansion happen later.
+- After initial decomposition, a mandatory user checkpoint precedes the **Decomposition Audit Gate**, which repeatedly compares freshly-read persisted `MASTER_PLAN.md ↔ PLAN_INDEX.md`, corrects material index gaps, and re-audits until a complete pass is clean before expansion begins.
 - Plan files contain the minimum complete implementation information. No filler, tutorials, repeated context, or prose added to reach a size.
 - Every substantial expansion combines current-source inspection with targeted external research on comparable solutions/techniques, comparing trade-offs before choosing the approach that best fits the project's canonical direction; research informs design and is not used to copy external code.
 - Line counts are safety guidance only. Small complete subplans are desirable.

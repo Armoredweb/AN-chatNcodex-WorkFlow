@@ -290,7 +290,7 @@ At approval:
 3. preserve `backup/MASTER_PLAN.original.md`;
 4. begin `PLAN_INDEX.md`.
 
-## 7. Decomposition
+## 7. Decomposition and Decomposition Audit Gate
 
 Decomposition and expansion are separate.
 
@@ -309,6 +309,50 @@ Agent roles:
 The role names describe capability/cost classes, not specific model versions.
 
 Before retaining SOL-high, ask whether better contracts, repository evidence, algorithms, pseudocode/code, migration order, tests, or narrower subdivision can make the work suitable for LUA-high.
+
+### Mandatory checkpoint after decomposition
+
+When the initial decomposition and first `PLAN_INDEX.md` are persisted, **stop and return control to the user**. Do not begin Plan Part expansion in the same automatic run.
+
+This checkpoint applies even when Continuous Mode is ACTIVE. Tell the user that the next stage is the Decomposition Audit Gate and that expansion has not started yet.
+
+A later user `continue` (or equivalent explicit request to proceed) starts the audit stage.
+
+### Decomposition Audit Gate
+
+The purpose of this gate is to prove that the decomposition actually covers the approved master plan before any Plan Part expansion begins.
+
+Do **not** audit from conversation memory, prior reasoning, or the model's remembered understanding of the decomposition.
+
+For every audit pass:
+
+1. perform Context Safety;
+2. read the current persisted `MASTER_PLAN.md` directly;
+3. read the current persisted `PLAN_INDEX.md` directly;
+4. walk the master plan **item by item**, including requirements, architecture decisions, constraints/invariants, non-goals that affect scope, major work areas, dependencies, compatibility/migration expectations, and other implementation-relevant commitments;
+5. for each item, locate its concrete representation in the index: macroblock, microstep, dependency, output, invariant, assignment, validation boundary, or explicit reason it requires no implementation work;
+6. check the inverse direction too: every material index entry must trace back to approved master-plan intent or required repository evidence rather than being an orphaned invention;
+7. check ordering, prerequisites, ownership, cross-macroblock dependencies, outputs, missing bridges, duplicated responsibility, and decomposition granularity;
+8. record the necessary corrections internally and persist only the implementation-relevant result; do not dump a full finding-by-finding audit transcript to the user unless asked.
+
+If the audit finds material problems:
+
+1. tell the user concisely that the index requires another correction pass; a detailed finding list is not required unless a user decision/blocker exists;
+2. perform a bounded correction pass on `PLAN_INDEX.md` and any directly owning planning artifact when necessary under normal source-precedence rules;
+3. persist the correction coherently;
+4. **start a new audit pass from fresh reads of the persisted `MASTER_PLAN.md` and `PLAN_INDEX.md`** rather than trusting the previous pass or memory.
+
+Repeat:
+
+`fresh audit → correction pass → fresh audit`
+
+until one complete audit pass finds no remaining material decomposition correction.
+
+Only after a clean audit pass may the workflow mark the decomposition as audited/ready and begin Plan Part expansion.
+
+A clean gate means "no material correction found in the latest complete pass"; it does not mean that future repository evidence can never require later repair.
+
+A substantial audit pass or correction pass counts as its own heavy operation when it independently warrants Context Safety. The mandatory post-decomposition user checkpoint remains required regardless of Continuous Mode.
 
 ## 8. Planning efficiency and file safety
 
@@ -350,6 +394,8 @@ Use observable signals: accumulated conversation size, loaded material, reposito
 When uncertain, prefer a planned handoff.
 
 ## 10. Expansion
+
+Expansion may begin only after the Decomposition Audit Gate has completed a clean pass against the persisted `MASTER_PLAN.md` and `PLAN_INDEX.md`.
 
 Every substantial expansion combines **current-repository inspection** with **targeted external comparative research** before the Plan Part is finalized.
 
@@ -394,6 +440,7 @@ Examples:
 - substantial plan expansion;
 - structural subdivision;
 - substantial decomposition;
+- substantial Decomposition Audit Gate pass or decomposition correction pass;
 - major master-plan consolidation/revision;
 - research/repository-heavy architecture reconciliation;
 - substantial final audit or Consistency Gate;
@@ -422,6 +469,8 @@ Context Safety still applies on every operation. If it reaches HANDOFF, do not b
 ### Continuous Mode
 
 Continuous Mode is opt-in. Enable it only when the user explicitly requests automatic continuation across checkpoints.
+
+The mandatory checkpoint immediately after initial decomposition overrides automatic continuation: even inside an unfinished Continuous Mode block, stop after persisting the first decomposition/index and return control to the user. The user's next `continue` starts the Decomposition Audit Gate while preserving the current chat/block counters.
 
 Continuous Mode runs in **blocks of 3 heavy operations**:
 

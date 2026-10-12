@@ -31,6 +31,9 @@ During every substantial Plan Part expansion, inspect current source and also pe
 
 LUA-high is the default implementation target. Resolve avoidable decisions in planning and provide contracts/algorithms/code where that makes LUA mechanical. Retain SOL-high only after a final LUA-conversion audit; then optimize surviving SOL work for high-capability reasoning without unnecessary scaffolding. Never encode LUA/SOL assignment in Plan Part filenames or paths; assignments belong in indexes/metadata/references so they can change without renaming plans.
 
+DECOMPOSITION AUDIT
+After the initial decomposition/PLAN_INDEX is persisted, always stop and return control to the user, even in Continuous Mode. The next stage is an iterative Decomposition Audit Gate: freshly re-read persisted MASTER_PLAN.md and PLAN_INDEX.md, check the master plan item by item against the index and the index back against approved intent, correct material gaps in a bounded pass, then repeat the audit from fresh reads. Do not trust conversation memory. Expansion may start only after a complete audit pass finds no material correction.
+
 CONTEXT / EXECUTION
 Before substantial work apply Context Safety: SAFE / CAUTION / HANDOFF.
 
@@ -106,11 +109,23 @@ MASTER_PLAN aprovado. Inicie o planejamento para implementação seguindo o work
 
 Nesse gate o ChatGPT preserva o baseline aprovado do master plan e inicia a decomposição.
 
-## 5. Decomposição e expansão
+## 5. Decomposição, auditoria e expansão
 
-Primeiro a decomposição define macroblocos, micro passos, dependências, arquivos provisórios e atribuições preliminares LUA-high/SOL-high. A expansão detalhada vem depois.
+Primeiro a decomposição define macroblocos, micro passos, dependências, arquivos provisórios e atribuições preliminares LUA-high/SOL-high.
 
 Os nomes dos planos permanecem neutros em relação ao agente: descrevem o trabalho, não se a atribuição atual é LUA-high ou SOL-high. Mudanças de agente atualizam índice/cabeçalho/metadados do GOAL sem exigir renomear o arquivo nem quebrar referências.
+
+Depois que a primeira decomposição e o `PLAN_INDEX.md` forem persistidos, o ChatGPT **para e devolve o controle ao usuário**, mesmo se o Modo Contínuo estiver ativo. A expansão ainda não começa.
+
+No próximo `continue`, o ChatGPT executa o Decomposition Audit Gate. Ele relê do armazenamento persistente o `MASTER_PLAN.md` e o `PLAN_INDEX.md` e confere o master plan item por item contra o índice; depois confere o índice de volta contra a intenção aprovada. Não pode confiar na memória da conversa.
+
+Se a auditoria encontrar lacunas materiais, erros de ordem/dependência, responsabilidade duplicada, cobertura faltando ou trabalho órfão no índice, o ChatGPT avisa de forma concisa que é necessário mais um passe de correção do índice; não precisa listar todos os achados, salvo quando existir decisão necessária. Corrige o índice, persiste e então repete a auditoria a partir de novas leituras dos arquivos.
+
+O ciclo continua:
+
+`nova auditoria → correção → nova auditoria`
+
+até um passe completo não encontrar mais correção material na decomposição. Só então a expansão dos Plan Parts pode começar.
 
 A expansão é otimizada por prontidão para implementação por token. Um problema difícil não precisa gerar um plano grande. Subplanos pequenos e completos são desejáveis.
 
