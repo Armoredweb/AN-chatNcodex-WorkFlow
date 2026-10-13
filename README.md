@@ -31,8 +31,9 @@ Checkpoints, multiple chats, handoffs, and continuous mode divide work into boun
 - GitHub is the recommended planning backend; Library is a fallback.
 - `MASTER_PLAN.md` stays compact; decomposition and detailed expansion happen later.
 - After initial decomposition, a mandatory user checkpoint precedes the **Decomposition Audit Gate**, which repeatedly compares freshly-read persisted `MASTER_PLAN.md ↔ PLAN_INDEX.md`, corrects material index gaps, and re-audits until a complete pass is clean before expansion begins.
-- Plan files contain the minimum complete implementation information. No filler, tutorials, repeated context, or prose added to reach a size.
-- Every substantial expansion combines current-source inspection with targeted external research on comparable solutions/techniques, comparing trade-offs before choosing the approach that best fits the project's canonical direction; research informs design and is not used to copy external code.
+- Plan files contain the minimum **complete** implementation information. Technical depth is proportional to difficulty: verified code references, contracts, structures/states/ownership, algorithms/flows, integration order, relevant failure/resource behavior, tests and objective completion evidence as needed.
+- Every substantial expansion combines current-source inspection with **actually performed and examined** external research on comparable solutions/techniques, comparing trade-offs before choosing the approach that best fits the project's canonical direction; remembered links or generic tables do not substitute for research, and external code is not copied.
+- Each Plan Part passes an Implementation Readiness Self-Check before being marked expanded; short plans are not considered complete merely because expected headings exist.
 - Line counts are safety guidance only. Small complete subplans are desirable.
 - Context Safety and file size are independent.
 - Manual Mode performs one heavy operation per user invocation with no fixed accumulated handoff count. Continuous Mode runs four blocks of three heavy operations (3×4=12), pausing for `continue` after each 3-operation block and handing off after operation 12.

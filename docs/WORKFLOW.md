@@ -104,9 +104,11 @@ Always create a plan-specific folder.
 
 Explain that planning writes create commits and obtain scoped authorization for routine writes inside that folder. Authorization does not extend to application source or unrelated files.
 
-Preserve small planning operations, but avoid micro-commits when practical. When one heavy operation updates several planning files or performs several small edits within the same bounded task, prefer **one coherent commit for that heavy-operation unit** when tooling allows. This is especially important during post-expansion Pass A and Pass B, which may touch many Plan Parts. Intermediate in-memory/tool edits may remain fine-grained, but persistence should not create one commit per tiny edit when those edits belong to the same heavy operation.
+Preserve small planning operations, but avoid micro-commits when practical. When one heavy operation updates several planning files or performs several small edits within the same bounded task, prefer **one coherent commit for that heavy-operation unit** when tooling allows. This is especially important during expansion and post-expansion Pass A/Pass B.
 
-Do not delay required checkpoints, mix unrelated heavy operations, or create artificial batching solely to reduce commit count. Correctness, recoverability, and safe boundaries take precedence over commit minimization.
+When safe and supported by the GitHub tooling, a Plan Part plus the directly related `PLAN_INDEX.md`, `PROJECT.md`, and `CHAT_HANDOFF.md` updates from the same heavy operation should normally land in the same commit. At a checkpoint/block boundary, prefer one coherent repository checkpoint instead of one commit per control file. Intermediate in-memory/tool edits may remain fine-grained.
+
+Do not confuse commit count with heavy-operation count. Do not delay required checkpoints, mix unrelated heavy operations, rewrite history merely to reduce commits, or create artificial batching solely to reduce commit count. Correctness, recoverability, and safe boundaries take precedence over commit minimization.
 
 ### Library — fallback
 
@@ -179,19 +181,26 @@ Plan-part filenames and directory names must be **agent-neutral**. Do not includ
 
 Agent assignment may appear in `PLAN_INDEX.md`, Plan Part headers/metadata, GOAL definitions, handoffs, and references where useful. If work changes from SOL-high to LUA-high or vice versa, update those assignments without renaming the Plan Part solely because of the agent change. This preserves stable paths and references throughout optimization.
 
-Each expanded plan part should contain only what applies:
+Each expanded Plan Part should contain the implementation detail its actual difficulty requires. Expanding a microstep is not merely rewriting the index item at greater length.
+
+Provide, when relevant:
 
 - identity/status, inspected repository base, agent/batch/GOAL;
-- exact objective;
-- current repository evidence;
-- fixed decisions and relevant constraints;
-- scope/non-scope when ambiguity exists;
-- dependencies and outputs;
-- direct implementation instructions;
-- invariants;
-- targeted validation;
-- observable definition of done;
-- downstream guarantees when useful.
+- exact objective and the delta between current and desired behavior;
+- verified current-repository references to real files, classes, functions, interfaces, symbols, and structures;
+- clear distinction between existing code/contracts and proposed interfaces or structures;
+- fixed decisions, scope/non-scope, constraints, invariants, ownership and lifetime rules;
+- dependencies, inputs/outputs, cross-component contracts, data/state flow and integration boundaries;
+- concrete data structures, types, states and transitions;
+- algorithms and execution flows detailed enough that the implementation agent does not need to rediscover the mechanism;
+- pseudocode or implementation-oriented snippets when they materially remove avoidable technical reasoning;
+- recommended implementation/migration order with prerequisites and downstream guarantees;
+- relevant failure behavior, errors, concurrency/races, cancellation, recovery, cleanup and edge cases;
+- applicable performance, memory, persistence, bandwidth, hardware or resource constraints;
+- build/run/test/instrumentation procedures needed to verify the change;
+- targeted validation and objective observable definition of done.
+
+Do not invent current files, symbols, APIs, or structures. When proposing something new, label it as proposed rather than presenting it as existing repository evidence.
 
 Rationale is optional. Include it only when needed to preserve a non-obvious architectural decision, compatibility constraint, known failure mode, or a material research-driven trade-off.
 
@@ -210,7 +219,8 @@ Operational checkpoint containing:
 - exact files to read first;
 - blockers/user decisions;
 - recent operational/decomposition changes not obvious elsewhere;
-- repository facts that must be re-checked.
+- repository facts that must be re-checked;
+- when expansion is active, compact continuity state identifying the next Plan Part and preserving the requirement to re-apply current-source inspection, actually performed external research/trade-off comparison, technical-depth/readiness checks, coherent-commit discipline, and approved-architecture precedence.
 
 Manual Mode does not require an accumulated heavy-operation counter. A successor chat resets Continuous Mode cadence to block 1/4, 0/3 operations, 0/12 total.
 
@@ -360,7 +370,11 @@ The objective is implementation readiness per token.
 
 Do the difficult reasoning in ChatGPT, then persist only what implementation needs. Heavy thinking does not imply large output, and a difficult problem may legitimately produce a very small plan.
 
-Prefer verified paths/symbols, explicit contracts, necessary data/state flow, concise algorithms, relevant invariants, applicable failure/migration/cleanup behavior, targeted code/pseudocode, tests, and definition of done.
+**Document length is not a goal, but concision is never justification for incomplete planning.** Technical depth must be proportional to implementation difficulty. A short Plan Part is not complete merely because it contains all expected headings.
+
+Prefer verified paths/symbols, explicit contracts, necessary data/state flow, concrete structures/states/ownership, sufficiently detailed algorithms, relevant invariants, applicable failure/migration/concurrency/cleanup behavior, targeted code/pseudocode, tests, and definition of done.
+
+Do not compress away contracts, algorithms, integration details, failure behavior, tests, validation, or other information the implementer would otherwise have to rediscover. Conversely, do not inflate a simple microstep to resemble a large one.
 
 Avoid filler, repeated background, generic tutorials, obvious rationale, duplicated source context, and prose added only to increase file size.
 
@@ -373,9 +387,9 @@ For larger implementation-planning files:
 - consider subdivision around 1,700-1,800 when complexity/structure also warrants it;
 - do not intentionally exceed about 2,000 lines.
 
-Split much earlier when reasoning, research, tool usage, repository inspection, or information density makes the operation risky.
+Split much earlier when reasoning, research, tool usage, repository inspection, or information density makes the operation risky. When subdivision is needed, split by coherent technical responsibility while preserving approved dependency/order semantics.
 
-Estimate size and complexity before drafting.
+Estimate size and complexity before drafting, and judge completeness from implementation readiness rather than section count or line count.
 
 ## 9. Context Safety
 
@@ -399,31 +413,58 @@ Expansion may begin only after the Decomposition Audit Gate has completed a clea
 
 Every substantial expansion combines **current-repository inspection** with **targeted external comparative research** before the Plan Part is finalized.
 
+Expanding a microstep is not merely turning the corresponding index item into a longer description. The Plan Part must resolve enough technical detail that the assigned implementation agent can execute with minimal additional investigation and without redoing substantial planning.
+
 External research is for design intelligence, not code acquisition. Its purpose is to expose the planner to comparable solutions, established techniques, alternative architectures, operational patterns, performance strategies, failure modes, and trade-offs that may not be obvious from the current repository alone.
+
+The research must be **actually performed and examined during the expansion**. Do not satisfy this rule by adding remembered URLs, unverified references, a generic alternatives table, or references that were not opened/read. Prefer official documentation, recognized projects, standards, papers, engineering write-ups, and other reliable sources appropriate to the decision.
 
 Before each substantial expansion:
 
-1. perform Context Safety;
+1. re-read the applicable expansion rules in this workflow and perform Context Safety;
 2. inspect the relevant current source and active project architecture;
 3. identify the implementation/design questions that materially affect this Plan Part;
-4. perform targeted internet research for comparable solutions, techniques, standards, papers, official documentation, engineering write-ups, or relevant open-source designs;
-5. prefer primary/authoritative sources when available and compare more than one approach when the design space is material;
-6. build a concise alternatives comparison with relevant advantages, disadvantages, complexity, performance/resource cost, maintainability, compatibility, operational risk, and fit with the project's existing direction;
-7. treat external approaches as evidence and inspiration only: **do not copy external implementation code into the plan or project as part of this research step**;
-8. reconcile the research with the current repository, approved master plan, project constraints, dependencies, interfaces, target hardware/performance, and previously established direction;
+4. formulate specific research questions from those decisions instead of searching generically;
+5. perform targeted internet research and examine the relevant returned sources;
+6. compare more than one approach when the design space is material, including relevant advantages, disadvantages, complexity, performance/resource cost, maintainability, compatibility, operational risk, failure modes, and fit with the project's existing direction;
+7. treat external approaches as evidence and inspiration only: **do not copy external implementation code into the plan or project as part of this research step** and do not introduce technology merely because it is popular;
+8. reconcile the research with the current repository, approved master plan, project constraints, dependencies, interfaces, target hardware/performance/resources, and previously established direction;
 9. make the planning/implementation decision that best serves this project rather than automatically choosing the most common, newest, or externally popular approach;
-10. resolve questions that repository and research evidence can answer;
-11. write the smallest implementation-ready Plan Part;
-12. persist it;
-13. update index/handoff state only as needed.
+10. resolve every technical choice that repository/research evidence can settle without requiring a new architectural user decision;
+11. explain concretely how to build any non-trivial mechanism that remains in scope, including verified code touchpoints, proposed-versus-existing interfaces, structures, states, ownership, algorithms, execution/data flow, integration/migration order, relevant failure/concurrency/cancellation/recovery behavior, resource constraints, and validation;
+12. write the smallest **complete** implementation-ready Plan Part;
+13. perform the Implementation Readiness Self-Check below and repair material gaps before marking the part expanded;
+14. persist the Plan Part together with directly related index/project/handoff updates in one coherent heavy-operation commit when safe and tooling permits;
+15. update remaining index/handoff state only as needed.
 
 The project's approved intent and current repository remain authoritative. External research may improve the technique used to achieve that intent, reveal a risk, or justify revisiting an assumption, but it must not silently redirect scope or replace an approved architectural decision. If research reveals a material conflict with an approved requirement or architecture, repair the owning artifact or raise the user decision according to the normal source-precedence rules.
 
 Research breadth must be proportional to the decision. Do not turn routine implementation details into broad literature reviews. Conversely, do not skip comparison when a choice materially affects architecture, performance, persistence, networking, concurrency, security, compatibility, rendering, storage, deployment, or another important system property.
 
-If the internet/research capability is unavailable, do not fabricate external findings. Continue from repository and canonical project evidence where safe, and record the limitation when it materially affects confidence.
+If the internet/research capability is unavailable, do not fabricate external findings or present remembered/unverified references as researched evidence. Continue from repository and canonical project evidence where safe, and record the limitation when it materially affects confidence.
 
 Re-check current source before every part even when nearby parts were expanded recently.
+
+### Implementation Readiness Self-Check
+
+Before marking a Plan Part expanded, perform a real content check inside the same expansion operation. This is not a separate heavy operation by default and must not become a decorative checklist.
+
+Verify internally:
+
+1. Did I inspect the current relevant source and verify repository facts/symbols?
+2. Did I confirm dependencies and contracts with preceding Plan Parts and established interfaces?
+3. Did I actually perform the required external research and examine the relevant sources?
+4. Did I compare meaningful alternatives where a real technical choice existed?
+5. Did I resolve choices that can be resolved from evidence without new architectural authorization?
+6. Did I explain **how to implement** the non-trivial mechanisms rather than merely naming them?
+7. Are the important states, data structures, ownership rules, algorithms, interfaces and execution/data flows concrete enough?
+8. Are relevant errors, races/concurrency, cancellation, recovery, cleanup and edge cases covered?
+9. Is the implementation/migration order clear, and are build/run/test/instrumentation/validation criteria objectively verifiable?
+10. Could the assigned implementation agent execute this work without redoing a substantial portion of the planning?
+
+If any answer exposes a material gap, repair the Plan Part before marking it expanded. If the unresolved issue genuinely requires user approval under the established architecture-decision rules, stop at that decision boundary instead of inventing it.
+
+When external comparative research materially affects a Plan Part, persist only a compact implementation-relevant record: alternatives considered, decisive trade-offs, selected direction, and source references when useful for later verification. Do not paste research transcripts or external code into the plan.
 
 The external research performed for one Plan Part is normally supporting work inside that expansion heavy operation. Count it separately only when the research itself becomes a distinct substantial top-level operation.
 
@@ -480,7 +521,7 @@ Continuous Mode runs in **blocks of 3 heavy operations**:
 4. after the 3rd heavy operation in the block, persist state, compact `CHAT_HANDOFF.md` to live operational information, and stop automatic execution;
 5. return control to the user and ask for `continue` before starting another block.
 
-Block-boundary compaction is only a context/state hygiene step. It never substitutes for the full final optimization performed after all required plan expansion is complete.
+Block-boundary compaction is only a context/state hygiene step. It never substitutes for the full final optimization performed after all required plan expansion is complete. When expansion remains active, preserve the requirement that the next operation re-read the applicable expansion rules and repeat current-source inspection, actually performed external research/trade-off comparison, technical-depth/readiness checking, coherent persistence, and approved-architecture precedence.
 
 A `continue` after a completed block starts the next block in the **same chat**. It does not reset the chat-level total.
 
@@ -520,6 +561,7 @@ The final chat response must end with a plain-text copyable continuation prompt 
 - exact persistent files to read first;
 - instruction to read this canonical workflow;
 - instruction to re-check relevant current source;
+- when resuming expansion, instruction to re-apply Section 10 requirements: actual external research, trade-off comparison, proportional technical depth, Implementation Readiness Self-Check, and coherent commit/checkpoint discipline;
 - if Continuous Mode is ACTIVE, instruction that the successor starts a fresh cadence at block 1/4, 0/3 operations, 0/12 total.
 
 Never leave placeholders in a real handoff. Put no explanatory text after the continuation prompt.
@@ -607,8 +649,13 @@ For every Plan Part ask:
 - Is an instruction vague enough that two reasonable implementations could diverge materially?
 - Can ChatGPT resolve that ambiguity now from current source?
 - Would concise code/pseudocode/contract text remove substantial implementation reasoning?
+- Is the Plan Part technically deep enough for its implementation difficulty, or was it over-compressed merely because all expected headings are present?
+- Are any algorithms/mechanisms undefined, repository references unverified, integration steps missing, or important error/concurrency/resource cases omitted?
+- Was required external research actually performed, or does the document rely on generic/remembered references instead?
 - Is any paragraph irrelevant to implementing, validating, or preserving the intended behavior?
 - Can it be compressed without losing implementation information or intent?
+
+Treat an excessively summarized Plan Part, undefined algorithm/mechanism, missing required research, unverified repository assumption, or avoidable architectural reasoning left to the implementer as a **planning gap**. Repair it by adding the necessary technical detail without changing approved architecture or inflating the document for its own sake.
 
 Compression is subordinate to correctness.
 

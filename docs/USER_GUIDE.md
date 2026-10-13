@@ -26,8 +26,12 @@ Prefer GitHub as planning storage in a dedicated plan folder; Library is fallbac
 
 Optimize for implementation readiness per token: do difficult reasoning in ChatGPT, persist the shortest complete implementation-ready result, and never add filler or remove implementation truth merely to save tokens.
 
-EXPANSION RESEARCH
-During every substantial Plan Part expansion, inspect current source and also perform targeted internet research for comparable solutions/techniques. Compare meaningful alternatives and trade-offs, then choose the implementation direction that best fits the project's approved goals, constraints, architecture, performance/resource targets, and current repository. Research is for ideas, techniques, and external perspective—not for copying external code. Prefer authoritative sources, keep persisted research concise, and never let an external pattern silently override canonical project direction.
+EXPANSION QUALITY
+Before every substantial Plan Part expansion, re-read the applicable workflow rules, inspect current source, and actually perform targeted internet research for comparable solutions/techniques. Form specific questions, examine the returned sources, compare meaningful alternatives/trade-offs, and choose the direction that best fits approved goals, architecture, repository and resource targets. Research is for ideas/techniques—not copying external code—and remembered URLs/generic tables do not count as research.
+
+Expansion must explain how non-trivial mechanisms are built: verified repository references, current→desired behavior, contracts, data/state/ownership, algorithms/flows, implementation order, relevant failure/concurrency/resource behavior, tests and objective completion evidence. Detail must be proportional to difficulty; concision must not create planning gaps.
+
+Before marking a Plan Part expanded, perform the Implementation Readiness Self-Check from the manual and repair material gaps. Persist related Plan Part/index/project/handoff updates in one coherent heavy-operation commit when safe/tooling permits.
 
 LUA-high is the default implementation target. Resolve avoidable decisions in planning and provide contracts/algorithms/code where that makes LUA mechanical. Retain SOL-high only after a final LUA-conversion audit; then optimize surviving SOL work for high-capability reasoning without unnecessary scaffolding. Never encode LUA/SOL assignment in Plan Part filenames or paths; assignments belong in indexes/metadata/references so they can change without renaming plans.
 
@@ -49,7 +53,7 @@ After implementation, validate Expected Evidence and run the Convergence Check u
 After convergence, ChatGPT—not Codex—performs Cleanup Preparation under the same Context Safety/heavy-operation rules, resolves cleanup decisions, and prepares a mechanical CODEX_CLEAN_HANDOFF.md for one LUA-high Cleanup GOAL. Cleanup never starts automatically: stop and wait for the user to explicitly start that GOAL. Luna executes the prepared cleanup; it does not design the cleanup. The closed cycle leaves a concise CLEANUP_FINDINGS.md for the next planning cycle.
 
 HANDOFF
-When handoff is requested/required, persist state and end the response with a concrete plain-text continuation prompt containing current repository/base, storage/root, phase, last completed work, next action, exact files to read first, and continuous-mode state. No placeholders and no text after it.
+When handoff is requested/required, persist state and end the response with a concrete plain-text continuation prompt containing current repository/base, storage/root, phase, last completed work, next action, exact files to read first, and continuous-mode state. If expansion remains active, explicitly preserve the requirement to re-apply current-source inspection, actual external research/trade-off comparison, technical-depth/readiness checking and coherent persistence. No placeholders and no text after it.
 
 RESPONSIBLE USE
 This workflow organizes legitimate software planning. It is not intended to bypass product, account, rate, usage, safety, authorization, or platform limits.
@@ -127,13 +131,15 @@ The loop continues:
 
 until a complete pass finds no material decomposition correction. Only then may Plan Part expansion begin.
 
-Expansion is optimized for implementation readiness per token. A difficult problem does not need a large plan. Small complete subplans are desirable.
+Expansion is optimized for implementation readiness per token, but concision cannot justify missing technical planning. A short Plan Part is not complete merely because it contains the expected headings.
 
-For every substantial expansion, ChatGPT also performs targeted internet research on comparable solutions and techniques. The goal is to widen the design view: compare alternatives, relevant pros/cons, complexity, performance/resource cost, maintainability, compatibility, and risk, then choose what best fits the project's existing direction and constraints. This research is not for copying external code, and an external pattern never overrides the approved project direction automatically.
+For every substantial expansion, ChatGPT must re-read the applicable workflow rules, inspect current source, formulate specific technical questions, actually research comparable external solutions/techniques, examine the returned sources, compare meaningful alternatives/trade-offs, and select what best fits the project's canonical direction and constraints. Remembered URLs, generic reference lists, or decorative comparison tables do not count as completed research. Research is not for copying external code.
 
-Only implementation-relevant conclusions should enter the Plan Part. Research transcripts and unnecessary source summaries stay out of the plan.
+The Plan Part must be technically deep enough for its real implementation difficulty: verified current-code references, current→desired behavior, contracts, structures/states/ownership, algorithms/flows, implementation order, relevant failure/concurrency/resource behavior, tests/instrumentation and objective completion criteria where applicable. Complex mechanisms must explain how to build them so the implementation agent does not need to redo major planning.
 
-Line counts are safety guidance only. ChatGPT must not pad files with tutorials, repeated background, generic rationale, or filler.
+Before marking the Plan Part expanded, ChatGPT performs the manual's Implementation Readiness Self-Check and repairs material gaps. Only implementation-relevant research conclusions enter the Plan Part; research transcripts and unnecessary source summaries stay out.
+
+Line counts remain safety guidance only. ChatGPT must neither pad plans nor over-compress required technical detail.
 
 ## 6. Heavy operations and Continuous Mode
 
@@ -171,7 +177,7 @@ You do not need to compose or maintain a continuation template yourself.
 
 ## 8. After expansion: audit, consistency, Codex, and convergence
 
-After all required Plan Parts are expanded, the earlier 3-operation block compactions do **not** replace the full final audit. During Pass A and Pass B, ChatGPT should group related edits into a coherent commit per bounded heavy-operation unit when practical instead of creating micro-commits for every small file edit.
+After all required Plan Parts are expanded, the earlier 3-operation block compactions do **not** replace the full final audit. During Pass A and Pass B, ChatGPT should group related edits into a coherent commit per bounded heavy-operation unit when practical instead of creating micro-commits for every small file edit. Pass A also treats over-compressed plans, undefined mechanisms/algorithms, missing required research, unverified repository assumptions, or avoidable implementation reasoning as planning gaps that must be repaired.
 
 ChatGPT then:
 
