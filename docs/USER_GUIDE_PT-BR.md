@@ -33,7 +33,7 @@ Expansion must explain how non-trivial mechanisms are built: verified repository
 
 Before marking a Plan Part expanded, perform the Implementation Readiness Self-Check from the manual and repair material gaps. Persist related Plan Part/index/project/handoff updates in one coherent heavy-operation commit when safe/tooling permits.
 
-LUA-high is the default implementation target. Resolve avoidable decisions in planning and provide contracts/algorithms/code where that makes LUA mechanical. Retain SOL-high only after a final LUA-conversion audit; then optimize surviving SOL work for high-capability reasoning without unnecessary scaffolding. Never encode LUA/SOL assignment in Plan Part filenames or paths; assignments belong in indexes/metadata/references so they can change without renaming plans.
+Luna is the default implementation target. Resolve avoidable decisions in planning and provide contracts/algorithms/code where that makes Luna mechanical. Retain SOL only after a final Luna-conversion audit; then optimize surviving SOL work for high-capability reasoning without unnecessary scaffolding. Never encode Luna/SOL assignment in Plan Part filenames or paths; assignments belong in indexes/metadata/references so they can change without renaming plans.
 
 DECOMPOSITION AUDIT
 After the initial decomposition/PLAN_INDEX is persisted, always stop and return control to the user, even in Continuous Mode. The next stage is an iterative Decomposition Audit Gate: freshly re-read persisted MASTER_PLAN.md and PLAN_INDEX.md, check the master plan item by item against the index and the index back against approved intent, correct material gaps in a bounded pass, then repeat the audit from fresh reads. Do not trust conversation memory. Expansion may start only after a complete audit pass finds no material correction.
@@ -46,11 +46,16 @@ Manual Mode: at most one heavy operation per user invocation, then persist and r
 Continuous Mode: 3 heavy operations per block, persist/reassess after each, then stop for user "continue". Up to 4 blocks (12 operations) per chat; after operation 12, mandatory persisted handoff. Context Safety may stop earlier. At each block boundary compact only transient CHAT_HANDOFF state; never substitute this for the full post-expansion audit.
 
 FINALIZATION
-After all Plan Parts are expanded, always run the full file-by-file optimization, LUA-conversion gate, cross-artifact Consistency Gate, GOAL/Batch construction, Expected Evidence definition, and Codex handoff described in the manual.
+After all Plan Parts are expanded, always run the full file-by-file optimization, Luna-conversion gate, cross-artifact Consistency Gate, GOAL/Batch construction, Expected Evidence definition, and Codex handoff described in the manual.
 
 After implementation, validate Expected Evidence and run the Convergence Check until required planned behavior converges or a real blocker/user decision remains.
 
-After convergence, ChatGPT—not Codex—performs Cleanup Preparation under the same Context Safety/heavy-operation rules, resolves cleanup decisions, and prepares a mechanical CODEX_CLEAN_HANDOFF.md for one LUA-high Cleanup GOAL. Cleanup never starts automatically: stop and wait for the user to explicitly start that GOAL. Luna executes the prepared cleanup; it does not design the cleanup. The closed cycle leaves a concise CLEANUP_FINDINGS.md for the next planning cycle.
+CODEX ACTIVE MODEL AND PAUSES
+During implementation, CODEX_HANDOFF.md::ACTIVE_MODEL is the only authoritative record of the user-selected model (Luna or SOL, high effort implicit). All GOALs read it; other files refer there rather than copying the active state. When the user reports "Luna selecionado" or "SOL selecionado", persist that value there before acting on model identity. Never infer identity from memory, previous GOALs or recommended assignments; require selection confirmation if UNCONFIRMED.
+
+A paused GOAL cannot be resumed autonomously by the agent. Before a planned pause, ask if the user wishes to resume and switch models. A model change does not resume a paused GOAL; after a selection notification, explicitly tell the user to manually resume/continue if still paused. If file writes are unavailable while paused, update ACTIVE_MODEL first after user-triggered resumption; never claim it was already saved.
+
+After convergence, ChatGPT—not Codex—performs Cleanup Preparation under the same Context Safety/heavy-operation rules, resolves cleanup decisions, and prepares a mechanical CODEX_CLEAN_HANDOFF.md for one Luna Cleanup GOAL. Cleanup never starts automatically: stop and wait for the user to explicitly start that GOAL. Luna executes the prepared cleanup; it does not design the cleanup. The closed cycle leaves a concise CLEANUP_FINDINGS.md for the next planning cycle.
 
 HANDOFF
 When handoff is requested/required, persist state and end the response with a concrete plain-text continuation prompt containing current repository/base, storage/root, phase, last completed work, next action, exact files to read first, and continuous-mode state. If expansion remains active, explicitly preserve the requirement to re-apply current-source inspection, actual external research/trade-off comparison, technical-depth/readiness checking and coherent persistence. No placeholders and no text after it.
@@ -115,9 +120,9 @@ Nesse gate o ChatGPT preserva o baseline aprovado do master plan e inicia a deco
 
 ## 5. Decomposição, auditoria e expansão
 
-Primeiro a decomposição define macroblocos, micro passos, dependências, arquivos provisórios e atribuições preliminares LUA-high/SOL-high.
+Primeiro a decomposição define macroblocos, micro passos, dependências, arquivos provisórios e atribuições preliminares Luna/SOL.
 
-Os nomes dos planos permanecem neutros em relação ao agente: descrevem o trabalho, não se a atribuição atual é LUA-high ou SOL-high. Mudanças de agente atualizam índice/cabeçalho/metadados do GOAL sem exigir renomear o arquivo nem quebrar referências.
+Os nomes dos planos permanecem neutros em relação ao agente: descrevem o trabalho, não se a atribuição atual é Luna ou SOL. Mudanças de agente atualizam índice/cabeçalho/metadados do GOAL sem exigir renomear o arquivo nem quebrar referências.
 
 Depois que a primeira decomposição e o `PLAN_INDEX.md` forem persistidos, o ChatGPT **para e devolve o controle ao usuário**, mesmo se o Modo Contínuo estiver ativo. A expansão ainda não começa.
 
@@ -182,8 +187,8 @@ Depois de expandir todos os Plan Parts necessários, as compactações feitas a 
 O ChatGPT então:
 
 1. otimiza cada Plan Part sem perder a intenção da implementação;
-2. remove decisões evitáveis do LUA-high e adiciona contratos/código concretos quando útil;
-3. desafia toda atribuição SOL-high e só mantém SOL quando um planejamento melhor ainda não consegue tornar o trabalho seguramente mecânico para LUA;
+2. remove decisões evitáveis do Luna e adiciona contratos/código concretos quando útil;
+3. desafia toda atribuição SOL e só mantém SOL quando um planejamento melhor ainda não consegue tornar o trabalho seguramente mecânico para Luna;
 4. otimiza o trabalho que realmente permanecer SOL para raciocínio de maior capacidade, sem scaffolding desnecessário;
 5. executa um Consistency Gate entre `MASTER_PLAN → PLAN_INDEX → Plan Parts → repositório atual`, corrigindo inconsistências no arquivo que realmente é dono daquela informação;
 6. define Implementation Batches e GOALs, marcando GOALs fundacionais que precisam validar antes do trabalho dependente;
@@ -194,7 +199,15 @@ Depois da implementação, o ChatGPT executa um Convergence Check contra o plano
 
 Arquivos de planejamento são limites de segurança do planejamento, não sessões automáticas do Codex nem ciclos individuais de teste. Um GOAL pode usar muitos Plan Parts.
 
-## 9. Cycle Closure e limpeza
+## 9. Modelo ativo e GOALs pausados
+
+O `CODEX_HANDOFF.md` do plano atual guarda a única variável autoritativa `ACTIVE_MODEL`: `Luna` ou `SOL` (esforço high implícito). As atribuições previstas nos GOALs são recomendações, não prova do modelo selecionado; os demais arquivos apontam para essa variável sem duplicá-la.
+
+Depois de selecionar o modelo no aplicativo, informe `Luna selecionado` ou `SOL selecionado`. O agente registra a escolha em `CODEX_HANDOFF.md::ACTIVE_MODEL`; a mensagem, por si só, não altera o seletor do aplicativo.
+
+O agente pode pausar um GOAL, mas não consegue retomá-lo autonomamente. Antes de uma pausa planejada, deve perguntar se você pretende continuar este GOAL e trocar de modelo. Mesmo após informar uma seleção, o GOAL pode continuar pausado; nesse caso, deve orientar a **retomada/continuação manual**. Se não conseguir gravar durante a pausa, deve fazê-lo primeiro depois da retomada, sem alegar que a alteração já foi salva.
+
+## 10. Cycle Closure e limpeza
 
 Um Convergence Check concluído torna o ciclo elegível para limpeza; ele não inicia a
 limpeza.
@@ -204,13 +217,13 @@ essa preparação segue as mesmas regras de Context Safety, Modo Manual/Contínu
 checkpoints, commits coerentes e handoff das outras operações pesadas. O ChatGPT resolve
 precedência arquitetural, regras de exclusão/preservação, limpeza local de
 build/generated, formato dos findings e validação limpa, então prepara
-`CODEX_CLEAN_HANDOFF.md` especificamente para que LUA-high possa executá-lo de forma
+`CODEX_CLEAN_HANDOFF.md` especificamente para que Luna possa executá-lo de forma
 mecânica.
 
 Quando esse handoff estiver pronto, o ChatGPT para. Você inicia explicitamente o Cleanup
 GOAL quando quiser executá-lo.
 
-O Cleanup GOAL é uma missão contínua única para LUA-high. Ele reconcilia a arquitetura
+O Cleanup GOAL é uma missão contínua única para Luna. Ele reconcilia a arquitetura
 permanente, confere a implementação contra o plano final, remove planejamento/histórico
 concluído e resíduos classificados de arquitetura/build/generated, reconstrói a partir de
 estado limpo, remove o próprio handoff temporário e deixa `CLEANUP_FINDINGS.md` contendo
@@ -223,7 +236,7 @@ O ciclo pretendido é:
 
 `Planejar -> Implementar -> Convergir -> Limpar -> alimentar o próximo Planejamento`
 
-## 10. Armazenamento
+## 11. Armazenamento
 
 GitHub é recomendado porque o planejamento pode ser persistido diretamente em uma pasta dedicada e retomado por outro chat.
 

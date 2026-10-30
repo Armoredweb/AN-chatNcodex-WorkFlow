@@ -38,17 +38,19 @@ Checkpoints, multiple chats, handoffs, and continuous mode divide work into boun
 - Context Safety and file size are independent.
 - Manual Mode performs one heavy operation per user invocation with no fixed accumulated handoff count. Continuous Mode runs four blocks of three heavy operations (3×4=12), pausing for `continue` after each 3-operation block and handing off after operation 12.
 - Planning-file boundaries do not imply one Codex session or one test cycle per file.
-- Plan filenames are agent-neutral; LUA/SOL assignment lives in indexes/metadata so optimization never requires agent-driven file renames.
+- Plan filenames are agent-neutral; Luna/SOL assignment lives in indexes/metadata so optimization never requires agent-driven file renames.
 - Related planning edits, especially Pass A/B optimization, should be committed per bounded heavy-operation unit when practical rather than as micro-commits.
-- LUA-high is the default implementation role; SOL-high survives only after an explicit LUA-conversion audit.
+- Luna is the default implementation role; SOL survives only after an explicit Luna-conversion audit.
 - After expansion, a Consistency Gate checks traceability and contradictions across the master plan, index, Plan Parts, and current repository.
 - Every GOAL defines Expected Evidence; foundational GOALs gate dependent work.
+- `CODEX_HANDOFF.md::ACTIVE_MODEL` is the only authoritative user-selected model (`Luna` or `SOL`); changing the model must update that field, not context-derived assumptions.
+- A paused GOAL requires user-triggered resume/continue; switching models does not automatically resume it.
 - Post-implementation Convergence Checks compare the real repository back to the canonical plan until required behavior converges.
 - Whenever ChatGPT already has to read source code, it opportunistically checks the same
   code for material bugs, architecture inconsistencies, dead paths, avoidable cost and
   clear optimizations without starting unrelated source audits.
 - After convergence, ChatGPT plans Cycle Closure under the normal heavy-planning rules
-  and prepares a Luna-high `CODEX_CLEAN_HANDOFF.md`; cleanup never starts automatically.
+  and prepares a Luna `CODEX_CLEAN_HANDOFF.md`; cleanup never starts automatically.
 - The user explicitly starts the single Cleanup GOAL. It removes completed planning and
   classified build/generated residue, validates from a clean build, and leaves only a
   concise `CLEANUP_FINDINGS.md` delta for the next planning cycle.

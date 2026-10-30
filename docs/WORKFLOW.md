@@ -168,7 +168,7 @@ Dependency-oriented index containing:
 - ordered microsteps;
 - plan-file paths and status;
 - dependencies and outputs;
-- agent assignment: LUA-high, SOL-high, or temporary UNASSIGNED;
+- agent assignment: Luna, SOL, or temporary UNASSIGNED;
 - cross-part invariants;
 - Implementation Batches;
 - final GOALs and validation boundaries.
@@ -177,9 +177,9 @@ No UNASSIGNED may remain when implementation-ready.
 
 ### Plan parts
 
-Plan-part filenames and directory names must be **agent-neutral**. Do not include `LUA`, `SOL`, `LUA-high`, `SOL-high`, or another mutable agent assignment in the plan filename/path. Name files from stable work identity: macroblock/microstep/order/scope or another implementation-domain label.
+Plan-part filenames and directory names must be **agent-neutral**. Do not include `Luna`, `SOL`, `Luna`, `SOL`, or another mutable agent assignment in the plan filename/path. Name files from stable work identity: macroblock/microstep/order/scope or another implementation-domain label.
 
-Agent assignment may appear in `PLAN_INDEX.md`, Plan Part headers/metadata, GOAL definitions, handoffs, and references where useful. If work changes from SOL-high to LUA-high or vice versa, update those assignments without renaming the Plan Part solely because of the agent change. This preserves stable paths and references throughout optimization.
+Agent assignment may appear in `PLAN_INDEX.md`, Plan Part headers/metadata, GOAL definitions, handoffs, and references where useful. If work changes from SOL to Luna or vice versa, update those assignments without renaming the Plan Part solely because of the agent change. This preserves stable paths and references throughout optimization.
 
 Each expanded Plan Part should contain the implementation detail its actual difficulty requires. Expanding a microstep is not merely rewriting the index item at greater length.
 
@@ -233,15 +233,26 @@ It is not a conversation transcript.
 Final implementation handoff containing:
 
 - repository/base and plan root;
-- authoritative plan index;
-- ordered GOALs;
-- agent per GOAL;
-- plan files/batches per GOAL;
-- dependencies;
-- required validation;
-- **Expected Evidence** for each GOAL: the observable repository/runtime/test evidence that demonstrates the intended result, not merely that a command exited successfully;
-- whether a GOAL is foundational and therefore gates dependent GOALs;
-- deviation-reporting rules.
+- **the authoritative active-model variable near the beginning of this file**, adjacent to its warning;
+- authoritative plan index and ordered GOALs;
+- recommended model per GOAL (planning assignment only, never active-model authority);
+- plan files/batches per GOAL and dependencies;
+- required validation and **Expected Evidence** for each GOAL;
+- foundational GOAL dependencies and deviation-reporting rules;
+- the paused-GOAL procedure in Section 13.
+
+Every generated `CODEX_HANDOFF.md` must include:
+
+```text
+IMPORTANT — SINGLE SOURCE OF TRUTH FOR THE ACTIVE IMPLEMENTATION MODEL
+CODEX_HANDOFF.md::ACTIVE_MODEL is the only authoritative workflow record
+of the user-selected active model. Do not infer it from chat history,
+memory, agent self-identification, previous GOALs, or planned assignments.
+Other files refer here; never duplicate the active-model variable.
+ACTIVE_MODEL: UNCONFIRMED
+```
+
+Allowed values: `Luna`, `SOL`, or `UNCONFIRMED` until the user's model selection is confirmed. Both model names imply high effort; do not append `high` to either name. Fill the initial value only from explicit user confirmation, not from a recommended GOAL model. Ask for confirmation before implementation if unconfirmed.
 
 Planning-file subdivisions are not automatic agent-session or test boundaries.
 
@@ -249,7 +260,7 @@ Planning-file subdivisions are not automatic agent-session or test boundaries.
 
 Temporary Cleanup GOAL handoff prepared by ChatGPT after implementation convergence.
 
-It must contain only the information needed to make cleanup mechanical for **LUA-high**,
+It must contain only the information needed to make cleanup mechanical for **Luna**,
 including:
 
 - repository/base and completed planning chain to reconcile;
@@ -312,13 +323,13 @@ Think in small implementation units, but do not fully expand them yet.
 
 Agent roles:
 
-- **LUA-high** — default when planning can make implementation mechanical.
-- **SOL-high** — only when substantial architecture/debugging/cross-system reasoning remains after strong preparation.
+- **Luna** — default when planning can make implementation mechanical.
+- **SOL** — only when substantial architecture/debugging/cross-system reasoning remains after strong preparation.
 - **UNASSIGNED** — temporary during planning only.
 
 The role names describe capability/cost classes, not specific model versions.
 
-Before retaining SOL-high, ask whether better contracts, repository evidence, algorithms, pseudocode/code, migration order, tests, or narrower subdivision can make the work suitable for LUA-high.
+Before retaining SOL, ask whether better contracts, repository evidence, algorithms, pseudocode/code, migration order, tests, or narrower subdivision can make the work suitable for Luna.
 
 ### Mandatory checkpoint after decomposition
 
@@ -575,20 +586,38 @@ Keep these units distinct:
 - **Implementation Batch** — compatible work before a meaningful validation boundary.
 - **GOAL** — continuous autonomous mission assigned to one implementation agent.
 
-Many plan files may belong to one GOAL. Minimize LUA/SOL switching without violating dependencies.
+Many plan files may belong to one GOAL. Minimize unnecessary switching without violating dependencies.
+
+### Authoritative active model and user-selected changes
+
+During implementation, `CODEX_HANDOFF.md::ACTIVE_MODEL` is the **sole source of truth** for the user-selected active model (`Luna` or `SOL`). A GOAL's assigned/recommended model is not the current active model. No `PLAN_INDEX.md`, Plan Part, chat memory, model self-description, prior GOAL or old handoff may override it. Other files must point to this exact field instead of storing another active-model value.
+
+Read the current persisted `CODEX_HANDOFF.md` before starting, continuing or reassessing a GOAL. Never pause or abort merely because a planned recommendation differs from `ACTIVE_MODEL` or because memory/context suggests a different model.
+
+When the user explicitly says `Luna selecionado` or `SOL selecionado` (case-insensitive), normalize and update **that single variable** in `CODEX_HANDOFF.md` and persist it before the next model-dependent step. A chat message cannot change the product's model selector: the user performs the actual UI selection and confirms it in text. Do not infer changes from GOAL metadata or memory. If writing is unavailable, report the missing update rather than claiming persistence; if still `UNCONFIRMED`, request the selection before GOAL execution.
+
+### Paused GOAL and resume procedure
+
+An implementation GOAL may be paused, but the agent **cannot autonomously resume a paused GOAL**. Only the user can invoke the applicable resume/continue action. A model-selection notification is not a resume command, and the GOAL may still be paused after the user selects `Luna` or `SOL`.
+
+Before a planned pause, if a final message is possible, ask briefly **whether the user wants to resume this GOAL and whether they want to change models**. Then pause; do not promise automatic resumption.
+
+If a model-selection message arrives while the GOAL is paused, persist `ACTIVE_MODEL` if possible and tell the user that, **if the GOAL remains paused, they must manually resume/continue it**. If the paused state prevents writing, say that the field must be updated as the first action after user-triggered resumption. Never claim a model switch has resumed the GOAL.
+
+Include this concise pause/resume procedure in `CODEX_HANDOFF.md`, which each implementation GOAL must read. Never create a second active-model variable.
 
 ### Agent preparation density
 
-LUA-high is the default target. Give LUA-high enough verified paths, decisions, contracts, algorithms, pseudocode/code, tests, and ordering to make implementation as mechanical as practical.
+Luna is the default target. Give Luna enough verified paths, decisions, contracts, algorithms, pseudocode/code, tests, and ordering to make implementation as mechanical as practical.
 
-Do not optimize a task for SOL-high until the final audit has established that stronger planning cannot reasonably move it to LUA-high.
+Do not optimize a task for SOL until the final audit has established that stronger planning cannot reasonably move it to Luna.
 
-For work that genuinely remains SOL-high, optimize differently: preserve intent, invariants, interfaces, repository evidence, boundaries, risks, and Expected Evidence, but remove unnecessary recipe-level scaffolding that would constrain useful higher-capability reasoning without reducing risk.
+For work that genuinely remains SOL, optimize differently: preserve intent, invariants, interfaces, repository evidence, boundaries, risks, and Expected Evidence, but remove unnecessary recipe-level scaffolding that would constrain useful higher-capability reasoning without reducing risk.
 
 Perform this SOL-specific optimization twice when useful:
 
-1. after the task survives the final LUA-conversion audit and before final GOAL/Codex handoff;
-2. immediately before a SOL-high GOAL executes, re-checking current repository state because upstream work may have changed the assumptions.
+1. after the task survives the final Luna-conversion audit and before final GOAL/Codex handoff;
+2. immediately before a SOL GOAL executes, re-checking current repository state because upstream work may have changed the assumptions.
 
 ### Validation and Expected Evidence
 
@@ -615,7 +644,7 @@ They must not silently redesign prepared architecture or revive superseded plans
 The Cleanup GOAL is deliberately different from normal implementation planning:
 
 - ChatGPT performs the cleanup reasoning and prepares `CODEX_CLEAN_HANDOFF.md`;
-- the execution target is **LUA-high by design**;
+- the execution target is **Luna by design**;
 - it should be one continuous autonomous GOAL from start to finish;
 - Luna executes the prepared procedure and must not reconstruct architectural
   precedence, invent deletion policy, or redesign cleanup strategy;
@@ -637,7 +666,7 @@ Treat one bounded Pass A review/optimization task as the natural persistence uni
 Use this priority order:
 
 1. **Preserve implementation truth first.** Do not remove requirements, constraints, invariants, compatibility behavior, dependencies, failure behavior, validation, or architectural intent merely to save tokens.
-2. **Remove delegated thinking.** Find places where LUA-high is still asked to choose an approach, infer ownership, design an interface, resolve ambiguity, select an algorithm, decide migration order, or make another decision ChatGPT can resolve from current repository evidence. Resolve it in the plan.
+2. **Remove delegated thinking.** Find places where Luna is still asked to choose an approach, infer ownership, design an interface, resolve ambiguity, select an algorithm, decide migration order, or make another decision ChatGPT can resolve from current repository evidence. Resolve it in the plan.
 3. **Materialize difficult implementation where useful.** Provide the minimum concrete contract, algorithm, pseudocode, data shape, call sequence, or implementation-ready code needed to remove avoidable reasoning. Do not add code for volume.
 4. **Re-check current source.** Verify decisions whose correctness depends on repository state.
 5. **Reduce without losing meaning.** Remove duplicated background, obsolete notes, tutorial prose, repeated rationale, redundant examples, and context the implementation agent can obtain directly from cited source files.
@@ -645,7 +674,7 @@ Use this priority order:
 
 For every Plan Part ask:
 
-- Does LUA-high still have to make an avoidable architecture or implementation decision?
+- Does Luna still have to make an avoidable architecture or implementation decision?
 - Is an instruction vague enough that two reasonable implementations could diverge materially?
 - Can ChatGPT resolve that ambiguity now from current source?
 - Would concise code/pseudocode/contract text remove substantial implementation reasoning?
@@ -659,19 +688,19 @@ Treat an excessively summarized Plan Part, undefined algorithm/mechanism, missin
 
 Compression is subordinate to correctness.
 
-### Pass B — LUA-conversion gate
+### Pass B — Luna-conversion gate
 
 Use the same commit discipline as Pass A: fine-grained analysis/edits are allowed inside the heavy operation, but when practical persist the resulting related plan/index updates as one coherent commit for that bounded Pass B task rather than many micro-commits.
 
 Resolve every UNASSIGNED item.
 
-Challenge every preliminary SOL-high assignment. Try to move it to LUA-high using stronger repository evidence, narrower scope, explicit ownership, contracts, algorithms, migration order, pseudocode/code, validation, or subdivision.
+Challenge every preliminary SOL assignment. Try to move it to Luna using stronger repository evidence, narrower scope, explicit ownership, contracts, algorithms, migration order, pseudocode/code, validation, or subdivision.
 
-Only retain SOL-high after this pass demonstrates that substantial reasoning remains that should not or cannot reasonably be removed by planning.
+Only retain SOL after this pass demonstrates that substantial reasoning remains that should not or cannot reasonably be removed by planning.
 
-Changing an assignment between LUA-high and SOL-high must not rename an otherwise correctly named Plan Part. Update assignment metadata/index/GOAL references while preserving the stable agent-neutral file path.
+Changing an assignment between Luna and SOL must not rename an otherwise correctly named Plan Part. Update assignment metadata/index/GOAL references while preserving the stable agent-neutral file path.
 
-Then perform the SOL-specific preparation described in Section 13. This occurs only **after** the work has survived the LUA-conversion gate.
+Then perform the SOL-specific preparation described in Section 13. This occurs only **after** the work has survived the Luna-conversion gate.
 
 ### Pass C — Consistency Gate
 
@@ -705,10 +734,10 @@ Only after Passes A-C:
 
 1. finalize Implementation Batches;
 2. identify foundational GOALs;
-3. finalize GOAL order and LUA/SOL assignments;
+3. finalize GOAL order and Luna/SOL assignments;
 4. define Expected Evidence for every GOAL;
 5. minimize unnecessary agent switching;
-6. create `CODEX_HANDOFF.md`.
+6. create `CODEX_HANDOFF.md` with its single `ACTIVE_MODEL` field, adjacent source-of-truth warning and paused-GOAL/resume procedure; confirm the initial model instead of guessing it from a GOAL recommendation.
 
 In GitHub mode the plan is already persistent. In Library mode, publish it to the working repository only with user authorization.
 
@@ -757,7 +786,7 @@ The canonical cycle is:
 ```text
 Plan -> Implement -> Converge -> ChatGPT prepares cleanup
      -> user explicitly starts Cleanup GOAL
-     -> LUA-high cleans and validates
+     -> Luna cleans and validates
      -> CLEANUP_FINDINGS.md feeds the next plan
 ```
 
@@ -812,7 +841,7 @@ removed as part of cleanup.
 
 ### 16.3 Luna-readiness gate
 
-Prepare the Cleanup GOAL specifically for **LUA-high**. Before
+Prepare the Cleanup GOAL specifically for **Luna**. Before
 `CODEX_CLEAN_HANDOFF.md` is ready, verify that:
 
 - no avoidable architecture decision is delegated to Luna;
@@ -842,7 +871,7 @@ to execute destructive cleanup.
 
 ### 16.5 Cleanup GOAL execution
 
-After explicit user initiation, LUA-high executes the prepared cleanup as one continuous
+After explicit user initiation, Luna executes the prepared cleanup as one continuous
 GOAL from start to finish.
 
 The prepared mission normally includes:
