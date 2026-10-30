@@ -51,9 +51,11 @@ After all Plan Parts are expanded, always run the full file-by-file optimization
 After implementation, validate Expected Evidence and run the Convergence Check until required planned behavior converges or a real blocker/user decision remains.
 
 CODEX ACTIVE MODEL AND PAUSES
-During implementation, CODEX_HANDOFF.md::ACTIVE_MODEL is the only authoritative record of the user-selected model (Luna or SOL, high effort implicit). All GOALs read it; other files refer there rather than copying the active state. When the user reports "Luna selecionado" or "SOL selecionado", persist that value there before acting on model identity. Never infer identity from memory, previous GOALs or recommended assignments; require selection confirmation if UNCONFIRMED.
+CODEX_HANDOFF.md::ACTIVE_MODEL is the sole authoritative persisted model record (Luna or SOL; high effort implicit). Every GOAL reads it directly; NEVER infer the active model from chat context, memory, old user prompts, agent self-identification, previous GOALs or recommendations.
 
-A paused GOAL cannot be resumed autonomously by the agent. Before a planned pause, ask if the user wishes to resume and switch models. A model change does not resume a paused GOAL; after a selection notification, explicitly tell the user to manually resume/continue if still paused. If file writes are unavailable while paused, update ACTIVE_MODEL first after user-triggered resumption; never claim it was already saved.
+CHANGE ACTIVE_MODEL ONLY when the CURRENT user message explicitly confirms/selects Luna or SOL or requests that update. Older prompts and earlier confirmations expire as authorization; a later "continue" does not authorize replay. Without explicit current-message authorization, leave the field unchanged, even if apparently stale. On an authorized request, persist/verify the one field. If unavailable, report failure and ask for a fresh explicit selection later; never defer/replay the old instruction.
+
+A paused GOAL cannot resume autonomously. Before a planned pause, ask whether the user wants to resume/change models. A model-selection message alone does not resume a GOAL. If still paused, tell the user to resume manually. If updating was blocked during the pause, require a NEW explicit selection message after resumption before writing the field.
 
 After convergence, ChatGPT—not Codex—performs Cleanup Preparation under the same Context Safety/heavy-operation rules, resolves cleanup decisions, and prepares a mechanical CODEX_CLEAN_HANDOFF.md for one Luna Cleanup GOAL. Cleanup never starts automatically: stop and wait for the user to explicitly start that GOAL. Luna executes the prepared cleanup; it does not design the cleanup. The closed cycle leaves a concise CLEANUP_FINDINGS.md for the next planning cycle.
 
@@ -203,9 +205,9 @@ Planning files are planning-safety boundaries, not automatic Codex sessions or t
 
 The current plan's `CODEX_HANDOFF.md` contains the only authoritative `ACTIVE_MODEL` variable: `Luna` or `SOL` (high effort implicit). GOAL assignments are recommendations, not runtime-model proof; all other artifacts point to this variable instead of duplicating it.
 
-After selecting a model in the app, say `Luna selecionado` or `SOL selecionado`. The implementation agent records the choice in `CODEX_HANDOFF.md::ACTIVE_MODEL`; sending the message alone does not change the app's model selector.
+After selecting a model in the app, explicitly state `Luna selecionado` or `SOL selecionado` in your **current message**. Only that current message authorizes writing the field. The agent must never infer a model from chat context or memory, and previous selection messages **cannot be replayed** to update it in later turns (including after `continue`). If no new explicit selection is given, the variable stays unchanged even if earlier messages suggest another model. Sending the message alone does not change the app's model selector.
 
-A GOAL may pause, but the agent cannot resume it autonomously. Before a planned pause, it asks if you want to continue this GOAL and change models. After a model-selection message, the GOAL may still be paused; the agent must tell you to **manually resume/continue** if so. If it cannot update the file while paused, it must do so first after you resume, without claiming an earlier write.
+A GOAL may pause, but the agent cannot resume it autonomously. Before a planned pause, it asks if you want to continue/change models. A selection message does not resume a paused GOAL: you may still need to **manually resume/continue** it. If writing is blocked during the pause, the agent must report that no update was made and request a **fresh explicit selection** after resumption; it cannot apply the old message later.
 
 ## 10. Cycle Closure and cleanup
 

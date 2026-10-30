@@ -43,7 +43,7 @@ Checkpoints, multiple chats, handoffs, and continuous mode divide work into boun
 - Luna is the default implementation role; SOL survives only after an explicit Luna-conversion audit.
 - After expansion, a Consistency Gate checks traceability and contradictions across the master plan, index, Plan Parts, and current repository.
 - Every GOAL defines Expected Evidence; foundational GOALs gate dependent work.
-- `CODEX_HANDOFF.md::ACTIVE_MODEL` is the only authoritative user-selected model (`Luna` or `SOL`); changing the model must update that field, not context-derived assumptions.
+- `CODEX_HANDOFF.md::ACTIVE_MODEL` is the only authoritative persisted model record (`Luna` or `SOL`); NEVER infer model identity from context/memory. Change it only on an explicit instruction in the **current user message**—never replay old selections, including across pauses or `continue` turns.
 - A paused GOAL requires user-triggered resume/continue; switching models does not automatically resume it.
 - Post-implementation Convergence Checks compare the real repository back to the canonical plan until required behavior converges.
 - Whenever ChatGPT already has to read source code, it opportunistically checks the same

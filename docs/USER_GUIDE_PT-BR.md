@@ -51,9 +51,11 @@ After all Plan Parts are expanded, always run the full file-by-file optimization
 After implementation, validate Expected Evidence and run the Convergence Check until required planned behavior converges or a real blocker/user decision remains.
 
 CODEX ACTIVE MODEL AND PAUSES
-During implementation, CODEX_HANDOFF.md::ACTIVE_MODEL is the only authoritative record of the user-selected model (Luna or SOL, high effort implicit). All GOALs read it; other files refer there rather than copying the active state. When the user reports "Luna selecionado" or "SOL selecionado", persist that value there before acting on model identity. Never infer identity from memory, previous GOALs or recommended assignments; require selection confirmation if UNCONFIRMED.
+CODEX_HANDOFF.md::ACTIVE_MODEL is the sole authoritative persisted model record (Luna or SOL; high effort implicit). Every GOAL reads it directly; NEVER infer the active model from chat context, memory, old user prompts, agent self-identification, previous GOALs or recommendations.
 
-A paused GOAL cannot be resumed autonomously by the agent. Before a planned pause, ask if the user wishes to resume and switch models. A model change does not resume a paused GOAL; after a selection notification, explicitly tell the user to manually resume/continue if still paused. If file writes are unavailable while paused, update ACTIVE_MODEL first after user-triggered resumption; never claim it was already saved.
+CHANGE ACTIVE_MODEL ONLY when the CURRENT user message explicitly confirms/selects Luna or SOL or requests that update. Older prompts and earlier confirmations expire as authorization; a later "continue" does not authorize replay. Without explicit current-message authorization, leave the field unchanged, even if apparently stale. On an authorized request, persist/verify the one field. If unavailable, report failure and ask for a fresh explicit selection later; never defer/replay the old instruction.
+
+A paused GOAL cannot resume autonomously. Before a planned pause, ask whether the user wants to resume/change models. A model-selection message alone does not resume a GOAL. If still paused, tell the user to resume manually. If updating was blocked during the pause, require a NEW explicit selection message after resumption before writing the field.
 
 After convergence, ChatGPT—not Codex—performs Cleanup Preparation under the same Context Safety/heavy-operation rules, resolves cleanup decisions, and prepares a mechanical CODEX_CLEAN_HANDOFF.md for one Luna Cleanup GOAL. Cleanup never starts automatically: stop and wait for the user to explicitly start that GOAL. Luna executes the prepared cleanup; it does not design the cleanup. The closed cycle leaves a concise CLEANUP_FINDINGS.md for the next planning cycle.
 
@@ -203,9 +205,9 @@ Arquivos de planejamento são limites de segurança do planejamento, não sessõ
 
 O `CODEX_HANDOFF.md` do plano atual guarda a única variável autoritativa `ACTIVE_MODEL`: `Luna` ou `SOL` (esforço high implícito). As atribuições previstas nos GOALs são recomendações, não prova do modelo selecionado; os demais arquivos apontam para essa variável sem duplicá-la.
 
-Depois de selecionar o modelo no aplicativo, informe `Luna selecionado` ou `SOL selecionado`. O agente registra a escolha em `CODEX_HANDOFF.md::ACTIVE_MODEL`; a mensagem, por si só, não altera o seletor do aplicativo.
+Depois de selecionar o modelo no aplicativo, informe explicitamente `Luna selecionado` ou `SOL selecionado` na **mensagem atual**. Somente essa mensagem autoriza a gravação. O agente **não pode confiar no contexto ou na memória** para determinar o modelo ativo, nem reutilizar prompts antigos ou confirmações ultrapassadas em turnos posteriores, inclusive após `continue`. Sem uma instrução explícita na mensagem atual, a variável permanece intocada, mesmo que o histórico sugira outra seleção. A mensagem não altera o seletor do aplicativo.
 
-O agente pode pausar um GOAL, mas não consegue retomá-lo autonomamente. Antes de uma pausa planejada, deve perguntar se você pretende continuar este GOAL e trocar de modelo. Mesmo após informar uma seleção, o GOAL pode continuar pausado; nesse caso, deve orientar a **retomada/continuação manual**. Se não conseguir gravar durante a pausa, deve fazê-lo primeiro depois da retomada, sem alegar que a alteração já foi salva.
+Um GOAL pode ser pausado, mas o agente não consegue retomá-lo sozinho. Antes de uma pausa planejada, pergunta se você deseja continuar/trocar de modelo. A mensagem de seleção não retoma o GOAL; você pode precisar **retomá-lo manualmente**. Se a pausa impedir a gravação, o agente informa que nenhuma alteração foi realizada e solicita **nova confirmação explícita após a retomada**, sem executar posteriormente o comando antigo.
 
 ## 10. Cycle Closure e limpeza
 

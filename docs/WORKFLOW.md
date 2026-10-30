@@ -245,14 +245,16 @@ Every generated `CODEX_HANDOFF.md` must include:
 
 ```text
 IMPORTANT — SINGLE SOURCE OF TRUTH FOR THE ACTIVE IMPLEMENTATION MODEL
-CODEX_HANDOFF.md::ACTIVE_MODEL is the only authoritative workflow record
-of the user-selected active model. Do not infer it from chat history,
-memory, agent self-identification, previous GOALs, or planned assignments.
+CODEX_HANDOFF.md::ACTIVE_MODEL is the only authoritative recorded model.
+NEVER infer the active model from chat context, memory, older user prompts,
+agent self-identification, GOAL history, or planned model assignments.
+CHANGE ACTIVE_MODEL ONLY when the user's CURRENT message explicitly reports
+a model selection. Old or deferred selection messages are NOT authorization.
 Other files refer here; never duplicate the active-model variable.
 ACTIVE_MODEL: UNCONFIRMED
 ```
 
-Allowed values: `Luna`, `SOL`, or `UNCONFIRMED` until the user's model selection is confirmed. Both model names imply high effort; do not append `high` to either name. Fill the initial value only from explicit user confirmation, not from a recommended GOAL model. Ask for confirmation before implementation if unconfirmed.
+Allowed values: `Luna`, `SOL`, or `UNCONFIRMED` until the user's model selection is confirmed. Both model names imply high effort; do not append `high` to either name. Initialize only from an explicit model-selection statement in the **current user message**, never from an older prompt, memory, prior GOAL, or recommended model. Otherwise use `UNCONFIRMED` and request a fresh confirmation before implementation.
 
 Planning-file subdivisions are not automatic agent-session or test boundaries.
 
@@ -590,11 +592,13 @@ Many plan files may belong to one GOAL. Minimize unnecessary switching without v
 
 ### Authoritative active model and user-selected changes
 
-During implementation, `CODEX_HANDOFF.md::ACTIVE_MODEL` is the **sole source of truth** for the user-selected active model (`Luna` or `SOL`). A GOAL's assigned/recommended model is not the current active model. No `PLAN_INDEX.md`, Plan Part, chat memory, model self-description, prior GOAL or old handoff may override it. Other files must point to this exact field instead of storing another active-model value.
+During implementation, `CODEX_HANDOFF.md::ACTIVE_MODEL` is the **sole source of truth for the recorded user-selected model** (`Luna` or `SOL`). A GOAL's assigned/recommended model is not the current active model. No `PLAN_INDEX.md`, Plan Part, chat context, memory, model self-description, previous user prompt, prior GOAL, or old handoff may override this field. Other files must point to it instead of storing another active-model value.
 
-Read the current persisted `CODEX_HANDOFF.md` before starting, continuing or reassessing a GOAL. Never pause or abort merely because a planned recommendation differs from `ACTIVE_MODEL` or because memory/context suggests a different model.
+Before starting, continuing, or reassessing a GOAL, read the **current persisted** `CODEX_HANDOFF.md::ACTIVE_MODEL`. Never substitute context or memory for this read; never pause or abort solely because another document or an earlier message claims a different model.
 
-When the user explicitly says `Luna selecionado` or `SOL selecionado` (case-insensitive), normalize and update **that single variable** in `CODEX_HANDOFF.md` and persist it before the next model-dependent step. A chat message cannot change the product's model selector: the user performs the actual UI selection and confirms it in text. Do not infer changes from GOAL metadata or memory. If writing is unavailable, report the missing update rather than claiming persistence; if still `UNCONFIRMED`, request the selection before GOAL execution.
+**Current-message-only write authorization:** change `ACTIVE_MODEL` only if the user's **current message in this turn** explicitly says which model has been selected (for example, `Luna selecionado` or `SOL selecionado`, case-insensitive), or explicitly commands that model selection update. The current message must itself contain the instruction; old prompts, prior confirmations, quoted/history material, handoff text, remembered preferences, GOAL assignments, agent guesses, or a later bare `continue` never authorize a change. A previous selection instruction expires as write authorization after that turn. If the current message has no explicit selection/update command, **leave the persisted variable untouched**, even if chat context strongly suggests it is stale. If the user reports a conflict, ask for a fresh explicit selection instead of silently reconciling it.
+
+On a valid current-message instruction, normalize the value to `Luna` or `SOL` and update **only** `CODEX_HANDOFF.md::ACTIVE_MODEL`; verify persistence before relying on the new value. A chat message does not change the product's model selector: the user changes the actual UI selection, and the variable records their current explicit report. If writing is unavailable, report that no update occurred and request a new explicit instruction when writing is available. **Never queue or replay the expired instruction** on a future turn or resumption. If `UNCONFIRMED`, ask for current confirmation before running a model-dependent GOAL.
 
 ### Paused GOAL and resume procedure
 
@@ -602,7 +606,7 @@ An implementation GOAL may be paused, but the agent **cannot autonomously resume
 
 Before a planned pause, if a final message is possible, ask briefly **whether the user wants to resume this GOAL and whether they want to change models**. Then pause; do not promise automatic resumption.
 
-If a model-selection message arrives while the GOAL is paused, persist `ACTIVE_MODEL` if possible and tell the user that, **if the GOAL remains paused, they must manually resume/continue it**. If the paused state prevents writing, say that the field must be updated as the first action after user-triggered resumption. Never claim a model switch has resumed the GOAL.
+If the **current** user message explicitly reports a model selection while the GOAL is paused, update `ACTIVE_MODEL` in that turn only if writing is possible, and tell the user that a paused GOAL still requires a manual resume/continue action. If writing is blocked, state that the update did not occur; after resumption, request a **new explicit model-selection instruction in the then-current user message** before changing the field. Do not apply the old selection automatically, and never claim a model switch resumed the GOAL.
 
 Include this concise pause/resume procedure in `CODEX_HANDOFF.md`, which each implementation GOAL must read. Never create a second active-model variable.
 
